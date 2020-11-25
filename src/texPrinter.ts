@@ -1,4 +1,5 @@
 import {
+  EmbedCache,
   getLinkpath,
   Loc,
   MetadataCache,
@@ -10,7 +11,7 @@ import {
 export class TeXPrinter {
   constructor(readonly metadata: MetadataCache) {}
 
-  public async resolveEmbeds(
+  public async resolveEmbedsRecursively(
     file: TFile,
     regionStart: Loc,
     regionEnd?: Loc,
@@ -21,25 +22,25 @@ export class TeXPrinter {
     const enclosedEmbeds =
       fileCache.embeds
         ?.filter(({ position }) => inRegion(position, regionStart, regionEnd))
-        ?.sort((a, b) => a.position.start.offset - b.position.start.offset)
-        ?.map(({ position, link }) => {
-          const path = getLinkpath(link);
-          const target = this.metadata.getFirstLinkpathDest(path, file.path);
-          const subpath = link.replace(path, '');
-          const result = resolveSubpath(
-            this.metadata.getFileCache(target),
-            subpath,
-          );
-          return {
-            data: this.resolveEmbeds(
-              target,
-              result.start,
-              result.end ?? undefined,
-            ),
-            position,
-          };
-        }) ?? [];
+        ?.sort(compareEmbedCache)
+        ?.map(({ position, link }) =>
+          this.resolveEmbed(link, file.path, position),
+        ) ?? [];
 
+    return await TeXPrinter.doTransclusion(
+      file,
+      enclosedEmbeds,
+      regionStart,
+      regionEnd,
+    );
+  }
+
+  private static async doTransclusion(
+    file: TFile,
+    enclosedEmbeds: ResolvedEmbed[],
+    regionStart: Loc,
+    regionEnd?: Loc,
+  ): Promise<string> {
     const data = await file.vault.cachedRead(file);
     const chunks: string[] = [];
     let pointer = regionStart.offset;
@@ -60,13 +61,37 @@ export class TeXPrinter {
     return chunks.join('');
   }
 
+  private resolveEmbed(
+    link: string,
+    sourcePath: string,
+    position: Pos,
+  ): ResolvedEmbed {
+    const path = getLinkpath(link);
+    const target = this.metadata.getFirstLinkpathDest(path, sourcePath);
+    const subpath = link.replace(path, '');
+    const result = resolveSubpath(this.metadata.getFileCache(target), subpath);
+    return {
+      data: this.resolveEmbedsRecursively(
+        target,
+        result.start,
+        result.end ?? undefined,
+      ),
+      position,
+    };
+  }
+
   async print(file: TFile): Promise<string> {
-    return await this.resolveEmbeds(file, {
+    return await this.resolveEmbedsRecursively(file, {
       line: 0,
       col: 0,
       offset: 0,
     });
   }
+}
+
+interface ResolvedEmbed {
+  data: Promise<string>;
+  position: Pos;
 }
 
 function inRegion(position: Pos, regionStart: Loc, regionEnd?: Loc): boolean {
@@ -83,4 +108,7 @@ function inInterval(point: Loc, regionStart: Loc, regionEnd?: Loc): boolean {
     offset >= regionStart.offset &&
     offset <= (regionEnd?.offset ?? Number.MAX_SAFE_INTEGER)
   );
+}
+function compareEmbedCache(a: EmbedCache, b: EmbedCache): number {
+  return a.position.start.offset - b.position.start.offset;
 }
