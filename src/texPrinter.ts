@@ -23,13 +23,14 @@ export class TeXPrinter {
       fileCache.embeds
         ?.filter(({ position }) => inRegion(position, regionStart, regionEnd))
         ?.sort(compareEmbedCache)
-        ?.map(({ position, link }) =>
-          this.resolveEmbed(link, file.path, position),
+        ?.map(
+          async ({ position, link }) =>
+            await this.resolveEmbed(link, file.path, position),
         ) ?? [];
 
     return await TeXPrinter.doTransclusion(
       file,
-      enclosedEmbeds,
+      await Promise.all(enclosedEmbeds),
       regionStart,
       regionEnd,
     );
@@ -37,21 +38,30 @@ export class TeXPrinter {
 
   private static async doTransclusion(
     file: TFile,
-    enclosedEmbeds: ResolvedEmbed[],
+    enclosedEmbeds: Resolved[],
     regionStart: Loc,
     regionEnd?: Loc,
   ): Promise<string> {
     const data = await file.vault.cachedRead(file);
+    return this.replaceCached(data, enclosedEmbeds, regionStart, regionEnd);
+  }
+
+  private static replaceCached(
+    data: string,
+    cached: Resolved[],
+    regionStart?: Loc,
+    regionEnd?: Loc,
+  ): string {
     const chunks: string[] = [];
-    let pointer = regionStart.offset;
+    let pointer = regionStart?.offset ?? 0;
     const end = regionEnd?.offset ?? data.length;
 
-    for (const embed of enclosedEmbeds) {
+    for (const insert of cached) {
       chunks.push(
-        data.slice(pointer, embed.position.start.offset),
-        await embed.data,
+        data.slice(pointer, insert.position.start.offset),
+        insert.data,
       );
-      pointer = embed.position.end.offset;
+      pointer = insert.position.end.offset;
     }
 
     if (pointer < end) {
@@ -61,17 +71,17 @@ export class TeXPrinter {
     return chunks.join('');
   }
 
-  private resolveEmbed(
+  private async resolveEmbed(
     link: string,
     sourcePath: string,
     position: Pos,
-  ): ResolvedEmbed {
+  ): Promise<Resolved> {
     const path = getLinkpath(link);
     const target = this.metadata.getFirstLinkpathDest(path, sourcePath);
     const subpath = link.replace(path, '');
     const result = resolveSubpath(this.metadata.getFileCache(target), subpath);
     return {
-      data: this.resolveEmbedsRecursively(
+      data: await this.resolveEmbedsRecursively(
         target,
         result.start,
         result.end ?? undefined,
@@ -80,17 +90,33 @@ export class TeXPrinter {
     };
   }
 
+  process(file: TFile, data: string): string {
+    return this.replaceHeadings(file, data);
+  }
+
   async print(file: TFile): Promise<string> {
-    return await this.resolveEmbedsRecursively(file, {
+    const data = await this.resolveEmbedsRecursively(file, {
       line: 0,
       col: 0,
       offset: 0,
     });
+    return this.process(file, data);
+  }
+
+  private replaceHeadings(file: TFile, data: string): string {
+    const cache = this.metadata.getFileCache(file);
+    const headings = cache?.headings?.map(({ heading, level, position }) => {
+      return {
+        data: `\\section{${heading}}`,
+        position,
+      };
+    });
+    return TeXPrinter.replaceCached(data, headings ?? []);
   }
 }
 
-interface ResolvedEmbed {
-  data: Promise<string>;
+interface Resolved {
+  data: string;
   position: Pos;
 }
 
