@@ -53,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "commitizen": "^4.2.2",
+    "electron": "^11.0.3",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-config-standard-with-typescript": "^19.0.1",

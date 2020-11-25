@@ -1,5 +1,8 @@
-import { MarkdownView, Plugin, PluginSettingTab } from 'obsidian';
+import { Plugin, PluginSettingTab, TFile } from 'obsidian';
 import { TeXPrinter } from './texPrinter';
+import { remote } from 'electron';
+import * as fs from 'fs';
+import { promisify } from 'util';
 
 export default class ExportToTeXPlugin extends Plugin {
   public onload(): void {
@@ -12,11 +15,7 @@ export default class ExportToTeXPlugin extends Plugin {
         const file = this.app.workspace.getActiveFile();
         if (file !== null) {
           if (!checking) {
-            const printer = new TeXPrinter(this.app.metadataCache);
-            printer
-              .resolveEmbeds(file, TeXPrinter.START)
-              .then(console.log)
-              .catch((_any) => console.log('Error!'));
+            this.doExport(file).catch(console.log);
           }
           return true;
         }
@@ -25,6 +24,23 @@ export default class ExportToTeXPlugin extends Plugin {
     });
 
     this.addSettingTab(new ExportToTeXSettingTab(this.app, this));
+  }
+
+  async doExport(file: TFile): Promise<void> {
+    const printer = new TeXPrinter(this.app.metadataCache);
+    const contents = await printer.resolveEmbeds(file, TeXPrinter.START);
+    const { filePath, canceled } = await remote.dialog.showSaveDialog({
+      filters: [
+        {
+          name: 'TeX',
+          extensions: ['tex'],
+        },
+      ],
+    });
+
+    if (canceled || filePath === undefined) return;
+
+    await promisify(fs.writeFile)(filePath, contents);
   }
 }
 

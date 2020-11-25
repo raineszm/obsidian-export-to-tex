@@ -6,5 +6,5 @@
   "author": "Zach Raines",
   "authorUrl": "https://github.com/raineszm/obsidian-export-to-tex",
   "minAppVersion": "0.9.16",
-  "isDesktopOnly": false
+  "isDesktopOnly": true
 }
