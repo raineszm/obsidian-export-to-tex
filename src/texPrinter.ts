@@ -1,19 +1,13 @@
 import {
-  resolveSubpath,
   getLinkpath,
+  Loc,
   MetadataCache,
   Pos,
+  resolveSubpath,
   TFile,
-  Loc,
 } from 'obsidian';
 
 export class TeXPrinter {
-  static START: Loc = {
-    line: 0,
-    col: 0,
-    offset: 0,
-  };
-
   constructor(readonly metadata: MetadataCache) {}
 
   public async resolveEmbeds(
@@ -64,6 +58,14 @@ export class TeXPrinter {
     }
 
     return chunks.join('');
+  }
+
+  async print(file: TFile): Promise<string> {
+    return await this.resolveEmbeds(file, {
+      line: 0,
+      col: 0,
+      offset: 0,
+    });
   }
 }
 

@@ -28,7 +28,7 @@ export default class ExportToTeXPlugin extends Plugin {
 
   async doExport(file: TFile): Promise<void> {
     const printer = new TeXPrinter(this.app.metadataCache);
-    const contents = await printer.resolveEmbeds(file, TeXPrinter.START);
+    const contents = await printer.print(file);
     const { filePath, canceled } = await remote.dialog.showSaveDialog({
       filters: [
         {
