@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": false,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "extends": [
+    "standard-with-typescript",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
+    "plugin:jest/recommended"
+  ],
+  "plugins": ["jest", "prettier"],
+  "rules": {
+    "@typescript-eslint/semi": "off"
+  }
+}
