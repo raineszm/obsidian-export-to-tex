@@ -107,11 +107,33 @@ export class TeXPrinter {
     const cache = this.metadata.getFileCache(file);
     const headings = cache?.headings?.map(({ heading, level, position }) => {
       return {
-        data: `\\section{${heading}}`,
+        data: TeXPrinter.texSection(heading, level),
         position,
       };
     });
     return TeXPrinter.replaceCached(data, headings ?? []);
+  }
+
+  static HEADINGS = [
+    'section',
+    'subsection',
+    'subsubsection',
+    'paragraph',
+    'subparagraph',
+  ];
+
+  static texSection(heading: string, level: number): string {
+    if (level < 1 || level > 5) {
+      return '';
+    }
+    const anchor = TeXPrinter.asAnchor(heading);
+    return `\\${
+      TeXPrinter.HEADINGS[level + 1]
+    }{${heading}}\\label{sec:${anchor}}`;
+  }
+
+  static asAnchor(heading: string): string {
+    return heading.toLowerCase().replace(/[^a-z0-9]/, '-');
   }
 }
 
