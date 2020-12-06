@@ -4,6 +4,7 @@ import math from 'remark-math';
 import gfm from 'remark-gfm';
 import directive from 'remark-directive';
 import { wikiLinkPlugin } from 'remark-wiki-link';
+import frontmatter from 'remark-frontmatter';
 import rebber from 'rebber';
 import { Node } from 'unist';
 
@@ -11,6 +12,7 @@ export const markdownToTex = unified()
   .use(markdown)
   .use(gfm)
   .use(math)
+  .use(frontmatter)
   .use(directive)
   .use(wikiLinkPlugin, {
     aliasDivider: '|',

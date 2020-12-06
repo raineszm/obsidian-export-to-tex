@@ -1,6 +1,7 @@
 dependencies:
   rebber: 5.1.2
   remark-directive: 1.0.1
+  remark-frontmatter: 3.0.0
   remark-gfm: 1.0.0
   remark-math: 4.0.0
   remark-parse: 9.0.0
@@ -3051,6 +3052,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-i7FVWL8HhVY+CTkwFxkN2mk3h+787ixS5S63eb78diVRc1MCssarHq3W5cj0av7YDSwmaV928RNag+U1etRQ7w==
+  /fault/1.0.4:
+    dependencies:
+      format: 0.2.2
+    dev: false
+    resolution:
+      integrity: sha512-CJ0HCB5tL5fYTEA7ToAq5+kTwd++Borf1/bifxd9iT70QcXr4MRrO3Llf8Ifs70q+SJcGHFtnIE/Nw6giCtECA==
   /fb-watchman/2.0.1:
     dependencies:
       bser: 2.1.1
@@ -3213,6 +3220,12 @@ packages:
       node: '>= 0.12'
     resolution:
       integrity: sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==
+  /format/0.2.2:
+    dev: false
+    engines:
+      node: '>=0.4.x'
+    resolution:
+      integrity: sha1-1hcBB+nv3E7TDJ3DkBbflCtctYs=
   /fragment-cache/0.2.1:
     dependencies:
       map-cache: 0.2.2
@@ -5172,6 +5185,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-lEiC6zP3sLGJmseGHf33YInftqOs1p4Z3U/mxEtjMkNjWTHBJx5rPjbgTbpHba11/H/TgB0fgiaiQk0lzdgKHg==
+  /mdast-util-frontmatter/0.2.0:
+    dependencies:
+      micromark-extension-frontmatter: 0.2.2
+    dev: false
+    resolution:
+      integrity: sha512-FHKL4w4S5fdt1KjJCwB0178WJ0evnyyQr5kXTM3wrOVpytD0hrkvd+AOOjU9Td8onOejCkmZ+HQRT3CZ3coHHQ==
   /mdast-util-gfm-autolink-literal/0.1.1:
     dev: false
     resolution:
@@ -5324,6 +5343,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-6FjvznI5GpUysZqGtTEMeDaC/D3FdWFVc3CC5gDZB3fBtqiaIRBhCNg4fbqvrFSC0T2eqRbO2dJ7ZFU86gAtEQ==
+  /micromark-extension-frontmatter/0.2.2:
+    dependencies:
+      fault: 1.0.4
+    dev: false
+    resolution:
+      integrity: sha512-q6nPLFCMTLtfsctAuS0Xh4vaolxSFUWUWR6PZSrXXiRy+SANGllpcqdXFv2z07l0Xz/6Hl40hK0ffNCJPH2n1A==
   /micromark-extension-gfm-autolink-literal/0.5.1:
     dependencies:
       micromark: 2.10.1
@@ -6378,6 +6403,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-x6rZs0qa0zu9gW7Avd+rRxHJL2K9TGk+c51NaLfQgCNI7SxwBycRJ3w5mMkjkIjO6O9/qdx0ntu48byCSgF96Q==
+  /remark-frontmatter/3.0.0:
+    dependencies:
+      mdast-util-frontmatter: 0.2.0
+      micromark-extension-frontmatter: 0.2.2
+    dev: false
+    resolution:
+      integrity: sha512-mSuDd3svCHs+2PyO29h7iijIZx4plX0fheacJcAoYAASfgzgVIcXGYSq9GFyYocFLftQs8IOmmkgtOovs6d4oA==
   /remark-gfm/1.0.0:
     dependencies:
       mdast-util-gfm: 0.1.0
@@ -7986,6 +8018,7 @@ specifiers:
   prettier: ^2.2.0
   rebber: ^5.1.2
   remark-directive: ^1.0.1
+  remark-frontmatter: ^3.0.0
   remark-gfm: ^1.0.0
   remark-math: ^4.0.0
   remark-parse: ^9.0.0
