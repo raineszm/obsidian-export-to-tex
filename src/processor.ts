@@ -7,7 +7,8 @@ import { wikiLinkPlugin } from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
 import rebber from 'rebber';
 import { Node } from 'unist';
-import { Parent } from 'mdast';
+import { LabelDirective, TextDirective } from './directives';
+import { embed } from './embed';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
 const wikiLink = consume;
@@ -22,6 +23,7 @@ export const markdownToTex = unified()
   .use(wikiLinkPlugin, {
     aliasDivider: '|',
   })
+  .use(embed)
   .use(rebber, {
     overrides: {
       wikiLink,
@@ -50,19 +52,6 @@ function inlineMath(_ctx: unknown, node: Node): string {
 function displayMath(_ctx: unknown, node: Node): string {
   const mathNode = node as Math;
   return `\\[\n${mathNode.value}\n\\]`;
-}
-
-interface TextDirective extends Parent {
-  type: 'textDirective';
-  name: string;
-  attributes?: unknown;
-}
-
-interface LabelDirective extends TextDirective {
-  name: 'label';
-  attributes: {
-    text: string;
-  };
 }
 
 function textDirective(_ctx: unknown, node: Node): string {

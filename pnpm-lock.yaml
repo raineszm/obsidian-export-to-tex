@@ -7,6 +7,7 @@ dependencies:
   remark-parse: 9.0.0
   remark-wiki-link: 1.0.0
   unified: 9.2.0
+  unist-util-flatmap: 1.0.0
 devDependencies:
   '@commitlint/cli': 11.0.0
   '@commitlint/config-conventional': 11.0.0
@@ -41,6 +42,7 @@ devDependencies:
   ts-jest: 26.4.4_jest@26.6.3+typescript@4.1.2
   tslib: 2.0.3
   typescript: 4.1.2
+  vfile: 4.2.1
 lockfileVersion: 5.2
 packages:
   /@babel/code-frame/7.10.4:
@@ -987,7 +989,6 @@ packages:
     resolution:
       integrity: sha512-imDtS4TAoTcXk0g7u4kkWqedB3E4qpjXzCpD2LU5M5NAXHzCDsypyvXSaG7mM8DKYkCRa7tFp4tS/lp/Wo7Q3w==
   /@types/unist/2.0.3:
-    dev: false
     resolution:
       integrity: sha512-FvUupuM3rlRsRtCN+fDudtmytGO6iHJuuRKS1Ss0pG5z8oX0diNEw94UEL7hgDbpN94rgaK5R7sWm6RrSkZuAQ==
   /@types/yargs-parser/15.0.0:
@@ -3911,7 +3912,6 @@ packages:
     resolution:
       integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
   /is-buffer/2.0.5:
-    dev: false
     engines:
       node: '>=4'
     resolution:
@@ -7635,6 +7635,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-tJfXmxMeWYnczCVs7XAEvIV7ieppALdyepWMkHkwciRpZraG/xwT+s2JN8+pr1+8jCRf80FFzvr+MpQeeoF4Xg==
+  /unist-util-flatmap/1.0.0:
+    dev: false
+    resolution:
+      integrity: sha512-IG32jcKJlhARCYT2LsYPJWdoXYkzz3ESAdl1aa2hn9Auh+cgUmU6wgkII4yCc/1GgeWibRdELdCZh/p3QKQ1dQ==
   /unist-util-is/4.0.4:
     dev: false
     resolution:
@@ -7642,7 +7646,6 @@ packages:
   /unist-util-stringify-position/2.0.3:
     dependencies:
       '@types/unist': 2.0.3
-    dev: false
     resolution:
       integrity: sha512-3faScn5I+hy9VleOq/qNbAd6pAx7iH5jYBMS9I1HgQVijz/4mv5Bvw5iw1sC/90CODiKo81G/ps8AJrISn687g==
   /unist-util-visit-parents/3.1.1:
@@ -7766,7 +7769,6 @@ packages:
     dependencies:
       '@types/unist': 2.0.3
       unist-util-stringify-position: 2.0.3
-    dev: false
     resolution:
       integrity: sha512-DjssxRGkMvifUOJre00juHoP9DPWuzjxKuMDrhNbk2TdaYYBNMStsNhEOt3idrtI12VQYM/1+iM0KOzXi4pxwQ==
   /vfile/4.2.1:
@@ -7775,7 +7777,6 @@ packages:
       is-buffer: 2.0.5
       unist-util-stringify-position: 2.0.3
       vfile-message: 2.0.4
-    dev: false
     resolution:
       integrity: sha512-O6AE4OskCG5S1emQ/4gl8zK586RqA3srz3nfK/Viy0UPToBc5Trp9BVFb1u0CjsKrAWwnpr4ifM/KBXPWwJbCA==
   /w3c-hr-time/1.0.2:
@@ -8030,3 +8031,5 @@ specifiers:
   tslib: ^2.0.3
   typescript: ^4.1.2
   unified: ^9.2.0
+  unist-util-flatmap: ^1.0.0
+  vfile: ^4.2.1

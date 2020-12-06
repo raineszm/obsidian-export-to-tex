@@ -74,7 +74,8 @@
     "standard-version": "^9.0.0",
     "ts-jest": "^26.4.4",
     "tslib": "^2.0.3",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "vfile": "^4.2.1"
   },
   "dependencies": {
     "rebber": "^5.1.2",
@@ -84,6 +85,7 @@
     "remark-math": "^4.0.0",
     "remark-parse": "^9.0.0",
     "remark-wiki-link": "^1.0.0",
-    "unified": "^9.2.0"
+    "unified": "^9.2.0",
+    "unist-util-flatmap": "^1.0.0"
   }
 }
