@@ -23,6 +23,7 @@ export const markdownToTex = unified()
       inlineMath: stringifyWikilink,
       math: stringifyWikilink,
       textDirective: stringifyWikilink,
+      yaml: stringifyWikilink,
     },
   });
 
