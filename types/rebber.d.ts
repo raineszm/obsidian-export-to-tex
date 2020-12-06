@@ -1,9 +1,7 @@
 declare module 'rebber' {
   import { Node } from 'unist';
   import { Plugin, Processor } from 'unified';
-  interface NodeStringifier {
-    (ctx: unknown, node: Node): string;
-  }
+  type NodeStringifier = (ctx: RebberSettings, node: Node) => string;
   interface RebberSettings {
     overrides?: {
       [key: string]: NodeStringifier;
