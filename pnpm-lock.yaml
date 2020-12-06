@@ -1,13 +1,16 @@
 dependencies:
   rebber: 5.1.2
   remark-directive: 1.0.1
+  remark-gfm: 1.0.0
   remark-math: 4.0.0
   remark-parse: 9.0.0
+  remark-wiki-link: 1.0.0
   unified: 9.2.0
 devDependencies:
   '@commitlint/cli': 11.0.0
   '@commitlint/config-conventional': 11.0.0
   '@rollup/plugin-commonjs': 15.1.0_rollup@2.33.3
+  '@rollup/plugin-json': 4.1.0_rollup@2.33.3
   '@rollup/plugin-node-resolve': 9.0.0_rollup@2.33.3
   '@rollup/plugin-typescript': 6.1.0_7acd921d0b3b835553b7f513891ce3ca
   '@types/codemirror': 0.0.98
@@ -285,7 +288,6 @@ packages:
   /@babel/runtime/7.12.5:
     dependencies:
       regenerator-runtime: 0.13.7
-    dev: true
     resolution:
       integrity: sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
   /@babel/template/7.12.7:
@@ -760,6 +762,15 @@ packages:
       rollup: ^2.22.0
     resolution:
       integrity: sha512-xCQqz4z/o0h2syQ7d9LskIMvBSH4PX5PjYdpSSvgS+pQik3WahkQVNWg3D8XJeYjZoVWnIUQYDghuEMRGrmQYQ==
+  /@rollup/plugin-json/4.1.0_rollup@2.33.3:
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.33.3
+      rollup: 2.33.3
+    dev: true
+    peerDependencies:
+      rollup: ^1.20.0 || ^2.0.0
+    resolution:
+      integrity: sha512-yfLbTdNS6amI/2OpmbiBoW12vngr5NW2jCJVZSBEz+H5KfUJZ2M7sDjk0U6GOOdCWFVScShte29o9NezJ53TPw==
   /@rollup/plugin-node-resolve/9.0.0_rollup@2.33.3:
     dependencies:
       '@rollup/pluginutils': 3.1.0_rollup@2.33.3
@@ -5121,6 +5132,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
+  /markdown-table/2.0.0:
+    dependencies:
+      repeat-string: 1.6.1
+    dev: false
+    resolution:
+      integrity: sha512-Ezda85ToJUBhM6WGaG6veasyym+Tbs3cMAw/ZhOPqXiYsr0jgocBV3j3nx+4lk47plLlIqjwuTm/ywVI+zjJ/A==
   /matcher/3.0.0:
     dependencies:
       escape-string-regexp: 4.0.0
@@ -5155,6 +5172,38 @@ packages:
     dev: false
     resolution:
       integrity: sha512-lEiC6zP3sLGJmseGHf33YInftqOs1p4Z3U/mxEtjMkNjWTHBJx5rPjbgTbpHba11/H/TgB0fgiaiQk0lzdgKHg==
+  /mdast-util-gfm-autolink-literal/0.1.1:
+    dev: false
+    resolution:
+      integrity: sha512-gJ2xSpqKCetSr22GEWpZH3f5ffb4pPn/72m4piY0v7T/S+O7n7rw+sfoPLhb2b4O7WdnERoYdALRcmD68FMtlw==
+  /mdast-util-gfm-strikethrough/0.2.2:
+    dependencies:
+      mdast-util-to-markdown: 0.5.4
+    dev: false
+    resolution:
+      integrity: sha512-T37ZbaokJcRbHROXmoVAieWnesPD5N21tv2ifYzaGRLbkh1gknItUGhZzHefUn5Zc/eaO/iTDSAFOBrn/E8kWw==
+  /mdast-util-gfm-table/0.1.4:
+    dependencies:
+      markdown-table: 2.0.0
+      mdast-util-to-markdown: 0.5.4
+    dev: false
+    resolution:
+      integrity: sha512-T4xFSON9kUb/IpYA5N+KGWcsdGczAvILvKiXQwUGind6V9fvjPCR9yhZnIeaLdBWXaz3m/Gq77ZtuLMjtFR4IQ==
+  /mdast-util-gfm-task-list-item/0.1.5:
+    dependencies:
+      mdast-util-to-markdown: 0.5.4
+    dev: false
+    resolution:
+      integrity: sha512-6O0bt34r+e7kYjeSwedhjDPYraspKIYKbhvhQEEioL7gSmXDxhN7WQW2KoxhVMpNzjNc03yC7K5KH6NHlz2jOA==
+  /mdast-util-gfm/0.1.0:
+    dependencies:
+      mdast-util-gfm-autolink-literal: 0.1.1
+      mdast-util-gfm-strikethrough: 0.2.2
+      mdast-util-gfm-table: 0.1.4
+      mdast-util-gfm-task-list-item: 0.1.5
+    dev: false
+    resolution:
+      integrity: sha512-HLfygQL6HdhJhFbLta4Ki9hClrzyAxRjyRvpm5caN65QZL+NyHPmqFlnF9vm1Rn58JT2+AbLwNcEDY4MEvkk8Q==
   /mdast-util-math/0.1.1:
     dependencies:
       longest-streak: 2.0.4
@@ -5178,6 +5227,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-AW4DRS3QbBayY/jJmD8437V1Gombjf8RSOUCMFBuo5iHi58AGEgVCKQ+ezHkZZDpAQS75hcBMpLqjpJTjtUL7w==
+  /mdast-util-wiki-link/0.0.1:
+    dependencies:
+      '@babel/runtime': 7.12.5
+      mdast-util-to-markdown: 0.5.4
+    dev: false
+    resolution:
+      integrity: sha512-mQGhpvS1kICzDvC4me3vV4L/0msyGTvoHWIjqI0wUR1ToQ+CMy1o+tDVsS1G6QrXMMHOY0I8S9k6qwRfjxS6cA==
   /meow/3.7.0:
     dependencies:
       camelcase-keys: 2.1.0
@@ -5268,6 +5324,45 @@ packages:
     dev: false
     resolution:
       integrity: sha512-6FjvznI5GpUysZqGtTEMeDaC/D3FdWFVc3CC5gDZB3fBtqiaIRBhCNg4fbqvrFSC0T2eqRbO2dJ7ZFU86gAtEQ==
+  /micromark-extension-gfm-autolink-literal/0.5.1:
+    dependencies:
+      micromark: 2.10.1
+    dev: false
+    resolution:
+      integrity: sha512-j30923tDp0faCNDjwqe4cMi+slegbGfc3VEAExEU8d54Q/F6pR6YxCVH+6xV0ItRoj3lCn1XkUWcy6FC3S9BOw==
+  /micromark-extension-gfm-strikethrough/0.6.2:
+    dependencies:
+      micromark: 2.10.1
+    dev: false
+    resolution:
+      integrity: sha512-aehEEqtTn3JekJNwZZxa7ZJVfzmuaWp4ew6x6sl3VAKIwdDZdqYeYSQIrNKwNgH7hX0g56fAwnSDLusJggjlCQ==
+  /micromark-extension-gfm-table/0.4.1:
+    dependencies:
+      micromark: 2.10.1
+    dev: false
+    resolution:
+      integrity: sha512-xVpqOnfFaa2OtC/Y7rlt4tdVFlUHdoLH3RXAZgb/KP3DDyKsAOx6BRS3UxiiyvmD/p2l6VUpD4bMIniuP4o4JA==
+  /micromark-extension-gfm-tagfilter/0.3.0:
+    dev: false
+    resolution:
+      integrity: sha512-9GU0xBatryXifL//FJH+tAZ6i240xQuFrSL7mYi8f4oZSbc+NvXjkrHemeYP0+L4ZUT+Ptz3b95zhUZnMtoi/Q==
+  /micromark-extension-gfm-task-list-item/0.3.2:
+    dependencies:
+      micromark: 2.10.1
+    dev: false
+    resolution:
+      integrity: sha512-cm8lYS10YAqeXE9B27TK3u1Ihumo3H9p/3XumT+jp8vSuSbSpFIJe0bDi2kq4YAAIxtcTzUOxhEH4ko2/NYDkQ==
+  /micromark-extension-gfm/0.3.1:
+    dependencies:
+      micromark: 2.10.1
+      micromark-extension-gfm-autolink-literal: 0.5.1
+      micromark-extension-gfm-strikethrough: 0.6.2
+      micromark-extension-gfm-table: 0.4.1
+      micromark-extension-gfm-tagfilter: 0.3.0
+      micromark-extension-gfm-task-list-item: 0.3.2
+    dev: false
+    resolution:
+      integrity: sha512-lJlhcOqzoJdjQg+LMumVHdUQ61LjtqGdmZtrAdfvatRUnJTqZlRwXXHdLQgNDYlFw4mycZ4NSTKlya5QcQXl1A==
   /micromark-extension-math/0.1.1:
     dependencies:
       katex: 0.12.0
@@ -5275,6 +5370,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-iKmIn5GDa4vWqSnYwjg4UGTSISKD+wHB4PsJIWreiF4KAA4OYe4ZdnApZqQbjeZZqbYOvxZX1m7F+JdwkBJtOg==
+  /micromark-extension-wiki-link/0.0.2:
+    dependencies:
+      '@babel/runtime': 7.12.5
+    dev: false
+    resolution:
+      integrity: sha512-uYexTeFeXbuXyYPIS7OvM0CEfQ7SnX1pauKSBzA5ygQIIb4VbJwbucpAgooHvjtXtvYreM6SA8ZxHGAbrF2G4Q==
   /micromark/2.10.1:
     dependencies:
       debug: 4.3.1
@@ -6253,7 +6354,6 @@ packages:
     resolution:
       integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==
   /regenerator-runtime/0.13.7:
-    dev: true
     resolution:
       integrity: sha512-a54FxoJDIr27pgf7IgeQGxmqUNYrcV338lf/6gH456HZ/PhX+5BcwHXG9ajESmwe6WRO0tAzRUrRmNONWgkrew==
   /regex-not/1.0.2:
@@ -6278,6 +6378,13 @@ packages:
     dev: false
     resolution:
       integrity: sha512-x6rZs0qa0zu9gW7Avd+rRxHJL2K9TGk+c51NaLfQgCNI7SxwBycRJ3w5mMkjkIjO6O9/qdx0ntu48byCSgF96Q==
+  /remark-gfm/1.0.0:
+    dependencies:
+      mdast-util-gfm: 0.1.0
+      micromark-extension-gfm: 0.3.1
+    dev: false
+    resolution:
+      integrity: sha512-KfexHJCiqvrdBZVbQ6RopMZGwaXz6wFJEfByIuEwGf0arvITHjiKKZ1dpXujjH9KZdm1//XJQwgfnJ3lmXaDPA==
   /remark-math/4.0.0:
     dependencies:
       mdast-util-math: 0.1.1
@@ -6291,6 +6398,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-geKatMwSzEXKHuzBNU1z676sGcDcFoChMK38TgdHJNAYfFtsfHDQG7MoJAjs6sgYMqyLduCYWDIWZIxiPeafEw==
+  /remark-wiki-link/1.0.0:
+    dependencies:
+      '@babel/runtime': 7.12.5
+      mdast-util-wiki-link: 0.0.1
+      micromark-extension-wiki-link: 0.0.2
+    dev: false
+    resolution:
+      integrity: sha512-oOTx7Coc/SSEtlxZnYbjoF2zlb5jJWrxh3mS4F6wNWaLfLCy8bt4pAeCcLki191Gzkm/zR7iiEYEh36kX1ZM7Q==
   /remove-trailing-separator/1.1.0:
     dev: true
     resolution:
@@ -7845,6 +7960,7 @@ specifiers:
   '@commitlint/cli': ^11.0.0
   '@commitlint/config-conventional': ^11.0.0
   '@rollup/plugin-commonjs': ^15.1.0
+  '@rollup/plugin-json': ^4.1.0
   '@rollup/plugin-node-resolve': ^9.0.0
   '@rollup/plugin-typescript': ^6.1.0
   '@types/codemirror': ^0.0.98
@@ -7870,8 +7986,10 @@ specifiers:
   prettier: ^2.2.0
   rebber: ^5.1.2
   remark-directive: ^1.0.1
+  remark-gfm: ^1.0.0
   remark-math: ^4.0.0
   remark-parse: ^9.0.0
+  remark-wiki-link: ^1.0.0
   rollup: ^2.33.3
   rollup-plugin-copy: ^3.3.0
   standard-version: ^9.0.0

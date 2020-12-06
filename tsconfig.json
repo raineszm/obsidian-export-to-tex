@@ -13,9 +13,11 @@
     "esModuleInterop": true,
     "lib": [
       "dom",
-      "es5",
       "scripthost",
-      "es2015"
+      "esnext"
+    ],
+    "rootDirs": [
+      "src/", "types/"
     ]
   },
   "include": [

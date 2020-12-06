@@ -7,6 +7,8 @@ import {
   resolveSubpath,
   TFile,
 } from 'obsidian';
+import { preprocess } from './preprocessor';
+import { markdownToTex } from './processor';
 
 export class TeXPrinter {
   constructor(readonly metadata: MetadataCache) {}
@@ -90,17 +92,15 @@ export class TeXPrinter {
     };
   }
 
-  process(file: TFile, data: string): string {
-    return this.replaceHeadings(file, data);
+  async process(file: TFile, data: string): Promise<string> {
+    const vfile = await markdownToTex.process(data);
+    return vfile.toString();
   }
 
   async print(file: TFile): Promise<string> {
-    const data = await this.resolveEmbedsRecursively(file, {
-      line: 0,
-      col: 0,
-      offset: 0,
-    });
-    return this.process(file, data);
+    const data = await file.vault.cachedRead(file);
+    const preprocessed = preprocess(data);
+    return await this.process(file, preprocessed);
   }
 
   private replaceHeadings(file: TFile, data: string): string {

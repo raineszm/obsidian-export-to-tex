@@ -27,8 +27,6 @@ export default class ExportToTeXPlugin extends Plugin {
   }
 
   async doExport(file: TFile): Promise<void> {
-    const printer = new TeXPrinter(this.app.metadataCache);
-    const contents = await printer.print(file);
     const { filePath, canceled } = await remote.dialog.showSaveDialog({
       filters: [
         {
@@ -39,6 +37,9 @@ export default class ExportToTeXPlugin extends Plugin {
     });
 
     if (canceled || filePath === undefined) return;
+
+    const printer = new TeXPrinter(this.app.metadataCache);
+    const contents = await printer.print(file);
 
     await promisify(fs.writeFile)(filePath, contents);
   }
