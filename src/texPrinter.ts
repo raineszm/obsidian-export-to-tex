@@ -15,16 +15,4 @@ export class TeXPrinter {
     const vfile = await toVFile(file, this.metadata);
     return await this.process(vfile);
   }
-
-  static HEADINGS = [
-    'section',
-    'subsection',
-    'subsubsection',
-    'paragraph',
-    'subparagraph',
-  ];
-
-  static asAnchor(heading: string): string {
-    return heading.toLowerCase().replace(/[^a-z0-9]/, '-');
-  }
 }

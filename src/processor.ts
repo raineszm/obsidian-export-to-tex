@@ -14,6 +14,16 @@ const consume = (_ctx: unknown, _node: Node): string => '';
 const wikiLink = consume;
 const yaml = consume;
 
+const headings = [
+  'section',
+  'subsection',
+  'subsubsection',
+  'paragraph',
+  'subparagraph',
+].map((cmd) => {
+  return (text: string) => `\\${cmd}{${text}}`;
+});
+
 export const markdownToTex = unified()
   .use(markdown)
   .use(gfm)
@@ -32,6 +42,7 @@ export const markdownToTex = unified()
       yaml,
       math: displayMath,
     },
+    headings,
   });
 
 interface InlineMath extends Node {

@@ -6,6 +6,7 @@ declare module 'rebber' {
     overrides?: {
       [key: string]: NodeStringifier;
     };
+    headings?: Array<(text: string) => string>;
   }
   type Rebber = Plugin<[RebberSettings?]> & {
     toLatex: Processor;
