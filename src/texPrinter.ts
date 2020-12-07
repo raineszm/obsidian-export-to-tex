@@ -7,8 +7,9 @@ import {
   resolveSubpath,
   TFile,
 } from 'obsidian';
-import { preprocess } from './preprocessor';
 import { markdownToTex } from './processor';
+import { toVFile } from './file';
+import { VFile } from 'vfile';
 
 export class TeXPrinter {
   constructor(readonly metadata: MetadataCache) {}
@@ -92,15 +93,14 @@ export class TeXPrinter {
     };
   }
 
-  async process(file: TFile, data: string): Promise<string> {
-    const vfile = await markdownToTex.process(data);
-    return vfile.toString();
+  async process(vfile: VFile): Promise<string> {
+    const output = await markdownToTex.process(vfile);
+    return output.toString();
   }
 
   async print(file: TFile): Promise<string> {
-    const data = await file.vault.cachedRead(file);
-    const preprocessed = preprocess(data);
-    return await this.process(file, preprocessed);
+    const vfile = await toVFile(file, this.metadata);
+    return await this.process(vfile);
   }
 
   private replaceHeadings(file: TFile, data: string): string {
