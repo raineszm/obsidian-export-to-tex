@@ -43,7 +43,8 @@ export const markdownToTex = unified()
       math: displayMath,
     },
     headings,
-  });
+  })
+  .freeze();
 
 interface InlineMath extends Node {
   type: 'inlineMath';

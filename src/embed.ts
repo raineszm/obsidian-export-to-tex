@@ -1,9 +1,8 @@
 import { Node } from 'unist';
-import { Plugin } from 'unified';
+import { Transformer, Processor } from 'unified';
 import { VFile } from 'vfile';
 import visit from 'unist-util-visit';
 import { EmbedDirective } from './directives';
-import { markdownToTex } from './processor';
 import {
   BlockSubpathResult,
   HeadingSubpathResult,
@@ -13,9 +12,16 @@ import {
 } from 'obsidian';
 import { ObsidianVFile } from './file';
 
-export const embed: Plugin<[]> = () => embedTransformer;
+export function embed(this: Processor): Transformer {
+  return async (tree: Node, file: VFile) =>
+    await embedTransformer(this, tree, file);
+}
 
-async function embedTransformer(tree: Node, file: VFile): Promise<void> {
+async function embedTransformer(
+  processor: Processor,
+  tree: Node,
+  file: VFile,
+): Promise<void> {
   const promises: Array<Promise<void>> = [];
   visit(
     tree,
@@ -25,9 +31,11 @@ async function embedTransformer(tree: Node, file: VFile): Promise<void> {
       if (parent === undefined)
         throw new Error('found an embed without a parent');
       promises.push(
-        resolveEmbed(embed.attributes.target, file).then((newNode) => {
-          parent.children[index] = newNode;
-        }),
+        resolveEmbed(processor, embed.attributes.target, file).then(
+          (newNode) => {
+            parent.children[index] = newNode;
+          },
+        ),
       );
     },
   );
@@ -35,11 +43,15 @@ async function embedTransformer(tree: Node, file: VFile): Promise<void> {
   return Promise.all(promises).then(() => {});
 }
 
-async function resolveEmbed(embedTarget: string, vfile: VFile): Promise<Node> {
+async function resolveEmbed(
+  processor: Processor,
+  embedTarget: string,
+  vfile: VFile,
+): Promise<Node> {
   const { file, result } = getTarget(embedTarget, vfile as ObsidianVFile);
   const fileData = await file.vault.cachedRead(file);
   const data = fileData.slice(result.start.offset, result.end?.offset);
-  return markdownToTex.parse(data);
+  return processor.parse(data);
 }
 
 function getTarget(
