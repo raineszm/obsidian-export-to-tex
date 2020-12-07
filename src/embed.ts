@@ -6,8 +6,8 @@ import { EmbedDirective } from './directives';
 import { markdownToTex } from './processor';
 import {
   BlockSubpathResult,
-  getLinkpath,
   HeadingSubpathResult,
+  parseLinktext,
   resolveSubpath,
   TFile,
 } from 'obsidian';
@@ -47,9 +47,8 @@ function getTarget(
   ovfile: ObsidianVFile,
 ): { file: TFile; result: HeadingSubpathResult | BlockSubpathResult } {
   const { file, metadata } = ovfile.data;
-  const path = getLinkpath(embedTarget);
+  const { path, subpath } = parseLinktext(embedTarget);
   const target = metadata.getFirstLinkpathDest(path, file.path);
-  const subpath = embedTarget.replace(path, '');
   return {
     file: target,
     result: resolveSubpath(metadata.getFileCache(target), subpath),

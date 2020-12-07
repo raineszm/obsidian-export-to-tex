@@ -36,7 +36,7 @@ devDependencies:
   husky: 4.3.0
   jest: 26.6.3
   lint-staged: 10.5.2
-  obsidian: github.com/obsidianmd/obsidian-api/3efab21fc0cfef3ae75951beb66aadd479ae610d
+  obsidian: github.com/obsidianmd/obsidian-api/6647842a61850b716eb05af0f9ffe36067dabbef
   prettier: 2.2.0
   rollup: 2.33.3
   rollup-plugin-copy: 3.3.0
@@ -7985,14 +7985,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==
-  github.com/obsidianmd/obsidian-api/3efab21fc0cfef3ae75951beb66aadd479ae610d:
+  github.com/obsidianmd/obsidian-api/6647842a61850b716eb05af0f9ffe36067dabbef:
     dependencies:
       '@types/codemirror': 0.0.98
     dev: true
     name: obsidian
     resolution:
-      tarball: 'https://codeload.github.com/obsidianmd/obsidian-api/tar.gz/3efab21fc0cfef3ae75951beb66aadd479ae610d'
-    version: 0.9.16
+      tarball: 'https://codeload.github.com/obsidianmd/obsidian-api/tar.gz/6647842a61850b716eb05af0f9ffe36067dabbef'
+    version: 0.9.20
 specifiers:
   '@commitlint/cli': ^11.0.0
   '@commitlint/config-conventional': ^11.0.0
@@ -8019,7 +8019,7 @@ specifiers:
   husky: ^4.3.0
   jest: ^26.6.3
   lint-staged: ^10.5.2
-  obsidian: obsidianmd/obsidian-api#3efab21fc0cfef3ae75951beb66aadd479ae610d
+  obsidian: obsidianmd/obsidian-api#6647842a61850b716eb05af0f9ffe36067dabbef
   prettier: ^2.2.0
   rebber: ^5.1.2
   remark-directive: ^1.0.1
