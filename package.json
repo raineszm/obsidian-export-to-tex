@@ -86,7 +86,8 @@
     "remark-parse": "^9.0.0",
     "remark-wiki-link": "^1.0.0",
     "unified": "^9.2.0",
-    "unist-util-flatmap": "^1.0.0",
-    "unist-util-is": "^4.0.4"
+    "unist-util-filter": "^2.0.3",
+    "unist-util-is": "^4.0.4",
+    "unist-util-map": "^2.0.1"
   }
 }

@@ -2,12 +2,12 @@ import { Node } from 'unist';
 import { Plugin } from 'unified';
 import { VFile } from 'vfile';
 import is from 'unist-util-is';
-import flatMap from 'unist-util-flatmap';
+import map from 'unist-util-map';
 import { EmbedDirective } from './directives';
 import {
-  BlockCache,
+  BlockSubpathResult,
   getLinkpath,
-  HeadingCache,
+  HeadingSubpathResult,
   resolveSubpath,
   TFile,
 } from 'obsidian';
@@ -15,25 +15,27 @@ import { ObsidianVFile } from './file';
 
 export const embed: Plugin<[]> = () => embedTransformer;
 
-function embedTransformer(tree: Node, file: VFile): Node {
-  return flatMap(tree, (node) => {
-    if (!is(node, { type: 'textDirective', name: 'embed' })) return [node];
+function isEmbedDirective(node: Node): node is EmbedDirective {
+  return is(node, { type: 'textDirective', name: 'embed' });
+}
 
-    const embed = node as EmbedDirective;
-    return resolveEmbed(embed.attributes.target, file);
+function embedTransformer(tree: Node, file: VFile): Node {
+  return map(tree, (node) => {
+    if (!isEmbedDirective(node)) return node;
+
+    return resolveEmbed(node.attributes.target, file);
   });
 }
 
-function resolveEmbed(embedTarget: string, vfile: VFile): Node[] {
+function resolveEmbed(embedTarget: string, vfile: VFile): Node {
   const { file, cache } = getTarget(embedTarget, vfile as ObsidianVFile);
-
-  return [];
+  return { type: 'promise' };
 }
 
 function getTarget(
   embedTarget: string,
   ovfile: ObsidianVFile,
-): { file: TFile; cache: BlockCache | HeadingCache } {
+): { file: TFile; cache: HeadingSubpathResult | BlockSubpathResult } {
   const { file, metadata } = ovfile.data;
   const path = getLinkpath(embedTarget);
   const target = metadata.getFirstLinkpathDest(path, file.path);

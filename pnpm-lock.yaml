@@ -7,8 +7,9 @@ dependencies:
   remark-parse: 9.0.0
   remark-wiki-link: 1.0.0
   unified: 9.2.0
-  unist-util-flatmap: 1.0.0
+  unist-util-filter: 2.0.3
   unist-util-is: 4.0.4
+  unist-util-map: 2.0.1
 devDependencies:
   '@commitlint/cli': 11.0.0
   '@commitlint/config-conventional': 11.0.0
@@ -5684,7 +5685,6 @@ packages:
     resolution:
       integrity: sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
   /object-assign/4.1.1:
-    dev: true
     engines:
       node: '>=0.10.0'
     resolution:
@@ -7636,14 +7636,23 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-tJfXmxMeWYnczCVs7XAEvIV7ieppALdyepWMkHkwciRpZraG/xwT+s2JN8+pr1+8jCRf80FFzvr+MpQeeoF4Xg==
-  /unist-util-flatmap/1.0.0:
+  /unist-util-filter/2.0.3:
+    dependencies:
+      unist-util-is: 4.0.4
     dev: false
     resolution:
-      integrity: sha512-IG32jcKJlhARCYT2LsYPJWdoXYkzz3ESAdl1aa2hn9Auh+cgUmU6wgkII4yCc/1GgeWibRdELdCZh/p3QKQ1dQ==
+      integrity: sha512-8k6Jl/KLFqIRTHydJlHh6+uFgqYHq66pV75pZgr1JwfyFSjbWb12yfb0yitW/0TbHXjr9U4G9BQpOvMANB+ExA==
   /unist-util-is/4.0.4:
     dev: false
     resolution:
       integrity: sha512-3dF39j/u423v4BBQrk1AQ2Ve1FxY5W3JKwXxVFzBODQ6WEvccguhgp802qQLKSnxPODE6WuRZtV+ohlUg4meBA==
+  /unist-util-map/2.0.1:
+    dependencies:
+      '@types/mdast': 3.0.3
+      object-assign: 4.1.1
+    dev: false
+    resolution:
+      integrity: sha512-VdNvk4BQUUU9Rgr8iUOvclHa/iN9O+6Dt66FKij8l9OVezGG37gGWCPU5KSax1R2degqXFvl3kWTkvzL79e9tQ==
   /unist-util-stringify-position/2.0.3:
     dependencies:
       '@types/unist': 2.0.3
@@ -8032,6 +8041,7 @@ specifiers:
   tslib: ^2.0.3
   typescript: ^4.1.2
   unified: ^9.2.0
-  unist-util-flatmap: ^1.0.0
+  unist-util-filter: ^2.0.3
   unist-util-is: ^4.0.4
+  unist-util-map: ^2.0.1
   vfile: ^4.2.1
