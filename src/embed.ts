@@ -15,7 +15,7 @@ import { ObsidianVFile } from './file';
 
 export const embed: Plugin<[]> = () => embedTransformer;
 
-async function embedTransformer(tree: Node, file: VFile): Promise<Node> {
+async function embedTransformer(tree: Node, file: VFile): Promise<void> {
   const promises: Array<Promise<void>> = [];
   visit(
     tree,
@@ -32,7 +32,7 @@ async function embedTransformer(tree: Node, file: VFile): Promise<Node> {
     },
   );
 
-  return Promise.all(promises).then(() => tree);
+  return Promise.all(promises).then(() => {});
 }
 
 async function resolveEmbed(embedTarget: string, vfile: VFile): Promise<Node> {
