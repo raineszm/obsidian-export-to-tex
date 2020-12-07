@@ -1,9 +1,9 @@
 import { Node } from 'unist';
 import { Plugin } from 'unified';
 import { VFile } from 'vfile';
-import is from 'unist-util-is';
-import map from 'unist-util-map';
+import visit from 'unist-util-visit';
 import { EmbedDirective } from './directives';
+import { markdownToTex } from './processor';
 import {
   BlockSubpathResult,
   getLinkpath,
@@ -15,33 +15,43 @@ import { ObsidianVFile } from './file';
 
 export const embed: Plugin<[]> = () => embedTransformer;
 
-function isEmbedDirective(node: Node): node is EmbedDirective {
-  return is(node, { type: 'textDirective', name: 'embed' });
+async function embedTransformer(tree: Node, file: VFile): Promise<Node> {
+  const promises: Array<Promise<void>> = [];
+  visit(
+    tree,
+    { type: 'textDirective', name: 'embed' },
+    (node, index, parent) => {
+      const embed = node as EmbedDirective;
+      if (parent === undefined)
+        throw new Error('found an embed without a parent');
+      promises.push(
+        resolveEmbed(embed.attributes.target, file).then((newNode) => {
+          parent.children[index] = newNode;
+        }),
+      );
+    },
+  );
+
+  return Promise.all(promises).then(() => tree);
 }
 
-function embedTransformer(tree: Node, file: VFile): Node {
-  return map(tree, (node) => {
-    if (!isEmbedDirective(node)) return node;
-
-    return resolveEmbed(node.attributes.target, file);
-  });
-}
-
-function resolveEmbed(embedTarget: string, vfile: VFile): Node {
-  const { file, cache } = getTarget(embedTarget, vfile as ObsidianVFile);
-  return { type: 'promise' };
+async function resolveEmbed(embedTarget: string, vfile: VFile): Promise<Node> {
+  const { file, result } = getTarget(embedTarget, vfile as ObsidianVFile);
+  const fileData = await file.vault.cachedRead(file);
+  const data = fileData.slice(result.start.offset, result.end?.offset);
+  return markdownToTex.parse(data);
 }
 
 function getTarget(
   embedTarget: string,
   ovfile: ObsidianVFile,
-): { file: TFile; cache: HeadingSubpathResult | BlockSubpathResult } {
+): { file: TFile; result: HeadingSubpathResult | BlockSubpathResult } {
   const { file, metadata } = ovfile.data;
   const path = getLinkpath(embedTarget);
   const target = metadata.getFirstLinkpathDest(path, file.path);
   const subpath = embedTarget.replace(path, '');
   return {
     file: target,
-    cache: resolveSubpath(metadata.getFileCache(target), subpath),
+    result: resolveSubpath(metadata.getFileCache(target), subpath),
   };
 }

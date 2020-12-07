@@ -9,7 +9,7 @@ dependencies:
   unified: 9.2.0
   unist-util-filter: 2.0.3
   unist-util-is: 4.0.4
-  unist-util-map: 2.0.1
+  unist-util-visit: 2.0.3
 devDependencies:
   '@commitlint/cli': 11.0.0
   '@commitlint/config-conventional': 11.0.0
@@ -5685,6 +5685,7 @@ packages:
     resolution:
       integrity: sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
   /object-assign/4.1.1:
+    dev: true
     engines:
       node: '>=0.10.0'
     resolution:
@@ -7646,13 +7647,6 @@ packages:
     dev: false
     resolution:
       integrity: sha512-3dF39j/u423v4BBQrk1AQ2Ve1FxY5W3JKwXxVFzBODQ6WEvccguhgp802qQLKSnxPODE6WuRZtV+ohlUg4meBA==
-  /unist-util-map/2.0.1:
-    dependencies:
-      '@types/mdast': 3.0.3
-      object-assign: 4.1.1
-    dev: false
-    resolution:
-      integrity: sha512-VdNvk4BQUUU9Rgr8iUOvclHa/iN9O+6Dt66FKij8l9OVezGG37gGWCPU5KSax1R2degqXFvl3kWTkvzL79e9tQ==
   /unist-util-stringify-position/2.0.3:
     dependencies:
       '@types/unist': 2.0.3
@@ -8043,5 +8037,5 @@ specifiers:
   unified: ^9.2.0
   unist-util-filter: ^2.0.3
   unist-util-is: ^4.0.4
-  unist-util-map: ^2.0.1
+  unist-util-visit: ^2.0.3
   vfile: ^4.2.1
