@@ -1,12 +1,4 @@
-import {
-  EmbedCache,
-  getLinkpath,
-  Loc,
-  MetadataCache,
-  Pos,
-  resolveSubpath,
-  TFile,
-} from 'obsidian';
+import { MetadataCache, TFile } from 'obsidian';
 import { markdownToTex } from './processor';
 import { toVFile } from './file';
 import { VFile } from 'vfile';
