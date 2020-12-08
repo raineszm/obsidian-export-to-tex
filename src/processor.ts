@@ -3,16 +3,20 @@ import markdown from 'remark-parse';
 import math from 'remark-math';
 import gfm from 'remark-gfm';
 import directive from 'remark-directive';
-import { wikiLinkPlugin } from 'remark-wiki-link';
+import { WikiLink, wikiLinkPlugin } from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
-import rebber from 'rebber';
+import rebber, { RebberSettings } from 'rebber';
 import { Node } from 'unist';
 import { LabelDirective, TextDirective } from './directives';
 import { embed } from './embed';
+// import { ExportToTexSettings } from './settings';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
-const wikiLink = consume;
 const yaml = consume;
+
+// type AugmentedContext = RebberSettings & {
+//   exportToTex: ExportToTexSettings;
+// };
 
 const headings = [
   'section',
@@ -56,17 +60,17 @@ interface Math extends Node {
   value: string;
 }
 
-function inlineMath(_ctx: unknown, node: Node): string {
+function inlineMath(_ctx: RebberSettings, node: Node): string {
   const mathNode = node as InlineMath;
   return `$${mathNode.value}$`;
 }
 
-function displayMath(_ctx: unknown, node: Node): string {
+function displayMath(_ctx: RebberSettings, node: Node): string {
   const mathNode = node as Math;
   return `\\[\n${mathNode.value}\n\\]`;
 }
 
-function textDirective(_ctx: unknown, node: Node): string {
+function textDirective(ctx: RebberSettings, node: Node): string {
   const directive = node as TextDirective;
   if (directive.name === 'label') {
     return stringifyLabel(directive as LabelDirective);
@@ -76,4 +80,11 @@ function textDirective(_ctx: unknown, node: Node): string {
 
 function stringifyLabel(directive: LabelDirective): string {
   return `\\label{${directive.attributes.text}}`;
+}
+
+function wikiLink(ctx: RebberSettings, node: Node): string {
+  // const { refCommand } = ctx as ExportToTexSettings;
+  const link = node as WikiLink;
+  const { alias } = link.data;
+  return alias ?? link.value;
 }
