@@ -15,7 +15,22 @@ export default class ExportToTeXPlugin extends Plugin {
         const file = this.app.workspace.getActiveFile();
         if (file !== null) {
           if (!checking) {
-            this.doExport(file).catch(console.log);
+            this.exportToFile(file).catch(console.log);
+          }
+          return true;
+        }
+        return false;
+      },
+    });
+
+    this.addCommand({
+      id: 'export-tex-to-clipboard',
+      name: 'Export To Clipboard',
+      checkCallback: (checking: boolean) => {
+        const file = this.app.workspace.getActiveFile();
+        if (file !== null) {
+          if (!checking) {
+            this.exportToClipboard(file).catch(console.log);
           }
           return true;
         }
@@ -26,7 +41,7 @@ export default class ExportToTeXPlugin extends Plugin {
     this.addSettingTab(new ExportToTeXSettingTab(this.app, this));
   }
 
-  async doExport(file: TFile): Promise<void> {
+  async exportToFile(file: TFile): Promise<void> {
     const { filePath, canceled } = await remote.dialog.showSaveDialog({
       filters: [
         {
@@ -42,6 +57,12 @@ export default class ExportToTeXPlugin extends Plugin {
     const contents = await printer.print(file);
 
     await promisify(fs.writeFile)(filePath, contents);
+  }
+
+  async exportToClipboard(file: TFile): Promise<void> {
+    const printer = new TeXPrinter(this.app.metadataCache);
+    const contents = await printer.print(file);
+    remote.clipboard.writeText(contents);
   }
 }
 
