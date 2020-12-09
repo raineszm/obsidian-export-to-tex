@@ -11,7 +11,7 @@ declare module 'rebber' {
       headings?: Array<(text: string) => string>;
     }
     type stringify = Plugin<[RebberSettings?]> & {
-      toLatex: (node: Node, settings: RebberSettings) => string;
+      toLaTeX: (node: Node, settings: RebberSettings) => string;
     };
   }
 

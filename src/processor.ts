@@ -95,9 +95,9 @@ function heading(ctx: RebberSettings, node: Node): string {
   if (heading.depth > 5) {
     return '';
   }
-  const cmd = headingNames[heading.depth];
+  const cmd = headingNames[heading.depth - 1];
   const text = heading.children
-    .map((content) => rebber.toLatex(content, ctx))
+    .map((content) => rebber.toLaTeX(content, ctx))
     .join('');
   const label = heading.data?.id as string;
   return `\\${cmd}{${text}}\\label{sec:${label}}`;
