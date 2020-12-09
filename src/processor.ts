@@ -5,8 +5,10 @@ import gfm from 'remark-gfm';
 import directive from 'remark-directive';
 import { WikiLink, wikiLinkPlugin } from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
+import slug from 'remark-slug';
 import rebber, { RebberSettings } from 'rebber';
 import { Node } from 'unist';
+import { Heading } from 'mdast';
 import { LabelDirective, TextDirective } from './directives';
 import { embed } from './embed';
 // import { ExportToTexSettings } from './settings';
@@ -18,16 +20,6 @@ const yaml = consume;
 //   exportToTex: ExportToTexSettings;
 // };
 
-const headings = [
-  'section',
-  'subsection',
-  'subsubsection',
-  'paragraph',
-  'subparagraph',
-].map((cmd) => {
-  return (text: string) => `\\${cmd}{${text}}`;
-});
-
 export const markdownToTex = unified()
   .use(markdown)
   .use(gfm)
@@ -38,6 +30,7 @@ export const markdownToTex = unified()
     aliasDivider: '|',
   })
   .use(embed)
+  .use(slug)
   .use(rebber, {
     overrides: {
       wikiLink,
@@ -45,8 +38,8 @@ export const markdownToTex = unified()
       textDirective,
       yaml,
       math: displayMath,
+      heading,
     },
-    headings,
   })
   .freeze();
 
@@ -70,7 +63,7 @@ function displayMath(_ctx: RebberSettings, node: Node): string {
   return `\\[\n${mathNode.value}\n\\]`;
 }
 
-function textDirective(ctx: RebberSettings, node: Node): string {
+function textDirective(_ctx: RebberSettings, node: Node): string {
   const directive = node as TextDirective;
   if (directive.name === 'label') {
     return stringifyLabel(directive as LabelDirective);
@@ -82,9 +75,30 @@ function stringifyLabel(directive: LabelDirective): string {
   return `\\label{${directive.attributes.text}}`;
 }
 
-function wikiLink(ctx: RebberSettings, node: Node): string {
+function wikiLink(_ctx: RebberSettings, node: Node): string {
   // const { refCommand } = ctx as ExportToTexSettings;
   const link = node as WikiLink;
   const { alias } = link.data;
   return alias ?? link.value;
+}
+
+const headingNames = [
+  'section',
+  'subsection',
+  'subsubsection',
+  'paragraph',
+  'subparagraph',
+];
+
+function heading(ctx: RebberSettings, node: Node): string {
+  const heading = node as Heading;
+  if (heading.depth > 5) {
+    return '';
+  }
+  const cmd = headingNames[heading.depth];
+  const text = heading.children
+    .map((content) => rebber.toLatex(content, ctx))
+    .join('');
+  const label = heading.data?.id as string;
+  return `\\${cmd}{${text}}\\label{sec:${label}}`;
 }

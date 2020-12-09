@@ -84,6 +84,7 @@
     "remark-gfm": "^1.0.0",
     "remark-math": "^4.0.0",
     "remark-parse": "^9.0.0",
+    "remark-slug": "^6.0.0",
     "remark-wiki-link": "^1.0.0",
     "unified": "^9.2.0",
     "unist-util-filter": "^2.0.3",

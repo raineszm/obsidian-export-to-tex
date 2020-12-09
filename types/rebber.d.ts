@@ -1,6 +1,6 @@
 declare module 'rebber' {
   import { Node } from 'unist';
-  import { Plugin, Processor } from 'unified';
+  import { Plugin } from 'unified';
 
   namespace Rebber {
     type NodeStringifier = (ctx: RebberSettings, node: Node) => string;
@@ -11,7 +11,7 @@ declare module 'rebber' {
       headings?: Array<(text: string) => string>;
     }
     type stringify = Plugin<[RebberSettings?]> & {
-      toLatex: Processor;
+      toLatex: (node: Node, settings: RebberSettings) => string;
     };
   }
 
