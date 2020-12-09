@@ -9,8 +9,9 @@ import {
 import { TeXPrinter } from './texPrinter';
 import { remote } from 'electron';
 import * as fs from 'fs';
-import { promisify } from 'util';
 import { ExportToTexSettings } from './settings';
+import { promisify } from 'util';
+import { setDebug } from './log';
 
 export default class ExportToTeXPlugin extends Plugin {
   settings: ExportToTexSettings = new ExportToTexSettings();
@@ -20,6 +21,7 @@ export default class ExportToTeXPlugin extends Plugin {
     if (settings !== null) {
       this.settings = settings;
     }
+    setDebug(this.settings.debug);
 
     this.addCommand({
       id: 'export-to-tex',
@@ -104,6 +106,17 @@ class ExportToTeXSettingTab extends PluginSettingTab {
             await this.plugin.saveData(this.plugin.settings);
           }),
       );
+
+    new Setting(containerEl)
+      .setName('Debug')
+      .setDesc('Print debug information to console?')
+      .addToggle((toggle) => {
+        toggle.setValue(this.plugin.settings.debug).onChange(async (value) => {
+          this.plugin.settings.debug = value;
+          setDebug(value);
+          await this.plugin.saveData(this.plugin.settings);
+        });
+      });
 
     new ButtonComponent(containerEl)
       .setButtonText('Reset to default')

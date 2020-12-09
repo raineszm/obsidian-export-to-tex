@@ -11,6 +11,8 @@ import {
   TFile,
 } from 'obsidian';
 import { ObsidianVFile } from './file';
+import * as log from 'loglevel';
+const logger = log.getLogger('export-to-tex');
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -48,9 +50,13 @@ async function resolveEmbed(
   embedTarget: string,
   vfile: VFile,
 ): Promise<Node> {
+  logger.debug(`Resolving embed ${embedTarget}`);
   const { file, result } = getTarget(embedTarget, vfile as ObsidianVFile);
+  logger.debug(`Reading embededed file ${file.basename}`);
   const fileData = await file.vault.cachedRead(file);
+  logger.debug(`Extracting block ${embedTarget}`);
   const data = fileData.slice(result.start.offset, result.end?.offset);
+  logger.debug(`Parsing ${embedTarget}`);
   return processor.parse(data);
 }
 
