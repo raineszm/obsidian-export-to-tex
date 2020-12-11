@@ -1,4 +1,6 @@
+import { LogLevelString } from './log';
+
 export class ExportToTexSettings {
   refCommand: string = 'cref';
-  debug: boolean = false;
+  logLevel: LogLevelString = 'warn';
 }

@@ -1,5 +1,11 @@
 import * as loglevel from 'loglevel';
 export const log = loglevel.getLogger('export-to-tex');
-export function setDebug(debug: boolean): void {
-  log.setLevel(debug ? 'debug' : 'info');
+
+export enum LogLevelOptions {
+  trace = 'trace',
+  debug = 'debug',
+  info = 'info',
+  warn = 'warn',
+  error = 'error',
 }
+export type LogLevelString = keyof typeof LogLevelOptions;
