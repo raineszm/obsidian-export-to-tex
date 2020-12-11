@@ -2,6 +2,7 @@ import {
   App,
   ButtonComponent,
   Plugin,
+  Notice,
   PluginSettingTab,
   Setting,
   TFile,
@@ -72,12 +73,17 @@ export default class ExportToTeXPlugin extends Plugin {
     const contents = await printer.print(file);
 
     await promisify(fs.writeFile)(filePath, contents);
+
+    // eslint-disable-next-line no-new
+    new Notice(`Tex exported to ${filePath}`);
   }
 
   async exportToClipboard(file: TFile): Promise<void> {
     const printer = new TeXPrinter(this.app.metadataCache, this.settings);
     const contents = await printer.print(file);
     remote.clipboard.writeText(contents);
+    // eslint-disable-next-line no-new
+    new Notice(`Tex exported to clipboard`);
   }
 }
 
