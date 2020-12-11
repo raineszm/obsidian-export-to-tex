@@ -46,7 +46,7 @@ async function embedTransformer(
   );
 
   return Promise.all(promises).then(() => {
-    log.debug("All embed's resolved");
+    log.debug('All embeds resolved');
   });
 }
 
