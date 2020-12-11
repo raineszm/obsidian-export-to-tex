@@ -9,3 +9,5 @@ export enum LogLevelOptions {
   error = 'error',
 }
 export type LogLevelString = keyof typeof LogLevelOptions;
+
+export const prefix = 'export-to-tex: ';
