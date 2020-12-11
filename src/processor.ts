@@ -11,6 +11,7 @@ import { Node } from 'unist';
 import { Heading } from 'mdast';
 import { LabelDirective, TextDirective } from './directives';
 import { embed } from './embed';
+import { displayMath, inlineMath } from './math';
 // import { ExportToTexSettings } from './settings';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
@@ -20,6 +21,14 @@ const yaml = consume;
 //   exportToTex: ExportToTexSettings;
 // };
 
+const rebberOverrides = {
+  wikiLink,
+  inlineMath,
+  textDirective,
+  yaml,
+  math: displayMath,
+  heading,
+};
 export const markdownToTex = unified()
   .use(markdown)
   .use(gfm)
@@ -32,36 +41,9 @@ export const markdownToTex = unified()
   .use(embed)
   .use(slug)
   .use(rebber, {
-    overrides: {
-      wikiLink,
-      inlineMath,
-      textDirective,
-      yaml,
-      math: displayMath,
-      heading,
-    },
+    overrides: rebberOverrides,
   })
   .freeze();
-
-interface InlineMath extends Node {
-  type: 'inlineMath';
-  value: string;
-}
-
-interface Math extends Node {
-  type: 'math';
-  value: string;
-}
-
-function inlineMath(_ctx: RebberSettings, node: Node): string {
-  const mathNode = node as InlineMath;
-  return `$${mathNode.value}$`;
-}
-
-function displayMath(_ctx: RebberSettings, node: Node): string {
-  const mathNode = node as Math;
-  return `\\[\n${mathNode.value}\n\\]`;
-}
 
 function textDirective(_ctx: RebberSettings, node: Node): string {
   const directive = node as TextDirective;
