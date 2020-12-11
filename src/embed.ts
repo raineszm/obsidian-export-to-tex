@@ -56,16 +56,29 @@ async function resolveEmbed(
   vfile: VFile,
 ): Promise<Node> {
   log.debug(`Resolving embed "${embedTarget}"`);
+
   const { file, result } = getTarget(embedTarget, vfile as ObsidianVFile);
+  if (result === null) {
+    log.warn(`Failed to resolve embed ${embedTarget}`);
+    return { type: 'inlineCode', value: `Missing ${embedTarget}` };
+  }
+
   log.debug('Obtained result block', result);
   log.debug(`Reading embedded file ${file.basename}`);
+
   const fileData = await file.vault.cachedRead(file);
+
   log.debug(`Extracting block "${embedTarget}"`);
+
   const data = fileData.slice(result.start.offset, result.end?.offset);
+
   log.trace(`"${embedTarget}" data:\n${data}`);
   log.debug(`Parsing "${embedTarget}"`);
+
   const processed = processor.parse(data);
+
   log.debug(`Parsed "${embedTarget}"`);
+
   return processed;
 }
 
