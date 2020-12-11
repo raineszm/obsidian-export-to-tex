@@ -11,8 +11,7 @@ import {
   TFile,
 } from 'obsidian';
 import { ObsidianVFile } from './file';
-import * as log from 'loglevel';
-const logger = log.getLogger('export-to-tex');
+import { log } from './log';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -24,6 +23,7 @@ async function embedTransformer(
   tree: Node,
   file: VFile,
 ): Promise<void> {
+  log.debug('embed resolution step');
   const promises: Array<Promise<void>> = [];
   visit(
     tree,
@@ -35,6 +35,9 @@ async function embedTransformer(
       promises.push(
         resolveEmbed(processor, embed.attributes.target, file).then(
           (newNode) => {
+            log.trace(
+              `Adding embed node ${embed.attributes.target} to parent ${parent.type} node at ${index}`,
+            );
             parent.children[index] = newNode;
           },
         ),
@@ -42,7 +45,9 @@ async function embedTransformer(
     },
   );
 
-  return Promise.all(promises).then(() => {});
+  return Promise.all(promises).then(() => {
+    log.debug("All embed's resolved");
+  });
 }
 
 async function resolveEmbed(
@@ -50,14 +55,18 @@ async function resolveEmbed(
   embedTarget: string,
   vfile: VFile,
 ): Promise<Node> {
-  logger.debug(`Resolving embed ${embedTarget}`);
+  log.debug(`Resolving embed "${embedTarget}"`);
   const { file, result } = getTarget(embedTarget, vfile as ObsidianVFile);
-  logger.debug(`Reading embededed file ${file.basename}`);
+  log.debug('Obtained result block', result);
+  log.debug(`Reading embedded file ${file.basename}`);
   const fileData = await file.vault.cachedRead(file);
-  logger.debug(`Extracting block ${embedTarget}`);
+  log.debug(`Extracting block "${embedTarget}"`);
   const data = fileData.slice(result.start.offset, result.end?.offset);
-  logger.debug(`Parsing ${embedTarget}`);
-  return processor.parse(data);
+  log.trace(`"${embedTarget}" data:\n${data}`);
+  log.debug(`Parsing "${embedTarget}"`);
+  const processed = processor.parse(data);
+  log.debug(`Parsed "${embedTarget}"`);
+  return processed;
 }
 
 function getTarget(
@@ -66,9 +75,11 @@ function getTarget(
 ): { file: TFile; result: HeadingSubpathResult | BlockSubpathResult } {
   const { file, metadata } = ovfile.data;
   const { path, subpath } = parseLinktext(embedTarget);
+  log.debug(`"${embedTarget}" parses to "${subpath}" in "${path}`);
   const target = metadata.getFirstLinkpathDest(path, file.path);
+  log.debug(`Loading file ${target.name}`);
   return {
     file: target,
-    result: resolveSubpath(metadata.getFileCache(target), subpath),
+    result: resolveSubpath(metadata.getFileCache(target), subpath.trimEnd()),
   };
 }
