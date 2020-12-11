@@ -108,6 +108,24 @@ class ExportToTeXSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
+      .setName('Additional math environments')
+      .setDesc(
+        'Additional environments which trigger math content without needing \\[...\\]' +
+          ' (comma delimited)',
+      )
+      .addText((text) => {
+        text
+          .setValue(this.plugin.settings.additionalMathEnvironments.join(','))
+          .onChange(async (value) => {
+            this.plugin.settings.additionalMathEnvironments = value
+              .split(',')
+              .map((x) => x.trim())
+              .filter((x) => x.length > 0);
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
+    new Setting(containerEl)
       .setName('Debug')
       .setDesc('Print debug information to console?')
       .addDropdown((dropdown) => {

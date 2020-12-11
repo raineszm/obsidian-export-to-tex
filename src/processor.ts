@@ -17,10 +17,6 @@ import { displayMath, inlineMath } from './math';
 const consume = (_ctx: unknown, _node: Node): string => '';
 const yaml = consume;
 
-// type AugmentedContext = RebberSettings & {
-//   exportToTex: ExportToTexSettings;
-// };
-
 const rebberOverrides = {
   wikiLink,
   inlineMath,
