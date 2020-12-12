@@ -3,16 +3,16 @@ import markdown from 'remark-parse';
 import math from 'remark-math';
 import gfm from 'remark-gfm';
 import directive from 'remark-directive';
-import { WikiLink, wikiLinkPlugin } from 'remark-wiki-link';
+import { wikiLinkPlugin } from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
-import slug from 'remark-slug';
 import rebber, { RebberSettings } from 'rebber';
 import { Node } from 'unist';
 import { Heading } from 'mdast';
 import { LabelDirective, TextDirective } from './directives';
 import { embed } from './embed';
 import { displayMath, inlineMath } from './math';
-// import { ExportToTexSettings } from './settings';
+import { LabeledLink, labels } from './labels';
+import { AugmentedContext } from './data';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
 const yaml = consume;
@@ -35,7 +35,7 @@ export const markdownToTex = unified()
     aliasDivider: '|',
   })
   .use(embed)
-  .use(slug)
+  .use(labels)
   .use(rebber, {
     overrides: rebberOverrides,
   })
@@ -50,14 +50,19 @@ function textDirective(_ctx: RebberSettings, node: Node): string {
 }
 
 function stringifyLabel(directive: LabelDirective): string {
-  return `\\label{${directive.attributes.text}}`;
+  return `\\label{${directive.data?.label ?? ''}}`;
 }
 
-function wikiLink(_ctx: RebberSettings, node: Node): string {
-  // const { refCommand } = ctx as ExportToTexSettings;
-  const link = node as WikiLink;
-  const { alias } = link.data;
-  return alias ?? link.value;
+function wikiLink(ctx: RebberSettings, node: Node): string {
+  const link = node as LabeledLink;
+  const {
+    exportToTex: { refCommand },
+  } = ctx as AugmentedContext;
+  const { alias, label } = link.data;
+  if (!link.value.contains('#') || label === undefined) {
+    return alias ?? link.value;
+  }
+  return `${alias ?? ''}\\${refCommand}{${label}}`;
 }
 
 const headingNames = [
@@ -77,6 +82,6 @@ function heading(ctx: RebberSettings, node: Node): string {
   const text = heading.children
     .map((content) => rebber.toLaTeX(content, ctx))
     .join('');
-  const label = heading.data?.id as string;
-  return `\\${cmd}{${text}}\\label{sec:${label}}`;
+  const label = heading.data?.label as string;
+  return `\\${cmd}{${text}}\\label{${label}}`;
 }

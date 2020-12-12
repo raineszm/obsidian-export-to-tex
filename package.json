@@ -78,6 +78,8 @@
     "vfile": "^4.2.1"
   },
   "dependencies": {
+    "@types/github-slugger": "^1.3.0",
+    "github-slugger": "^1.3.0",
     "loglevel": "^1.7.1",
     "rebber": "^5.1.2",
     "remark-directive": "^1.0.1",
@@ -85,7 +87,6 @@
     "remark-gfm": "^1.0.0",
     "remark-math": "^4.0.0",
     "remark-parse": "^9.0.0",
-    "remark-slug": "^6.0.0",
     "remark-wiki-link": "^1.0.0",
     "unified": "^9.2.0",
     "unist-util-filter": "^2.0.3",

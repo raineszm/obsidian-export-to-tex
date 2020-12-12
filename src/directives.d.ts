@@ -11,6 +11,9 @@ export interface LabelDirective extends TextDirective {
   attributes: {
     text: string;
   };
+  data: {
+    label?: string;
+  };
 }
 
 export interface EmbedDirective extends TextDirective {
