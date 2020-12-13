@@ -7,12 +7,16 @@ import { wikiLinkPlugin } from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
 import rebber, { RebberSettings } from 'rebber';
 import { Node } from 'unist';
-import { Heading } from 'mdast';
-import { LabelDirective, TextDirective } from './directives';
 import { embed } from './embed';
 import { displayMath, inlineMath } from './math';
-import { LabeledLink, labels } from './labels';
+import { labels } from './labels';
 import { AugmentedContext } from './data';
+import {
+  assertHeading,
+  assertLabelDirective,
+  assertLabeledLink,
+  LabelDirective,
+} from './mdastInterfaces';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
 const yaml = consume;
@@ -42,11 +46,8 @@ export const markdownToTex = unified()
   .freeze();
 
 function textDirective(_ctx: RebberSettings, node: Node): string {
-  const directive = node as TextDirective;
-  if (directive.name === 'label') {
-    return stringifyLabel(directive as LabelDirective);
-  }
-  throw new Error(`Unsupported directive type: ${directive.name}`);
+  assertLabelDirective(node);
+  return stringifyLabel(node);
 }
 
 function stringifyLabel(directive: LabelDirective): string {
@@ -54,13 +55,13 @@ function stringifyLabel(directive: LabelDirective): string {
 }
 
 function wikiLink(ctx: RebberSettings, node: Node): string {
-  const link = node as LabeledLink;
+  assertLabeledLink(node);
   const {
     exportToTex: { refCommand },
   } = ctx as AugmentedContext;
-  const { alias, label } = link.data;
-  if (!link.value.contains('#') || label === undefined) {
-    return alias ?? link.value;
+  const { alias, label } = node.data;
+  if (!node.value.contains('#') || label === undefined) {
+    return alias ?? node.value;
   }
   return `${alias ?? ''}\\${refCommand}{${label}}`;
 }
@@ -74,14 +75,15 @@ const headingNames = [
 ];
 
 function heading(ctx: RebberSettings, node: Node): string {
-  const heading = node as Heading;
-  if (heading.depth > 5) {
+  assertHeading(node);
+
+  if (node.depth > 5) {
     return '';
   }
-  const cmd = headingNames[heading.depth - 1];
-  const text = heading.children
+  const cmd = headingNames[node.depth - 1];
+  const text = node.children
     .map((content) => rebber.toLaTeX(content, ctx))
     .join('');
-  const label = heading.data?.label as string;
+  const label = node.data?.label as string;
   return `\\${cmd}{${text}}\\label{${label}}`;
 }

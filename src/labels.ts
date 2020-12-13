@@ -3,10 +3,12 @@ import { Processor, Transformer } from 'unified';
 import { Node } from 'unist';
 import { VFile } from 'vfile';
 import visit from 'unist-util-visit';
-import { Heading } from 'mdast';
-import { LabelDirective, TextDirective } from './directives';
 import { ObsidianVFile } from './file';
-import { WikiLink } from 'remark-wiki-link';
+import {
+  assertLabeledLink,
+  isHeading,
+  isLabelDirective,
+} from './mdastInterfaces';
 
 export function labels(this: Processor): Transformer {
   const slugger = new GithubSlugger();
@@ -41,31 +43,12 @@ function addLabel(
 }
 
 function getTargetText(node: Node): string {
-  switch (node.type) {
-    case 'heading':
-      return (node as Heading).children.map((c) => c.value).join('');
-    case 'textDirective': {
-      const directive = node as TextDirective;
-      if (directive.name === 'label') {
-        return (directive as LabelDirective).attributes.text;
-      }
-      throw new Error(
-        'Tried to generate label for unexpected directiev type: ' +
-          directive.name,
-      );
-    }
-    default:
-      throw new Error(
-        'Tried to generate label for unexpected type: ' + node.type,
-      );
+  if (isHeading(node)) {
+    return node.children.map((c) => c.value).join('');
+  } else if (isLabelDirective(node)) {
+    return node.attributes.text;
   }
-}
-
-export interface LabeledLink extends WikiLink {
-  data: {
-    label?: string;
-    alias?: string;
-  };
+  throw new Error('Tried to generate label for unexpected type: ' + node.type);
 }
 
 function targetLabels(
@@ -73,17 +56,17 @@ function targetLabels(
   tree: Node,
   file: VFile,
 ): void {
-  visit(tree, 'wikiLink', (node) => {
-    const link = node as LabeledLink;
-    if (!link.value.contains('#')) {
+  visit(tree, 'wikiLink', (node: Node) => {
+    assertLabeledLink(node);
+    if (!node.value.contains('#')) {
       return;
     }
-    const key = link.value.startsWith('#')
-      ? (file as ObsidianVFile).data.file.basename + link.value
-      : link.value;
+    const key = node.value.startsWith('#')
+      ? (file as ObsidianVFile).data.file.basename + node.value
+      : node.value;
     const label = labelsMap.get(key);
     if (label !== null) {
-      link.data.label = label;
+      node.data.label = label;
     }
   });
 }

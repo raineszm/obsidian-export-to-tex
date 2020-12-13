@@ -1,8 +1,7 @@
 import { Node } from 'unist';
-import { Transformer, Processor } from 'unified';
+import { Processor, Transformer } from 'unified';
 import { VFile } from 'vfile';
 import visit from 'unist-util-visit';
-import { EmbedDirective } from './directives';
 import {
   BlockSubpathResult,
   HeadingSubpathResult,
@@ -12,6 +11,7 @@ import {
 } from 'obsidian';
 import { ObsidianVFile } from './file';
 import { log, prefix } from './log';
+import { assertEmbedDirective } from './mdastInterfaces';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -29,16 +29,16 @@ async function embedTransformer(
     tree,
     { type: 'textDirective', name: 'embed' },
     (node, index, parent) => {
-      const embed = node as EmbedDirective;
+      assertEmbedDirective(node);
+
       if (parent === undefined)
         throw new Error('found an embed without a parent');
       promises.push(
-        resolveEmbed(processor, embed.attributes.target, file).then(
+        resolveEmbed(processor, node.attributes.target, file).then(
           (newNode) => {
             log.trace(
               prefix,
-              prefix,
-              `Adding embed node ${embed.attributes.target} to parent ${parent.type} node at ${index}`,
+              `Adding embed node ${node.attributes.target} to parent ${parent.type} node at ${index}`,
             );
             parent.children[index] = newNode;
           },
@@ -60,6 +60,7 @@ async function resolveEmbed(
   log.debug(prefix, `Resolving embed "${embedTarget}"`);
 
   const { file, result } = getTarget(embedTarget, vfile as ObsidianVFile);
+
   if (result === null) {
     log.warn(prefix, `Failed to resolve embed ${embedTarget}`);
     return { type: 'inlineCode', value: `Missing ${embedTarget}` };
@@ -90,9 +91,13 @@ function getTarget(
 ): { file: TFile; result: HeadingSubpathResult | BlockSubpathResult } {
   const { file, metadata } = ovfile.data;
   const { path, subpath } = parseLinktext(embedTarget);
+
   log.debug(prefix, `"${embedTarget}" parses to "${subpath}" in "${path}`);
+
   const target = metadata.getFirstLinkpathDest(path, file.path);
+
   log.debug(prefix, `Loading file ${target.name}`);
+
   return {
     file: target,
     result: resolveSubpath(metadata.getFileCache(target), subpath.trimEnd()),
