@@ -3,12 +3,12 @@ import { Processor, Transformer } from 'unified';
 import { Node } from 'unist';
 import { VFile } from 'vfile';
 import visit from 'unist-util-visit';
-import { ObsidianVFile } from './file';
 import {
   assertLabeledLink,
   isHeading,
   isLabelDirective,
 } from './mdastInterfaces';
+import { toNamedVFile } from './file';
 
 export function labels(this: Processor): Transformer {
   const slugger = new GithubSlugger();
@@ -26,8 +26,9 @@ function addLabel(
   file: VFile,
 ): void {
   visit(tree, ['heading', 'textDirective'], (node: Node) => {
+    const namedFile = toNamedVFile(file);
     const text = getTargetText(node);
-    const filename = (file as ObsidianVFile).data.file.basename;
+    const filename = namedFile.stem;
     const sigil = node.type === 'textDirective' ? '^' : '';
     const labelPrefix = node.type === 'textDirective' ? 'block' : 'sec';
     const label = labelPrefix + ':' + slugger.slug(text);
@@ -58,11 +59,13 @@ function targetLabels(
 ): void {
   visit(tree, 'wikiLink', (node: Node) => {
     assertLabeledLink(node);
+    const namedFile = toNamedVFile(file);
+
     if (!node.value.contains('#')) {
       return;
     }
     const key = node.value.startsWith('#')
-      ? (file as ObsidianVFile).data.file.basename + node.value
+      ? namedFile.stem + node.value
       : node.value;
     const label = labelsMap.get(key);
     if (label !== null) {

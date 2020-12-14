@@ -1,25 +1,23 @@
 import vfile, { VFile, VFileOptions } from 'vfile';
-import { MetadataCache, TFile } from 'obsidian';
+import { TFile } from 'obsidian';
 import { preprocess } from './preprocessor';
 
-export interface ObsidianVFile extends VFile {
-  data: {
-    file: TFile;
-    metadata: MetadataCache;
-  };
-}
-
-export async function toVFile(
-  file: TFile,
-  metadata: MetadataCache,
-): Promise<VFile> {
+export async function toVFile(file: TFile): Promise<VFile> {
   const data = await file.vault.cachedRead(file);
   const options: VFileOptions = {
     contents: preprocess(data),
-    data: {
-      file,
-      metadata,
-    },
+    path: file.path,
   };
   return vfile(options);
+}
+
+type NameKeys = 'path' | 'basename' | 'ext' | 'stem';
+type NamedVFile = {
+  [P in keyof VFile]-?: P extends NameKeys ? NonNullable<VFile[P]> : VFile[P];
+};
+
+export function toNamedVFile(vfile: VFile): NamedVFile {
+  if (vfile.path === undefined)
+    throw new Error('Processed file must have a name');
+  return vfile as NamedVFile;
 }

@@ -70,7 +70,7 @@ export default class ExportToTeXPlugin extends Plugin {
     if (canceled || filePath === undefined) return;
 
     const printer = new TeXPrinter(this.app.metadataCache, this.settings);
-    const contents = await printer.print(file);
+    const contents = await printer.toTex(file);
 
     await promisify(fs.writeFile)(filePath, contents);
 
@@ -80,7 +80,7 @@ export default class ExportToTeXPlugin extends Plugin {
 
   async exportToClipboard(file: TFile): Promise<void> {
     const printer = new TeXPrinter(this.app.metadataCache, this.settings);
-    const contents = await printer.print(file);
+    const contents = await printer.toTex(file);
     remote.clipboard.writeText(contents);
     // eslint-disable-next-line no-new
     new Notice(`Tex exported to clipboard`);

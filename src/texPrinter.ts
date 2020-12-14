@@ -15,12 +15,13 @@ export class TeXPrinter {
       .data('settings', {
         exportToTex: this.settings,
       })
+      .data('metadata', this.metadata)
       .process(vfile);
     return output.toString();
   }
 
-  async print(file: TFile): Promise<string> {
-    const vfile = await toVFile(file, this.metadata);
+  async toTex(file: TFile): Promise<string> {
+    const vfile = await toVFile(file);
     return await this.process(vfile);
   }
 }

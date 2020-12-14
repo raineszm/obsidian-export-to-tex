@@ -1,5 +1,4 @@
 import { Node } from 'unist';
-import { RebberSettings } from 'rebber';
 import { log, prefix } from './log';
 import { AugmentedContext } from './data';
 import { assertInlineMath, assertMath } from './mdastInterfaces';
@@ -15,18 +14,18 @@ const mathEnvironments = [
 ];
 const beginRegex = /^\s*\\begin{\s*(\w+)\*?\s*}/m;
 
-export function inlineMath(_ctx: RebberSettings, node: Node): string {
+export function inlineMath(_ctx: AugmentedContext, node: Node): string {
   assertInlineMath(node);
   return `$${node.value}$`;
 }
 
-export function displayMath(ctx: RebberSettings, node: Node): string {
+export function displayMath(ctx: AugmentedContext, node: Node): string {
   assertMath(node);
   const { value } = node;
   const match = beginRegex.exec(value);
   const {
     exportToTex: { additionalMathEnvironments },
-  } = ctx as AugmentedContext;
+  } = ctx;
   if (
     match !== null &&
     (mathEnvironments.contains(match[1]) ||

@@ -5,12 +5,12 @@ import gfm from 'remark-gfm';
 import directive from 'remark-directive';
 import { wikiLinkPlugin } from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
-import rebber, { RebberSettings } from 'rebber';
+import rebber from 'rebber';
 import { Node } from 'unist';
 import { embed } from './embed';
 import { displayMath, inlineMath } from './math';
 import { labels } from './labels';
-import { AugmentedContext } from './data';
+import { AugmentedContext, getContext, OptionalContext } from './data';
 import {
   assertHeading,
   assertLabelDirective,
@@ -22,12 +22,12 @@ const consume = (_ctx: unknown, _node: Node): string => '';
 const yaml = consume;
 
 const rebberOverrides = {
-  wikiLink,
-  inlineMath,
-  textDirective,
+  wikiLink: ensureContext(wikiLink),
+  inlineMath: ensureContext(inlineMath),
+  textDirective: ensureContext(textDirective),
   yaml,
-  math: displayMath,
-  heading,
+  math: ensureContext(displayMath),
+  heading: ensureContext(heading),
 };
 export const markdownToTex = unified()
   .use(markdown)
@@ -45,7 +45,15 @@ export const markdownToTex = unified()
   })
   .freeze();
 
-function textDirective(_ctx: RebberSettings, node: Node): string {
+function ensureContext(
+  fn: (ctx: AugmentedContext, node: Node) => string,
+): (ctx: OptionalContext, node: Node) => string {
+  return (ctx, node) => {
+    return fn(getContext(ctx), node);
+  };
+}
+
+function textDirective(_ctx: AugmentedContext, node: Node): string {
   assertLabelDirective(node);
   return stringifyLabel(node);
 }
@@ -54,11 +62,12 @@ function stringifyLabel(directive: LabelDirective): string {
   return `\\label{${directive.data?.label ?? ''}}`;
 }
 
-function wikiLink(ctx: RebberSettings, node: Node): string {
+function wikiLink(ctx: AugmentedContext, node: Node): string {
   assertLabeledLink(node);
   const {
     exportToTex: { refCommand },
-  } = ctx as AugmentedContext;
+  } = ctx;
+
   const { alias, label } = node.data;
   if (!node.value.contains('#') || label === undefined) {
     return alias ?? node.value;
@@ -74,7 +83,7 @@ const headingNames = [
   'subparagraph',
 ];
 
-function heading(ctx: RebberSettings, node: Node): string {
+function heading(ctx: AugmentedContext, node: Node): string {
   assertHeading(node);
 
   if (node.depth > 5) {

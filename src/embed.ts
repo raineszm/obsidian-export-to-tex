@@ -5,11 +5,11 @@ import visit from 'unist-util-visit';
 import {
   BlockSubpathResult,
   HeadingSubpathResult,
+  MetadataCache,
   parseLinktext,
   resolveSubpath,
   TFile,
 } from 'obsidian';
-import { ObsidianVFile } from './file';
 import { log, prefix } from './log';
 import { assertEmbedDirective } from './mdastInterfaces';
 
@@ -24,7 +24,9 @@ async function embedTransformer(
   file: VFile,
 ): Promise<void> {
   log.debug(prefix, 'embed resolution step');
+
   const promises: Array<Promise<void>> = [];
+
   visit(
     tree,
     { type: 'textDirective', name: 'embed' },
@@ -58,8 +60,14 @@ async function resolveEmbed(
   vfile: VFile,
 ): Promise<Node> {
   log.debug(prefix, `Resolving embed "${embedTarget}"`);
+  const metadata = processor.data('metadata');
+  if (!(metadata instanceof MetadataCache)) {
+    throw Error(
+      'metadata must be passed to the processor in the form of an obsidian MetadataCache',
+    );
+  }
 
-  const { file, result } = getTarget(embedTarget, vfile as ObsidianVFile);
+  const { file, result } = getTarget(embedTarget, vfile, metadata);
 
   if (result === null) {
     log.warn(prefix, `Failed to resolve embed ${embedTarget}`);
@@ -87,12 +95,17 @@ async function resolveEmbed(
 
 function getTarget(
   embedTarget: string,
-  ovfile: ObsidianVFile,
+  file: VFile,
+  metadata: MetadataCache,
 ): { file: TFile; result: HeadingSubpathResult | BlockSubpathResult } {
-  const { file, metadata } = ovfile.data;
   const { path, subpath } = parseLinktext(embedTarget);
 
   log.debug(prefix, `"${embedTarget}" parses to "${subpath}" in "${path}`);
+  if (file.path === undefined) {
+    throw new Error(
+      `cannot result target of link ${embedTarget} as the path of the embedding file is not available`,
+    );
+  }
 
   const target = metadata.getFirstLinkpathDest(path, file.path);
 
