@@ -34,7 +34,19 @@ function textDirective(_ctx: AugmentedContext, node: Node): string {
 }
 
 function stringifyLabel(directive: LabelDirective): string {
-  return `\\label{${directive.data?.label ?? ''}}`;
+  return `\\label{${getPrefix('heading')}${directive.data?.label ?? ''}}`;
+}
+
+const keyPrefixes: Record<string, string> = {
+  heading: 'sec',
+  block: 'block',
+};
+
+function getPrefix(targetType: string | undefined): string {
+  if (targetType !== undefined && targetType in keyPrefixes) {
+    return keyPrefixes[targetType] + ':';
+  }
+  return '';
 }
 
 function wikiLink(ctx: AugmentedContext, node: Node): string {
@@ -43,11 +55,11 @@ function wikiLink(ctx: AugmentedContext, node: Node): string {
     exportToTex: { refCommand },
   } = ctx;
 
-  const { alias, label } = node.data;
+  const { alias, label, targetType } = node.data;
   if (!node.value.contains('#') || label === undefined) {
     return alias ?? node.value;
   }
-  return `${alias ?? ''}\\${refCommand}{${label}}`;
+  return `${alias ?? ''}\\${refCommand}{${getPrefix(targetType)}${label}}`;
 }
 
 const headingNames = [
@@ -69,5 +81,5 @@ function heading(ctx: AugmentedContext, node: Node): string {
     .map((content) => rebber.toLaTeX(content, ctx))
     .join('');
   const label = node.data?.label as string;
-  return `\\${cmd}{${text}}\\label{${label}}`;
+  return `\\${cmd}{${text}}\\label{${getPrefix('heading')}${label}}`;
 }

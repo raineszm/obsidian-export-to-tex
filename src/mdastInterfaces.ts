@@ -2,11 +2,17 @@ import { Node } from 'unist';
 import { Heading, Parent } from 'mdast';
 import { WikiLink } from 'remark-wiki-link';
 
-export function isHeading(node: Node): node is Heading {
+export interface LabeledHeading extends Heading {
+  data: {
+    label?: string;
+  };
+}
+
+export function isHeading(node: Node): node is LabeledHeading {
   return node.type === 'heading';
 }
 
-export function assertHeading(node: Node): asserts node is Heading {
+export function assertHeading(node: Node): asserts node is LabeledHeading {
   if (!isHeading(node)) throwWrongNode('heading', node);
 }
 
@@ -65,6 +71,7 @@ export interface LabeledLink extends WikiLink {
   data: {
     label?: string;
     alias?: string;
+    targetType?: 'heading' | 'block';
   };
 }
 

@@ -86,7 +86,7 @@ async function resolveEmbed(
   log.trace(prefix, `"${embedTarget}" data:\n${data}`);
   log.debug(prefix, `Parsing "${embedTarget}"`);
 
-  const processed = processor.parse(data);
+  const processed = processor.parse({ contents: data, path: file.path });
 
   log.debug(prefix, `Parsed "${embedTarget}"`);
 
