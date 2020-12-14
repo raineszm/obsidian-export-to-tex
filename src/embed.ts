@@ -1,6 +1,6 @@
 import { Node } from 'unist';
 import { Processor, Transformer } from 'unified';
-import { VFile } from 'vfile';
+import vfile, { VFile } from 'vfile';
 import visit from 'unist-util-visit';
 import {
   BlockSubpathResult,
@@ -12,6 +12,7 @@ import {
 } from 'obsidian';
 import { log, prefix } from './log';
 import { assertEmbedDirective } from './mdastInterfaces';
+import { assertVFileData } from './file';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -57,7 +58,7 @@ async function embedTransformer(
 async function resolveEmbed(
   processor: Processor,
   embedTarget: string,
-  vfile: VFile,
+  parentFile: VFile,
 ): Promise<Node> {
   log.debug(prefix, `Resolving embed "${embedTarget}"`);
   const metadata = processor.data('metadata');
@@ -67,15 +68,14 @@ async function resolveEmbed(
     );
   }
 
-  const { file, result } = getTarget(embedTarget, vfile, metadata);
+  const { file, result } = getTarget(embedTarget, parentFile, metadata);
 
   if (result === null) {
-    log.warn(prefix, `Failed to resolve embed ${embedTarget}`);
+    parentFile.message(`Failed to resolve embed ${embedTarget}`);
     return { type: 'inlineCode', value: `Missing ${embedTarget}` };
   }
 
-  log.debug(prefix, 'Obtained result block', result);
-  log.debug(prefix, `Reading embedded file ${file.basename}`);
+  parentFile.info(`Reading embedded file ${file.basename}`);
 
   const fileData = await file.vault.cachedRead(file);
 
@@ -83,12 +83,16 @@ async function resolveEmbed(
 
   const data = fileData.slice(result.start.offset, result.end?.offset);
 
-  log.trace(prefix, `"${embedTarget}" data:\n${data}`);
-  log.debug(prefix, `Parsing "${embedTarget}"`);
+  parentFile.info(`Parsing "${embedTarget}"`);
 
-  const processed = processor.parse({ contents: data, path: file.path });
-
-  log.debug(prefix, `Parsed "${embedTarget}"`);
+  const embedFile = vfile({
+    contents: data,
+    path: file.path,
+    data: { embedded: new Array<VFile>() },
+  });
+  const processed = processor.parse(embedFile);
+  assertVFileData(parentFile.data);
+  parentFile.data.embedded.push(embedFile);
 
   return processed;
 }
