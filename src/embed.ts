@@ -1,6 +1,6 @@
 import { Node } from 'unist';
 import { Processor, Transformer } from 'unified';
-import vfile, { VFile } from 'vfile';
+import { VFile } from 'vfile';
 import visit from 'unist-util-visit';
 import {
   BlockSubpathResult,
@@ -12,7 +12,7 @@ import {
 } from 'obsidian';
 import { log, prefix } from './log';
 import { assertEmbedDirective } from './mdastInterfaces';
-import { assertVFileData } from './file';
+import { assertVFileData, makeVFile } from './file';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -68,7 +68,11 @@ async function resolveEmbed(
     );
   }
 
-  const { file, result } = getTarget(embedTarget, parentFile, metadata);
+  const { file, result, subpath } = getTarget(
+    embedTarget,
+    parentFile,
+    metadata,
+  );
 
   if (result === null) {
     parentFile.message(`Failed to resolve embed ${embedTarget}`);
@@ -85,11 +89,7 @@ async function resolveEmbed(
 
   parentFile.info(`Parsing "${embedTarget}"`);
 
-  const embedFile = vfile({
-    contents: data,
-    path: file.path,
-    data: { embedded: new Array<VFile>() },
-  });
+  const embedFile = makeVFile(data, file.path, subpath);
   const processed = processor.parse(embedFile);
   assertVFileData(parentFile.data);
   parentFile.data.embedded.push(embedFile);
@@ -101,7 +101,11 @@ function getTarget(
   embedTarget: string,
   file: VFile,
   metadata: MetadataCache,
-): { file: TFile; result: HeadingSubpathResult | BlockSubpathResult } {
+): {
+  file: TFile;
+  result: HeadingSubpathResult | BlockSubpathResult;
+  subpath: string;
+} {
   const { path, subpath } = parseLinktext(embedTarget);
 
   log.debug(prefix, `"${embedTarget}" parses to "${subpath}" in "${path}`);
@@ -117,6 +121,7 @@ function getTarget(
 
   return {
     file: target,
+    subpath,
     result: resolveSubpath(metadata.getFileCache(target), subpath.trimEnd()),
   };
 }
