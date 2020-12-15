@@ -1,5 +1,4 @@
 import { Node } from 'unist';
-import { log, prefix } from './log';
 import { AugmentedContext } from './data';
 import { assertInlineMath, assertMath } from './mdastInterfaces';
 
@@ -31,10 +30,6 @@ export function displayMath(ctx: AugmentedContext, node: Node): string {
     (mathEnvironments.contains(match[1]) ||
       additionalMathEnvironments.contains(match[1]))
   ) {
-    log.debug(
-      prefix,
-      `stripping delimiters from top level math env ${match[1]}`,
-    );
     return value;
   }
   return `\\[\n${value}\n\\]`;

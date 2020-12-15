@@ -10,7 +10,6 @@ import {
   resolveSubpath,
   TFile,
 } from 'obsidian';
-import { log, prefix } from './log';
 import { assertEmbedDirective, EmbedDirective } from './mdastInterfaces';
 import { makeVFile } from './file';
 
@@ -24,8 +23,6 @@ async function embedTransformer(
   tree: Node,
   file: VFile,
 ): Promise<void> {
-  log.debug(prefix, 'embed resolution step');
-
   const promises: Array<Promise<void>> = [];
 
   visit(
@@ -38,10 +35,6 @@ async function embedTransformer(
         throw new Error('found an embed without a parent');
       promises.push(
         resolveEmbed(processor, node, file).then((newNode) => {
-          log.trace(
-            prefix,
-            `Adding embed node ${node.attributes.target} to parent ${parent.type} node at ${index}`,
-          );
           parent.children[index] = newNode;
         }),
       );

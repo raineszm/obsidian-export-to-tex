@@ -12,7 +12,6 @@ import { remote } from 'electron';
 import * as fs from 'fs';
 import { ExportToTexSettings } from './settings';
 import { promisify } from 'util';
-import { log, LogLevelOptions, LogLevelString } from './log';
 
 export default class ExportToTeXPlugin extends Plugin {
   settings: ExportToTexSettings = new ExportToTexSettings();
@@ -22,7 +21,6 @@ export default class ExportToTeXPlugin extends Plugin {
     if (settings !== null) {
       this.settings = settings;
     }
-    log.setLevel(this.settings.logLevel);
 
     this.addCommand({
       id: 'export-to-tex',
@@ -127,21 +125,6 @@ class ExportToTeXSettingTab extends PluginSettingTab {
               .split(',')
               .map((x) => x.trim())
               .filter((x) => x.length > 0);
-            await this.plugin.saveData(this.plugin.settings);
-          });
-      });
-
-    new Setting(containerEl)
-      .setName('Debug')
-      .setDesc('Print debug information to console?')
-      .addDropdown((dropdown) => {
-        dropdown
-          .addOptions(LogLevelOptions)
-          .setValue(this.plugin.settings.logLevel)
-          .onChange(async (value) => {
-            const level = value as LogLevelString;
-            this.plugin.settings.logLevel = level;
-            log.setLevel(level);
             await this.plugin.saveData(this.plugin.settings);
           });
       });
