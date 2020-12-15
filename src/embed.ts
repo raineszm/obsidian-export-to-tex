@@ -11,8 +11,8 @@ import {
   TFile,
 } from 'obsidian';
 import { log, prefix } from './log';
-import { assertEmbedDirective } from './mdastInterfaces';
-import { assertVFileData, makeVFile } from './file';
+import { assertEmbedDirective, EmbedDirective } from './mdastInterfaces';
+import { makeVFile } from './file';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -37,30 +37,30 @@ async function embedTransformer(
       if (parent === undefined)
         throw new Error('found an embed without a parent');
       promises.push(
-        resolveEmbed(processor, node.attributes.target, file).then(
-          (newNode) => {
-            log.trace(
-              prefix,
-              `Adding embed node ${node.attributes.target} to parent ${parent.type} node at ${index}`,
-            );
-            parent.children[index] = newNode;
-          },
-        ),
+        resolveEmbed(processor, node, file).then((newNode) => {
+          log.trace(
+            prefix,
+            `Adding embed node ${node.attributes.target} to parent ${parent.type} node at ${index}`,
+          );
+          parent.children[index] = newNode;
+        }),
       );
     },
   );
 
   return Promise.all(promises).then(() => {
-    log.debug(prefix, 'All embeds resolved');
+    file.info('All embeds resolved', tree);
   });
 }
 
 async function resolveEmbed(
   processor: Processor,
-  embedTarget: string,
+  node: EmbedDirective,
   parentFile: VFile,
 ): Promise<Node> {
-  log.debug(prefix, `Resolving embed "${embedTarget}"`);
+  const embedTarget = node.attributes.target;
+  parentFile.info(`Resolving embed "${embedTarget}"`, node);
+
   const metadata = processor.data('metadata');
   if (!(metadata instanceof MetadataCache)) {
     throw Error(
@@ -75,24 +75,21 @@ async function resolveEmbed(
   );
 
   if (result === null) {
-    parentFile.message(`Failed to resolve embed ${embedTarget}`);
+    parentFile.message(`Failed to resolve embed ${embedTarget}`, node);
     return { type: 'inlineCode', value: `Missing ${embedTarget}` };
   }
 
-  parentFile.info(`Reading embedded file ${file.basename}`);
+  parentFile.info(`Reading embedded file ${file.basename}`, node);
 
   const fileData = await file.vault.cachedRead(file);
 
-  log.debug(prefix, `Extracting block "${embedTarget}"`);
-
   const data = fileData.slice(result.start.offset, result.end?.offset);
 
-  parentFile.info(`Parsing "${embedTarget}"`);
+  parentFile.info(`Parsing "${embedTarget}"`, node);
 
   const embedFile = makeVFile(data, file.path, subpath);
   const processed = processor.parse(embedFile);
-  assertVFileData(parentFile.data);
-  parentFile.data.embedded.push(embedFile);
+  parentFile.messages.push(...embedFile.messages);
 
   return processed;
 }
@@ -108,7 +105,6 @@ function getTarget(
 } {
   const { path, subpath } = parseLinktext(embedTarget);
 
-  log.debug(prefix, `"${embedTarget}" parses to "${subpath}" in "${path}`);
   if (file.path === undefined) {
     throw new Error(
       `cannot result target of link ${embedTarget} as the path of the embedding file is not available`,
@@ -116,8 +112,6 @@ function getTarget(
   }
 
   const target = metadata.getFirstLinkpathDest(path, file.path);
-
-  log.debug(prefix, `Loading file ${target.name}`);
 
   return {
     file: target,

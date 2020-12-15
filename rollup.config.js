@@ -12,7 +12,7 @@ export default {
     format: 'cjs',
     exports: 'default',
   },
-  external: ['obsidian', 'electron', 'fs', 'util', 'path'],
+  external: ['obsidian', 'electron', 'fs', 'util', 'path', 'os', 'tty'],
   plugins: [
     typescript(),
     nodeResolve({ browser: true }),
