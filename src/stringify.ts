@@ -65,7 +65,7 @@ function getLabel(
     exportToTex: { generateLabels },
   } = ctx;
   if (!generateLabels) return '';
-  return `\\label${getPrefix(targetType)}${label}}`;
+  return `\\label{${getPrefix(targetType)}${label}}`;
 }
 
 function wikiLink(ctx: AugmentedContext, node: Node): string {
