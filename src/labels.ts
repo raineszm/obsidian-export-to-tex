@@ -19,7 +19,7 @@ interface LinkTarget {
 
 export function labels(this: Processor): Transformer {
   const slugger = new GithubSlugger();
-  const labels = new Map<LinkTarget, string>();
+  const labels = new Map<string, string>();
   return (tree: Node, file: VFile) => {
     addLabel(slugger, labels, tree, file);
     targetLabels(labels, tree, file);
@@ -28,7 +28,7 @@ export function labels(this: Processor): Transformer {
 
 function addLabel(
   slugger: GithubSlugger,
-  labelsMap: Map<LinkTarget, string>,
+  labelsMap: Map<string, string>,
   tree: Node,
   file: VFile,
 ): void {
@@ -50,24 +50,24 @@ function addLabel(
     if (node.data.label === undefined) {
       node.data.label = slugger.slug(subpath);
     }
-    labelsMap.set(key, node.data.label);
+    labelsMap.set(keyToString(key), node.data.label);
   });
 }
 
 function getLabel(node: Node): { subpath: string; type: 'heading' | 'block' } {
   if (isHeading(node)) {
     return {
-      subpath: node.children.map((c) => c.value).join(''),
+      subpath: `#${node.children.map((c) => c.value).join('')}`,
       type: 'heading',
     };
   } else if (isLabelDirective(node)) {
-    return { subpath: node.attributes.text, type: 'block' };
+    return { subpath: `#^${node.attributes.text}`, type: 'block' };
   }
   throw new Error('Tried to generate label for unexpected type: ' + node.type);
 }
 
 function targetLabels(
-  labelsMap: Map<LinkTarget, string>,
+  labelsMap: Map<string, string>,
   tree: Node,
   file: VFile,
 ): void {
@@ -88,10 +88,14 @@ function targetLabels(
       path: path.length > 0 ? path : namedFile.stem,
       subpath,
     };
-    const label = labelsMap.get(key);
+    const label = labelsMap.get(keyToString(key));
     if (label !== null) {
       node.data.label = label;
       node.data.targetType = key.type;
     }
   });
+}
+
+function keyToString(key: LinkTarget): string {
+  return `${key.type}:${key.path}:${key.subpath}`;
 }

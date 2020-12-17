@@ -29,7 +29,7 @@ function ensureContext(
 
 function textDirective(ctx: AugmentedContext, node: Node): string {
   assertLabelDirective(node);
-  return getLabel(ctx, 'heading', node.data?.label ?? '');
+  return getLabel(ctx, 'block', node.data?.label ?? '');
 }
 
 const keyPrefixes: Record<string, string> = {
