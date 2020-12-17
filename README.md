@@ -5,9 +5,11 @@
 ![](https://img.shields.io/github/downloads/raineszm/obsidian-export-to-tex/total?style=for-the-badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](#license)
 
->
+> Export to obsidian notes to LaTeX format, suitable for pasting into a TeX file.
 
 ## Installation
+
+*(Not yet in the registry)*
 
 If you have Obsidian version 0.9.8 or greater:
 
@@ -33,6 +35,39 @@ For details see [the forums](https://forum.obsidian.md/t/plugins-mini-faq/7737).
 
 ## Usage
 
+This plugin allows Obsidian files to exported to TeX format.
+When doing so:
+- WikiLinks to other files are stripped
+- Embeds are resolved
+- By default, headings and blocks are associated with labels
+
+
+### Commands
+Export to TeX provides two commands
+
+#### Export to TeX
+
+This command will produce a save as dialog. The contents of the current file will be converted to TeX and saved to that file.
+
+#### Export to Clipboard
+
+The contents of the current file will be converted to TeX and copied to the clipboard.
+
+### Settings
+
+### Generate labels and refs
+
+By default, Export to TeX will auto generate labels for headings and blocks.
+Links to these from within the same file will be converted to `\ref` calls.
+
+### Ref command
+
+The command to use for generating refs: defaults to `\cref`.
+
+### Additional math environments
+
+Export to TeX will by default strip the surrounding displaymath delimeters from toplevel math environments such as `equation`.
+If there are other environments you which to do this for, they can be added to this list.
 
 
 ## Contributing
