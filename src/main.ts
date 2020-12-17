@@ -10,7 +10,7 @@ import {
 import { TeXPrinter } from './texPrinter';
 import { remote } from 'electron';
 import * as fs from 'fs';
-import { ExportToTexSettings } from './settings';
+import { ensureSettings, ExportToTexSettings } from './settings';
 import { promisify } from 'util';
 
 export default class ExportToTeXPlugin extends Plugin {
@@ -19,7 +19,7 @@ export default class ExportToTeXPlugin extends Plugin {
   public async onload(): Promise<void> {
     const settings = await this.loadData();
     if (settings !== null) {
-      this.settings = settings;
+      this.settings = ensureSettings(settings);
     }
 
     this.addCommand({
