@@ -1,0 +1,68 @@
+import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
+import { remote } from 'electron';
+import { ExportToTexSettings } from './settings';
+import ExportToTeXPlugin from './main';
+
+export class ExportToTeXSettingTab extends PluginSettingTab {
+  constructor(app: App, readonly plugin: ExportToTeXPlugin) {
+    super(app, plugin);
+  }
+
+  display(): void {
+    const { containerEl } = this;
+
+    containerEl.empty();
+
+    containerEl.createEl('h2', { text: 'Settings for exporting to TeX' });
+
+    new Setting(containerEl)
+      .setName('Ref command')
+      .setDesc(
+        'Command to use when converting links to headings/blocks to refs.',
+      )
+      .addText((text) =>
+        text
+          .setValue(this.plugin.settings.refCommand)
+          .onChange(async (value) => {
+            this.plugin.settings.refCommand = value;
+            await this.plugin.saveData(this.plugin.settings);
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName('Additional math environments')
+      .setDesc(
+        'Additional environments which trigger math content without needing \\[...\\]' +
+          ' (one per line)',
+      )
+      .addTextArea((text) => {
+        text
+          .setValue(this.plugin.settings.additionalMathEnvironments.join('\n'))
+          .onChange(async (value) => {
+            this.plugin.settings.additionalMathEnvironments = value
+              .split('\n')
+              .map((x) => x.trim())
+              .filter((x) => x.length > 0);
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
+    new ButtonComponent(containerEl)
+      .setButtonText('Reset to default')
+      .onClick(async () => {
+        await remote.dialog
+          .showMessageBox({
+            title: 'Reset settings to default?',
+            type: 'question',
+            message: 'Are you sure?',
+            buttons: ['No', 'Yes'],
+          })
+          .then(async (value) => {
+            if (value.response === 0) return;
+            this.plugin.settings = new ExportToTexSettings();
+            await this.plugin.saveData(this.plugin.settings);
+            this.display();
+          });
+      });
+  }
+}

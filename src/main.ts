@@ -1,17 +1,10 @@
-import {
-  App,
-  ButtonComponent,
-  Plugin,
-  Notice,
-  PluginSettingTab,
-  Setting,
-  TFile,
-} from 'obsidian';
+import { Notice, Plugin, TFile } from 'obsidian';
 import { TeXPrinter } from './texPrinter';
 import { remote } from 'electron';
 import * as fs from 'fs';
 import { ensureSettings, ExportToTexSettings } from './settings';
 import { promisify } from 'util';
+import { ExportToTeXSettingTab } from './settingsTabs';
 
 export default class ExportToTeXPlugin extends Plugin {
   settings: ExportToTexSettings = new ExportToTexSettings();
@@ -82,69 +75,5 @@ export default class ExportToTeXPlugin extends Plugin {
     remote.clipboard.writeText(contents);
     // eslint-disable-next-line no-new
     new Notice(`Tex exported to clipboard`);
-  }
-}
-
-class ExportToTeXSettingTab extends PluginSettingTab {
-  constructor(app: App, readonly plugin: ExportToTeXPlugin) {
-    super(app, plugin);
-  }
-
-  display(): void {
-    const { containerEl } = this;
-
-    containerEl.empty();
-
-    containerEl.createEl('h2', { text: 'Settings for exporting to TeX' });
-
-    new Setting(containerEl)
-      .setName('Ref command')
-      .setDesc(
-        'Command to use when converting links to headings/blocks to refs.',
-      )
-      .addText((text) =>
-        text
-          .setValue(this.plugin.settings.refCommand)
-          .onChange(async (value) => {
-            this.plugin.settings.refCommand = value;
-            await this.plugin.saveData(this.plugin.settings);
-          }),
-      );
-
-    new Setting(containerEl)
-      .setName('Additional math environments')
-      .setDesc(
-        'Additional environments which trigger math content without needing \\[...\\]' +
-          ' (comma delimited)',
-      )
-      .addText((text) => {
-        text
-          .setValue(this.plugin.settings.additionalMathEnvironments.join(','))
-          .onChange(async (value) => {
-            this.plugin.settings.additionalMathEnvironments = value
-              .split(',')
-              .map((x) => x.trim())
-              .filter((x) => x.length > 0);
-            await this.plugin.saveData(this.plugin.settings);
-          });
-      });
-
-    new ButtonComponent(containerEl)
-      .setButtonText('Reset to default')
-      .onClick(async () => {
-        await remote.dialog
-          .showMessageBox({
-            title: 'Reset settings to default?',
-            type: 'question',
-            message: 'Are you sure?',
-            buttons: ['No', 'Yes'],
-          })
-          .then(async (value) => {
-            if (value.response === 0) return;
-            this.plugin.settings = new ExportToTexSettings();
-            await this.plugin.saveData(this.plugin.settings);
-            this.display();
-          });
-      });
   }
 }
