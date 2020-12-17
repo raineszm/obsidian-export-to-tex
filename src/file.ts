@@ -7,6 +7,9 @@ export interface ObsidianVFile extends VFile {
 }
 
 export async function toVFile(file: TFile): Promise<ObsidianVFile> {
+  if (!(await file.vault.adapter.exists(file.path))) {
+    throw new Error(`${file.basename} does not exist`);
+  }
   const data = await file.vault.cachedRead(file);
   return makeVFile(data, file.path);
 }

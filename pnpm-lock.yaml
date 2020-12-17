@@ -12,7 +12,7 @@ dependencies:
   unist-util-filter: 2.0.3
   unist-util-is: 4.0.4
   unist-util-visit: 2.0.3
-  vfile-reporter-pretty: 5.0.0
+  vfile-reporter: 6.0.2
 devDependencies:
   '@commitlint/cli': 11.0.0
   '@commitlint/config-conventional': 11.0.0
@@ -39,7 +39,7 @@ devDependencies:
   husky: 4.3.0
   jest: 26.6.3
   lint-staged: 10.5.2
-  obsidian: github.com/obsidianmd/obsidian-api/6647842a61850b716eb05af0f9ffe36067dabbef
+  obsidian: github.com/obsidianmd/obsidian-api/ea530cce1adaa33eb891f053a56a12fa8640b834
   prettier: 2.2.0
   rollup: 2.33.3
   rollup-plugin-copy: 3.3.0
@@ -1192,6 +1192,7 @@ packages:
   /ansi-escapes/4.3.1:
     dependencies:
       type-fest: 0.11.0
+    dev: true
     engines:
       node: '>=8'
     resolution:
@@ -1224,6 +1225,7 @@ packages:
   /ansi-styles/4.3.0:
     dependencies:
       color-convert: 2.0.1
+    dev: true
     engines:
       node: '>=8'
     resolution:
@@ -1671,6 +1673,7 @@ packages:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
+    dev: true
     engines:
       node: '>=10'
     resolution:
@@ -1808,6 +1811,7 @@ packages:
   /color-convert/2.0.1:
     dependencies:
       color-name: 1.1.4
+    dev: true
     engines:
       node: '>=7.0.0'
     resolution:
@@ -1817,6 +1821,7 @@ packages:
     resolution:
       integrity: sha1-p9BVi9icQveV3UIyj3QIMcpTvCU=
   /color-name/1.1.4:
+    dev: true
     resolution:
       integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
   /colorette/1.2.1:
@@ -2649,20 +2654,6 @@ packages:
       eslint-plugin-standard: '>=4.0.0'
     resolution:
       integrity: sha512-Z9B+VR+JIXRxz21udPTL9HpFMyoMUEeX1G251EQ6e05WD9aPVtVBn09XUmZ259wCMlCDmYDSZG62Hhm+ZTJcUg==
-  /eslint-formatter-pretty/4.0.0:
-    dependencies:
-      ansi-escapes: 4.3.1
-      chalk: 4.1.0
-      eslint-rule-docs: 1.1.217
-      log-symbols: 4.0.0
-      plur: 4.0.0
-      string-width: 4.2.0
-      supports-hyperlinks: 2.1.0
-    dev: false
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha512-QgdeZxQwWcN0TcXXNZJiS6BizhAANFhCzkE7Yl9HKB7WjElzwED6+FbbZB2gji8ofgJTGPqKm6VRCNT3OGCeEw==
   /eslint-import-resolver-node/0.3.4:
     dependencies:
       debug: 2.6.9
@@ -2769,10 +2760,6 @@ packages:
       eslint: '>=5.0.0'
     resolution:
       integrity: sha512-ZL7+QRixjTR6/528YNGyDotyffm5OQst/sGxKDwGb9Uqs4In5Egi4+jbobhqJoyoCM6/7v/1A5fhQ7ScMtDjaQ==
-  /eslint-rule-docs/1.1.217:
-    dev: false
-    resolution:
-      integrity: sha512-xqd9Dtrr0bwoMtcQniZ+V/oXmixPe8TbPcKbMy4tzKIljUhiUpQDYrDZ6H3fIqUBlCcl9r7UhLoERqsMA74bcg==
   /eslint-scope/5.1.1:
     dependencies:
       esrecurse: 4.3.0
@@ -3663,12 +3650,12 @@ packages:
     resolution:
       integrity: sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==
   /has-flag/3.0.0:
-    dev: true
     engines:
       node: '>=4'
     resolution:
       integrity: sha1-tdRU3CGZriJWmfNGfloH87lVuv0=
   /has-flag/4.0.0:
+    dev: true
     engines:
       node: '>=8'
     resolution:
@@ -3905,12 +3892,6 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=
-  /irregular-plurals/3.2.0:
-    dev: false
-    engines:
-      node: '>=8'
-    resolution:
-      integrity: sha512-YqTdPLfwP7YFN0SsD3QUVCkm9ZG2VzOXv3DOrw5G5mkMbVwptTwVcFv7/C0vOpBmgTxAeTG19XpUs1E522LW9Q==
   /is-accessor-descriptor/0.1.6:
     dependencies:
       kind-of: 3.2.2
@@ -5068,6 +5049,7 @@ packages:
   /log-symbols/4.0.0:
     dependencies:
       chalk: 4.1.0
+    dev: true
     engines:
       node: '>=10'
     resolution:
@@ -6143,14 +6125,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-gQR3WpIgNIKwBMVLkpMUeR3e1/E1y42bqDQZfql+kDeXd8COYfM8PQA4X6y7a8u9Ua9FHmsrrmirW2vHs45hWg==
-  /plur/4.0.0:
-    dependencies:
-      irregular-plurals: 3.2.0
-    dev: false
-    engines:
-      node: '>=10'
-    resolution:
-      integrity: sha512-4UGewrYgqDFw9vV6zNV+ADmPAUAfJPKtGvb/VdpQAx25X5f3xXdGdyOEVFwkl8Hl/tl7+xbeHqSEM+D5/TirUg==
   /posix-character-classes/0.1.1:
     dev: true
     engines:
@@ -7299,9 +7273,18 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==
+  /supports-color/6.1.0:
+    dependencies:
+      has-flag: 3.0.0
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-qe1jfm1Mg7Nq/NSh6XE24gPXROEVsWHxC1LIx//XNlD9iw7YZQGjZNjYN7xGaEG6iKdA8EtNFW6R0gjnVXp+wQ==
   /supports-color/7.2.0:
     dependencies:
       has-flag: 4.0.0
+    dev: true
     engines:
       node: '>=8'
     resolution:
@@ -7310,6 +7293,7 @@ packages:
     dependencies:
       has-flag: 4.0.0
       supports-color: 7.2.0
+    dev: true
     engines:
       node: '>=8'
     resolution:
@@ -7596,6 +7580,7 @@ packages:
     resolution:
       integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==
   /type-fest/0.11.0:
+    dev: true
     engines:
       node: '>=8'
     resolution:
@@ -7809,23 +7794,25 @@ packages:
       unist-util-stringify-position: 2.0.3
     resolution:
       integrity: sha512-DjssxRGkMvifUOJre00juHoP9DPWuzjxKuMDrhNbk2TdaYYBNMStsNhEOt3idrtI12VQYM/1+iM0KOzXi4pxwQ==
-  /vfile-reporter-pretty/5.0.0:
+  /vfile-reporter/6.0.2:
     dependencies:
-      eslint-formatter-pretty: 4.0.0
-      vfile-to-eslint: 2.0.2
+      repeat-string: 1.6.1
+      string-width: 4.2.0
+      supports-color: 6.1.0
+      unist-util-stringify-position: 2.0.3
+      vfile-sort: 2.2.2
+      vfile-statistics: 1.1.4
     dev: false
     resolution:
-      integrity: sha512-pynx5Xvqp6TArfaP6T1JcyZK45Z7iQH6mv4XV7ce0Kry9t15zWaoZqFQvs9PNvivgxm7PFKzZV/l88VswW8Upw==
+      integrity: sha512-GN2bH2gs4eLnw/4jPSgfBjo+XCuvnX9elHICJZjVD4+NM0nsUrMTvdjGY5Sc/XG69XVTgLwj7hknQVc6M9FukA==
+  /vfile-sort/2.2.2:
+    dev: false
+    resolution:
+      integrity: sha512-tAyUqD2R1l/7Rn7ixdGkhXLD3zsg+XLAeUDUhXearjfIcpL1Hcsj5hHpCoy/gvfK/Ws61+e972fm0F7up7hfYA==
   /vfile-statistics/1.1.4:
     dev: false
     resolution:
       integrity: sha512-lXhElVO0Rq3frgPvFBwahmed3X03vjPF8OcjKMy8+F1xU/3Q3QU3tKEDp743SFtb74PdF0UWpxPvtOP0GCLheA==
-  /vfile-to-eslint/2.0.2:
-    dependencies:
-      vfile-statistics: 1.1.4
-    dev: false
-    resolution:
-      integrity: sha512-QvKxY1zCwLiDoM+Y4J46AHTRrY6WgVg9u8Ae/KbLRUmphcscmtIgSnttKefWH0X93JkONO+UD1DrltCpYYmDAQ==
   /vfile/4.2.1:
     dependencies:
       '@types/unist': 2.0.3
@@ -8036,14 +8023,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==
-  github.com/obsidianmd/obsidian-api/6647842a61850b716eb05af0f9ffe36067dabbef:
+  github.com/obsidianmd/obsidian-api/ea530cce1adaa33eb891f053a56a12fa8640b834:
     dependencies:
       '@types/codemirror': 0.0.98
     dev: true
     name: obsidian
     resolution:
-      tarball: 'https://codeload.github.com/obsidianmd/obsidian-api/tar.gz/6647842a61850b716eb05af0f9ffe36067dabbef'
-    version: 0.9.20
+      tarball: 'https://codeload.github.com/obsidianmd/obsidian-api/tar.gz/ea530cce1adaa33eb891f053a56a12fa8640b834'
+    version: 0.9.21
 specifiers:
   '@commitlint/cli': ^11.0.0
   '@commitlint/config-conventional': ^11.0.0
@@ -8072,7 +8059,7 @@ specifiers:
   husky: ^4.3.0
   jest: ^26.6.3
   lint-staged: ^10.5.2
-  obsidian: obsidianmd/obsidian-api#6647842a61850b716eb05af0f9ffe36067dabbef
+  obsidian: obsidianmd/obsidian-api#ea530cce1adaa33eb891f053a56a12fa8640b834
   prettier: ^2.2.0
   rebber: ^5.1.2
   remark-directive: ^1.0.1
@@ -8092,4 +8079,4 @@ specifiers:
   unist-util-is: ^4.0.4
   unist-util-visit: ^2.0.3
   vfile: ^4.2.1
-  vfile-reporter-pretty: ^5.0.0
+  vfile-reporter: ^6.0.2

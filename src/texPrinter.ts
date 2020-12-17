@@ -3,7 +3,7 @@ import { markdownToTex } from './processor';
 import { toVFile } from './file';
 import { VFile } from 'vfile';
 import { ExportToTexSettings } from './settings';
-import vfileReporterPretty from 'vfile-reporter-pretty';
+import reporter from 'vfile-reporter';
 
 export class TeXPrinter {
   constructor(
@@ -25,7 +25,7 @@ export class TeXPrinter {
     const vfile = await toVFile(file);
     console.groupCollapsed('export-to-tex');
     const tex = await this.process(vfile);
-    console.log(vfileReporterPretty([vfile]));
+    console.log(reporter(vfile));
     console.groupEnd();
     return tex;
   }
