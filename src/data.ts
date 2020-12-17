@@ -5,12 +5,16 @@ interface TexContext {
   exportToTex: ExportToTexSettings;
 }
 
+export function isTexContext(ctx: any): ctx is TexContext {
+  return 'exportToTex' in ctx && ctx.exportToTex instanceof ExportToTexSettings;
+}
+
 export type AugmentedContext = RebberSettings & TexContext;
 export type OptionalContext = RebberSettings & Partial<TexContext>;
 
 export function getContext(ctx: OptionalContext): AugmentedContext {
-  if (ctx.exportToTex === undefined) {
+  if (!isTexContext(ctx)) {
     throw new Error('Settings missing for export to tex');
   }
-  return ctx as AugmentedContext;
+  return ctx;
 }

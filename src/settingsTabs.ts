@@ -16,6 +16,20 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
     containerEl.createEl('h2', { text: 'Settings for exporting to TeX' });
 
     new Setting(containerEl)
+      .setName('Generate labels and refs')
+      .setDesc(
+        'Automatically generate TeX labels and refs for blocks and headings?',
+      )
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.plugin.settings.generateLabels)
+          .onChange(async (value) => {
+            this.plugin.settings.generateLabels = value;
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
+    new Setting(containerEl)
       .setName('Ref command')
       .setDesc(
         'Command to use when converting links to headings/blocks to refs.',

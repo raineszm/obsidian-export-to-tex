@@ -5,7 +5,6 @@ import {
   assertHeading,
   assertLabelDirective,
   assertLabeledLink,
-  LabelDirective,
 } from './mdastInterfaces';
 import rebber from 'rebber';
 
@@ -28,13 +27,9 @@ function ensureContext(
   };
 }
 
-function textDirective(_ctx: AugmentedContext, node: Node): string {
+function textDirective(ctx: AugmentedContext, node: Node): string {
   assertLabelDirective(node);
-  return stringifyLabel(node);
-}
-
-function stringifyLabel(directive: LabelDirective): string {
-  return `\\label{${getPrefix('heading')}${directive.data?.label ?? ''}}`;
+  return getLabel(ctx, 'heading', node.data?.label ?? '');
 }
 
 const keyPrefixes: Record<string, string> = {
@@ -49,17 +44,38 @@ function getPrefix(targetType: string | undefined): string {
   return '';
 }
 
+function getRef(
+  ctx: AugmentedContext,
+  targetType: string | undefined,
+  label: string,
+): string {
+  const {
+    exportToTex: { refCommand, generateLabels },
+  } = ctx;
+  if (!generateLabels) return '';
+  return `\\${refCommand}{${getPrefix(targetType)}${label}}`;
+}
+
+function getLabel(
+  ctx: AugmentedContext,
+  targetType: string | undefined,
+  label: string,
+): string {
+  const {
+    exportToTex: { generateLabels },
+  } = ctx;
+  if (!generateLabels) return '';
+  return `\\label${getPrefix(targetType)}${label}}`;
+}
+
 function wikiLink(ctx: AugmentedContext, node: Node): string {
   assertLabeledLink(node);
-  const {
-    exportToTex: { refCommand },
-  } = ctx;
 
   const { alias, label, targetType } = node.data;
   if (!node.value.contains('#') || label === undefined) {
     return alias ?? node.value;
   }
-  return `${alias ?? ''}\\${refCommand}{${getPrefix(targetType)}${label}}`;
+  return `${alias ?? ''}${getRef(ctx, targetType, label)}`;
 }
 
 const headingNames = [
@@ -81,5 +97,5 @@ function heading(ctx: AugmentedContext, node: Node): string {
     .map((content) => rebber.toLaTeX(content, ctx))
     .join('');
   const label = node.data?.label as string;
-  return `\\${cmd}{${text}}\\label{${getPrefix('heading')}${label}}`;
+  return `\\${cmd}{${text}}${getLabel(ctx, 'heading', label)}`;
 }

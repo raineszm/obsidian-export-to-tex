@@ -1,6 +1,7 @@
 export class ExportToTexSettings {
   refCommand: string = 'cref';
   additionalMathEnvironments: string[] = [];
+  generateLabels: boolean = true;
 }
 
 export type PartialSettings = Partial<ExportToTexSettings>;
@@ -12,6 +13,8 @@ export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
 
   settings.additionalMathEnvironments =
     partial.additionalMathEnvironments ?? settings.additionalMathEnvironments;
+
+  settings.generateLabels = partial.generateLabels ?? settings.generateLabels;
 
   return settings;
 }
