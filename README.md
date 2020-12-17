@@ -52,7 +52,7 @@ This command will produce a save as dialog. The contents of the current file wil
 #### Export to Clipboard
 
 The contents of the current file will be converted to TeX and copied to the clipboard.
-![](images/export-to-clipboard.gif)
+![](https://raw.githubusercontent.com/raineszm/obsidian-export-to-tex/master/images/export-to-clipboard.gif)
 
 ### Settings
 
