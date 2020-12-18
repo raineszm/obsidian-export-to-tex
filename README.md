@@ -6,6 +6,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](#license)
 
 > Export to obsidian notes to LaTeX format, suitable for pasting into a TeX file.
+> 
+![](https://raw.githubusercontent.com/raineszm/obsidian-export-to-tex/master/images/export-to-clipboard.gif)
 
 ## Installation
 
@@ -52,7 +54,6 @@ This command will produce a save as dialog. The contents of the current file wil
 #### Export to Clipboard
 
 The contents of the current file will be converted to TeX and copied to the clipboard.
-![](https://raw.githubusercontent.com/raineszm/obsidian-export-to-tex/master/images/export-to-clipboard.gif)
 
 ### Settings
 
