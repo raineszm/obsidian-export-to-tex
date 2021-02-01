@@ -24,9 +24,33 @@ export class TeXPrinter {
   async toTex(file: TFile): Promise<string> {
     const vfile = await toVFile(file);
     console.groupCollapsed('export-to-tex');
-    const tex = await this.process(vfile);
+    let tex = await this.process(vfile);
     console.log(reporter(vfile));
+    if (this.settings.compressNewlines) {
+      console.log('Compressing newlines');
+      tex = TeXPrinter.compressNewlines(tex);
+    }
     console.groupEnd();
     return tex;
+  }
+
+  private static compressNewlines(tex: string): string {
+    const lines = tex.split('\n');
+    const output = [];
+    let wasEmpty = false;
+    for (const line of lines) {
+      if (line === '') {
+        wasEmpty = true;
+        continue;
+      }
+
+      if (wasEmpty) {
+        output.push('');
+        wasEmpty = false;
+      }
+      output.push(line);
+    }
+
+    return output.join('\n');
   }
 }

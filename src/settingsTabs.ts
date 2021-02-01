@@ -73,6 +73,20 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
           });
       });
 
+    new Setting(containerEl)
+      .setName('Compress newlines')
+      .setDesc(
+        'Reduce any instance of 2 or more blank lines to a single blank line',
+      )
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.plugin.settings.compressNewlines)
+          .onChange(async (value) => {
+            this.plugin.settings.compressNewlines = value;
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
     new ButtonComponent(containerEl)
       .setButtonText('Reset to default')
       .onClick(async () => {

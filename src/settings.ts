@@ -3,6 +3,7 @@ export class ExportToTexSettings {
   defaultToEquation: boolean = false;
   additionalMathEnvironments: string[] = [];
   generateLabels: boolean = true;
+  compressNewlines: boolean = false;
 }
 
 export type PartialSettings = Partial<ExportToTexSettings>;
@@ -19,6 +20,9 @@ export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
 
   settings.defaultToEquation =
     partial.defaultToEquation ?? settings.defaultToEquation;
+
+  settings.compressNewlines =
+    partial.compressNewlines ?? settings.compressNewlines;
 
   return settings;
 }

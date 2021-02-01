@@ -59,19 +59,27 @@ The contents of the current file will be converted to TeX and copied to the clip
 
 ### Generate labels and refs
 
+**Default: true**
+
 By default, Export to TeX will auto generate labels for headings and blocks.
 Links to these from within the same file will be converted to `\ref` calls.
 
 ### Ref command
 
+**Default: '\cref'**
+
 The command to use for generating refs: defaults to `\cref`.
 
 ### Additional math environments
+
+**Default: []**
 
 Export to TeX will by default strip the surrounding displaymath delimeters from toplevel math environments such as `equation`.
 If there are other environments you which to do this for, they can be added to this list.
 
 ### Default to equation
+
+**Default: false**
 
 By default, display math environments
 
@@ -94,6 +102,12 @@ With default to equation on this well instead be exported as
 x^2
 \end{equation}
 ```
+
+### Compress Newlines
+
+**Default: false**
+
+When enabled, exported TeX will have any instance of more than one blank line in a row compressed to a single blank line.
 
 
 ## Contributing
