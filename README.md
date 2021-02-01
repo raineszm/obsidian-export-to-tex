@@ -71,6 +71,30 @@ The command to use for generating refs: defaults to `\cref`.
 Export to TeX will by default strip the surrounding displaymath delimeters from toplevel math environments such as `equation`.
 If there are other environments you which to do this for, they can be added to this list.
 
+### Default to equation
+
+By default, display math environments
+
+```
+$$
+x^2
+$$
+```
+will be exported as display math 
+```latex
+\[
+x^2
+\]
+```
+if there is no top level environment present.
+
+With default to equation on this well instead be exported as
+```latex
+\begin{equation}
+x^2
+\end{equation}
+```
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

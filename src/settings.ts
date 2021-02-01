@@ -1,5 +1,6 @@
 export class ExportToTexSettings {
   refCommand: string = 'cref';
+  defaultToEquation: boolean = false;
   additionalMathEnvironments: string[] = [];
   generateLabels: boolean = true;
 }
@@ -15,6 +16,9 @@ export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
     partial.additionalMathEnvironments ?? settings.additionalMathEnvironments;
 
   settings.generateLabels = partial.generateLabels ?? settings.generateLabels;
+
+  settings.defaultToEquation =
+    partial.defaultToEquation ?? settings.defaultToEquation;
 
   return settings;
 }

@@ -23,7 +23,7 @@ export function displayMath(ctx: AugmentedContext, node: Node): string {
   const { value } = node;
   const match = beginRegex.exec(value);
   const {
-    exportToTex: { additionalMathEnvironments },
+    exportToTex: { additionalMathEnvironments, defaultToEquation },
   } = ctx;
   if (
     match !== null &&
@@ -32,5 +32,10 @@ export function displayMath(ctx: AugmentedContext, node: Node): string {
   ) {
     return value;
   }
+
+  if (defaultToEquation) {
+    return `\\begin{equation}\n${value}\n\\end{equation}`;
+  }
+
   return `\\[\n${value}\n\\]`;
 }

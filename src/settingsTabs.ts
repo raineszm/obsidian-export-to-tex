@@ -61,6 +61,18 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
           });
       });
 
+    new Setting(containerEl)
+      .setName('Default to Equation')
+      .setDesc('Convert display math to equation environemtns')
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.plugin.settings.defaultToEquation)
+          .onChange(async (value) => {
+            this.plugin.settings.defaultToEquation = value;
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
     new ButtonComponent(containerEl)
       .setButtonText('Reset to default')
       .onClick(async () => {
