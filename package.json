@@ -1,6 +1,6 @@
 {
   "name": "obsidian-export-to-tex",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Export vault files in a format amenable to pasting into a tex document",
   "main": "src/main.js",
   "scripts": {

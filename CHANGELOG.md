@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/raineszm/obsidian-export-to-tex/compare/0.0.2...0.0.3) (2021-02-01)
+
+
+### Features
+
+* **math:** add defaultToEquation option ([bd7776e](https://github.com/raineszm/obsidian-export-to-tex/commit/bd7776ec3b4a72ea554e9bca0944ff2f7134f664))
+* **whitespace:** add compressNewlines option to reduce multiple blank lines ([6cfb35d](https://github.com/raineszm/obsidian-export-to-tex/commit/6cfb35df18501d1f0888c9ebcede8e3cf971ef81))
+
 ### [0.0.2](https://github.com/raineszm/obsidian-export-to-tex/compare/0.0.1...0.0.2) (2020-12-18)
 
 ### 0.0.1 (2020-12-18)
