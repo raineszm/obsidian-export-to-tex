@@ -83,16 +83,35 @@ class EmbedResolver {
 
     const { file, result, subpath } = this.getTarget(metadata);
 
-    if (result === null || file === undefined) {
+    if (file === undefined) {
       return this.failedEmbed();
     }
 
-    this.parentFile.info(`Reading embedded file ${file.basename}`, this.node);
-    if (!(await file.vault.adapter.exists(file.path))) {
-      this.parentFile.message(`${file.basename} does not exists`, this.node);
-      return this.failedEmbed();
+    switch (file.extension) {
+      case 'md':
+        if (result === null) {
+          return this.failedEmbed();
+        }
+        this.parentFile.info(
+          `Reading embedded file ${file.basename}`,
+          this.node,
+        );
+        if (!(await file.vault.adapter.exists(file.path))) {
+          this.parentFile.message(
+            `${file.basename} does not exists`,
+            this.node,
+          );
+          return this.failedEmbed();
+        }
+        return await this.processMarkdownEmbed(
+          embedTarget,
+          subpath,
+          file,
+          result,
+        );
+      default:
+        return this.processImageEmbed(embedTarget, subpath, file);
     }
-    return await this.processMarkdownEmbed(embedTarget, subpath, file, result);
   }
 
   async processMarkdownEmbed(
@@ -112,6 +131,14 @@ class EmbedResolver {
     this.parentFile.messages.push(...embedFile.messages);
 
     return processed;
+  }
+
+  processImageEmbed(embedTarget: string, subpath: string, file: TFile): Node {
+    this.parentFile.info(`Processing image "${embedTarget}"`, this.node);
+    return {
+      type: 'image',
+      url: file.path,
+    };
   }
 
   static readonly FAILED_TARGET = {
