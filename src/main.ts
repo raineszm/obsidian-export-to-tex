@@ -22,7 +22,7 @@ export default class ExportToTeXPlugin extends Plugin {
         const file = this.app.workspace.getActiveFile();
         if (file !== null) {
           if (!checking) {
-            this.exportToFile(file).catch(console.log);
+            this.exportToFile(file).catch(this.onExportError);
           }
           return true;
         }
@@ -37,7 +37,7 @@ export default class ExportToTeXPlugin extends Plugin {
         const file = this.app.workspace.getActiveFile();
         if (file !== null) {
           if (!checking) {
-            this.exportToClipboard(file).catch(console.log);
+            this.exportToClipboard(file).catch(this.onExportError);
           }
           return true;
         }
@@ -75,5 +75,13 @@ export default class ExportToTeXPlugin extends Plugin {
     remote.clipboard.writeText(contents);
     // eslint-disable-next-line no-new
     new Notice(`Tex exported to clipboard`);
+  }
+
+  onExportError(e: Error): void {
+    console.log(e);
+    // eslint-disable-next-line no-new
+    new Notice(
+      `Error of type "${e.name} occurred on export. See console for details."`,
+    );
   }
 }
