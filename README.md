@@ -109,6 +109,14 @@ x^2
 
 When enabled, exported TeX will have any instance of more than one blank line in a row compressed to a single blank line.
 
+### Export absolute image path
+
+**Default: false**
+
+When enabled, image embeds are exported with their absolute path, so that TeX files should compile without needing to copy the image to the TeX folder.
+When disabled, paths are relative to the vault root.
+
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
