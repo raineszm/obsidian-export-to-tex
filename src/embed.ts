@@ -127,7 +127,8 @@ class EmbedResolver {
     this.parentFile.info(`Parsing "${embedTarget}"`, this.node);
 
     const embedFile = makeVFile(data, file.path, subpath);
-    const processed = this.processor.parse(embedFile);
+    const node = this.processor.parse(embedFile);
+    const processed = await this.processor.run(node, embedFile);
     this.parentFile.messages.push(...embedFile.messages);
 
     return processed;

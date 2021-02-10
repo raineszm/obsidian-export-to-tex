@@ -34,7 +34,8 @@ function addLabel(
 ): void {
   visit(tree, ['heading', 'textDirective'], (node: Node) => {
     if (!isHeading(node) && !isLabelDirective(node)) {
-      throw new Error(`node of type ${node.type} cannot be labeled`);
+      file.message(`node of type ${node.type} cannot be labeled`);
+      return;
     }
     const namedFile = toNamedVFile(file);
     const { subpath, type } = getLabel(node);
