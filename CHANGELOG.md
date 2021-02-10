@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/raineszm/obsidian-export-to-tex/compare/0.0.3...0.1.0) (2021-02-10)
+
+
+### Features
+
+* **embed:** add support for images embedded via ![[image.png]] syntax ([5c24d2b](https://github.com/raineszm/obsidian-export-to-tex/commit/5c24d2ba5e473f55f7bf247089aaa002ecf7e1f9))
+* **error:** provide a notice to the user when export fails instead of failing silently ([ef20c37](https://github.com/raineszm/obsidian-export-to-tex/commit/ef20c377ccc274ca57b39209cef6f0a4091793c2))
+* **graphics:** add fullImagePath setting ([9e497b1](https://github.com/raineszm/obsidian-export-to-tex/commit/9e497b1ab37c33648db9198fd4851005b6965709))
+
+
+### Bug Fixes
+
+* **embed:** run processor properly on embedded files ([f75f823](https://github.com/raineszm/obsidian-export-to-tex/commit/f75f82316fbd1e608e0c8351f511bc46497efff6)), closes [#17](https://github.com/raineszm/obsidian-export-to-tex/issues/17)
+
 ### [0.0.3](https://github.com/raineszm/obsidian-export-to-tex/compare/0.0.2...0.0.3) (2021-02-01)
 
 
