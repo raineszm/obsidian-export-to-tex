@@ -8,6 +8,7 @@ import {
   FileSystemAdapter,
   HeadingSubpathResult,
   MetadataCache,
+  normalizePath,
   parseLinktext,
   resolveSubpath,
   TFile,
@@ -146,7 +147,7 @@ class EmbedResolver {
       : file.path;
     return {
       type: 'image',
-      url: imagePath,
+      url: normalizePath(imagePath),
     };
   }
 
