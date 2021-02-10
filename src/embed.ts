@@ -1,9 +1,11 @@
 import { Node } from 'unist';
 import { Processor, Transformer } from 'unified';
 import { VFile } from 'vfile';
+import * as path from 'path';
 import visit from 'unist-util-visit';
 import {
   BlockSubpathResult,
+  FileSystemAdapter,
   HeadingSubpathResult,
   MetadataCache,
   parseLinktext,
@@ -12,6 +14,7 @@ import {
 } from 'obsidian';
 import { assertEmbedDirective, EmbedDirective } from './mdastInterfaces';
 import { makeVFile } from './file';
+import { TexContext } from './data';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -136,9 +139,14 @@ class EmbedResolver {
 
   processImageEmbed(embedTarget: string, subpath: string, file: TFile): Node {
     this.parentFile.info(`Processing image "${embedTarget}"`, this.node);
+    const settings = this.processor.data('settings') as TexContext;
+    const adapter = file.vault.adapter as FileSystemAdapter;
+    const imagePath = settings.exportToTex.fullImagePath
+      ? path.join(adapter.getBasePath(), file.path)
+      : file.path;
     return {
       type: 'image',
-      url: file.path,
+      url: imagePath,
     };
   }
 

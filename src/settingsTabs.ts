@@ -87,6 +87,23 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
           });
       });
 
+    new Setting(containerEl)
+      .setName('Export absolute image paths')
+      .setDesc(
+        [
+          'When off image paths are exported relative to the vault root.',
+          'When on exports to absolute path inside the includegraphics command',
+        ].join('\n'),
+      )
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.plugin.settings.fullImagePath)
+          .onChange(async (value) => {
+            this.plugin.settings.fullImagePath = value;
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
     new ButtonComponent(containerEl)
       .setButtonText('Reset to default')
       .onClick(async () => {

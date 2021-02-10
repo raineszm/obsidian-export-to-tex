@@ -4,6 +4,7 @@ export class ExportToTexSettings {
   additionalMathEnvironments: string[] = [];
   generateLabels: boolean = true;
   compressNewlines: boolean = false;
+  fullImagePath: boolean = false;
 }
 
 export type PartialSettings = Partial<ExportToTexSettings>;
@@ -23,6 +24,8 @@ export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
 
   settings.compressNewlines =
     partial.compressNewlines ?? settings.compressNewlines;
+
+  settings.fullImagePath = partial.fullImagePath ?? settings.fullImagePath;
 
   return settings;
 }

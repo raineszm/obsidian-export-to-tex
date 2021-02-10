@@ -1,7 +1,7 @@
 import { RebberSettings } from 'rebber';
 import { ExportToTexSettings } from './settings';
 
-interface TexContext {
+export interface TexContext {
   exportToTex: ExportToTexSettings;
 }
 
