@@ -1,6 +1,10 @@
 import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
 import { remote } from 'electron';
-import { ExportToTexSettings } from './settings';
+import {
+  ExportToTexSettings,
+  ImagePathSettingDescriptions,
+  ImagePathSettings,
+} from './settings';
 import ExportToTeXPlugin from './main';
 
 export class ExportToTeXSettingTab extends PluginSettingTab {
@@ -88,18 +92,22 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
-      .setName('Export absolute image paths')
+      .setName('Image path format')
       .setDesc(
         [
-          'When off image paths are exported relative to the vault root.',
-          'When on exports to absolute path inside the includegraphics command',
+          'Specifies how the path for images should be written in exported \\includegraphics calls',
         ].join('\n'),
       )
-      .addToggle((toggle) => {
-        toggle
-          .setValue(this.plugin.settings.fullImagePath)
+      .addDropdown((dropdown) => {
+        for (let i = 0; i < ImagePathSettingDescriptions.length; i++) {
+          dropdown.addOption(i.toString(), ImagePathSettingDescriptions[i]);
+        }
+        dropdown
+          .setValue(this.plugin.settings.imagePathSettings.toString())
           .onChange(async (value) => {
-            this.plugin.settings.fullImagePath = value;
+            this.plugin.settings.imagePathSettings = Number.parseInt(
+              value,
+            ) as ImagePathSettings;
             await this.plugin.saveData(this.plugin.settings);
           });
       });

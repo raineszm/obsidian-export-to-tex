@@ -16,6 +16,8 @@ import {
 import { assertEmbedDirective, EmbedDirective } from './mdastInterfaces';
 import { makeVFile } from './file';
 import { TexContext } from './data';
+import { ImagePathSettings } from './settings';
+import { platform } from 'os';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -141,13 +143,10 @@ class EmbedResolver {
   processImageEmbed(embedTarget: string, subpath: string, file: TFile): Node {
     this.parentFile.info(`Processing image "${embedTarget}"`, this.node);
     const settings = this.processor.data('settings') as TexContext;
-    const adapter = file.vault.adapter as FileSystemAdapter;
-    const imagePath = settings.exportToTex.fullImagePath
-      ? path.join(adapter.getBasePath(), file.path)
-      : file.path;
+    const imagePath = this.getImagePath(file, settings);
     return {
       type: 'image',
-      url: normalizePath(imagePath),
+      url: imagePath,
     };
   }
 
@@ -196,5 +195,39 @@ class EmbedResolver {
       subpath,
       result: resolveSubpath(cache, subpath.trimEnd()),
     };
+  }
+
+  private getImagePath(file: TFile, settings: TexContext): string {
+    const adapter = file.vault.adapter as FileSystemAdapter;
+    const absolutePath = normalizePath(
+      path.join(adapter.getBasePath(), file.path),
+    );
+    switch (settings.exportToTex.imagePathSettings) {
+      case ImagePathSettings.RelativeToRoot:
+        return normalizePath(file.path);
+      case ImagePathSettings.FullPath:
+        return EmbedResolver.formatAbsolutePath(absolutePath);
+      case ImagePathSettings.BaseName:
+        return file.basename;
+      case ImagePathSettings.RelativeToExport: {
+        const exportPath = this.processor.data('exportPath') as string;
+        if (exportPath === null || exportPath === undefined) {
+          this.parentFile.info(
+            'No export file specified, falling back to exporting image absolute path',
+            this.node,
+            'imagePath:relativeToExport',
+          );
+          return EmbedResolver.formatAbsolutePath(absolutePath);
+        }
+        const exportFolder = path.dirname(normalizePath(exportPath));
+        return path.relative(exportFolder, absolutePath);
+      }
+    }
+  }
+
+  private static formatAbsolutePath(absolutePath: string): string {
+    return platform() === 'win32'
+      ? path.toNamespacedPath(absolutePath)
+      : '/' + absolutePath;
   }
 }

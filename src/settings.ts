@@ -1,13 +1,30 @@
+export enum ImagePathSettings {
+  RelativeToRoot,
+  FullPath,
+  BaseName,
+  RelativeToExport,
+}
+
+export const ImagePathSettingDescriptions = [
+  'Relative to vault root',
+  'Absolute path',
+  'File base name',
+  'Relative to export directory',
+];
+
 export class ExportToTexSettings {
   refCommand: string = 'cref';
   defaultToEquation: boolean = false;
   additionalMathEnvironments: string[] = [];
   generateLabels: boolean = true;
   compressNewlines: boolean = false;
-  fullImagePath: boolean = false;
+  imagePathSettings: ImagePathSettings = ImagePathSettings.RelativeToRoot;
 }
 
-export type PartialSettings = Partial<ExportToTexSettings>;
+export type PartialSettings = Partial<ExportToTexSettings> & {
+  // Deprecated options
+  fullImagePath?: boolean;
+};
 
 export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
   const settings = new ExportToTexSettings();
@@ -25,7 +42,17 @@ export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
   settings.compressNewlines =
     partial.compressNewlines ?? settings.compressNewlines;
 
-  settings.fullImagePath = partial.fullImagePath ?? settings.fullImagePath;
+  if (
+    partial.imagePathSettings === undefined &&
+    partial.fullImagePath !== undefined
+  ) {
+    settings.imagePathSettings = partial.fullImagePath
+      ? ImagePathSettings.FullPath
+      : ImagePathSettings.RelativeToRoot;
+  } else {
+    settings.imagePathSettings =
+      partial.imagePathSettings ?? settings.imagePathSettings;
+  }
 
   return settings;
 }

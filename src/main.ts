@@ -60,7 +60,11 @@ export default class ExportToTeXPlugin extends Plugin {
 
     if (canceled || filePath === undefined) return;
 
-    const printer = new TeXPrinter(this.app.metadataCache, this.settings);
+    const printer = new TeXPrinter(
+      this.app.metadataCache,
+      this.settings,
+      filePath,
+    );
     const contents = await printer.toTex(file);
 
     await promisify(fs.writeFile)(filePath, contents);

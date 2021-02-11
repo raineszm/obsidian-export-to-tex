@@ -9,6 +9,7 @@ export class TeXPrinter {
   constructor(
     readonly metadata: MetadataCache,
     readonly settings: ExportToTexSettings,
+    readonly exportPath?: string,
   ) {}
 
   async process(vfile: VFile): Promise<string> {
@@ -17,6 +18,7 @@ export class TeXPrinter {
         exportToTex: this.settings,
       })
       .data('metadata', this.metadata)
+      .data('exportPath', this.exportPath)
       .process(vfile);
     return output.toString();
   }

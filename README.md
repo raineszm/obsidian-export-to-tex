@@ -109,12 +109,17 @@ x^2
 
 When enabled, exported TeX will have any instance of more than one blank line in a row compressed to a single blank line.
 
-### Export absolute image path
+### Image path format
 
-**Default: false**
+**Default: Relative to vault root**
 
-When enabled, image embeds are exported with their absolute path, so that TeX files should compile without needing to copy the image to the TeX folder.
-When disabled, paths are relative to the vault root.
+Determines how image paths are written when converting image embeddings `![[image.png]]` to `\includgraphics` calls.
+Options are
+
+- *Relative to vault root*: uses to file path relative to the root of the current vault, `\includegraphics{Figures/image.png}`
+- *Absolute path*: uses the absolute path to the file on your filesystem, `\includegraphics{/Users/user/Documents/Vault/Figures/image.png}` 
+- *File base name*: uses only the base name of the image file: `\includegraphics{image}`
+- *Relative to export directory*: gives the file path relative to the export TeX directory, (if copying to clipboard will fall back to absolute path).
 
 
 
