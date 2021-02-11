@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/raineszm/obsidian-export-to-tex/compare/0.1.0...0.1.1) (2021-02-11)
+
+
+### Features
+
+* **images:** allow multiple options for how image paths are written during export ([d2bf5e9](https://github.com/raineszm/obsidian-export-to-tex/commit/d2bf5e9c9ec5d7fd9f84e0450ea56fcfe8006d35)), closes [#18](https://github.com/raineszm/obsidian-export-to-tex/issues/18)
+* **images:** normalize path of images so that it is readable by TeX ([a0baffa](https://github.com/raineszm/obsidian-export-to-tex/commit/a0baffa167bd578040a1bb5c0a2318aef1d7da3e)), closes [#20](https://github.com/raineszm/obsidian-export-to-tex/issues/20)
+
 ## [0.1.0](https://github.com/raineszm/obsidian-export-to-tex/compare/0.0.3...0.1.0) (2021-02-10)
 
 
