@@ -1,6 +1,7 @@
 dependencies:
   '@types/github-slugger': 1.3.0
   github-slugger: 1.3.0
+  normalize-path: 3.0.0
   rebber: 5.1.2
   remark-directive: 1.0.1
   remark-frontmatter: 3.0.0
@@ -23,6 +24,7 @@ devDependencies:
   '@types/codemirror': 0.0.98
   '@types/jest': 26.0.15
   '@types/node': 14.14.9
+  '@types/normalize-path': 3.0.0
   '@typescript-eslint/eslint-plugin': 4.8.2_6341bfd4e6c74608cac2d9a1d059520a
   '@typescript-eslint/parser': 4.8.2_eslint@7.14.0+typescript@4.1.2
   commitizen: 4.2.2
@@ -973,6 +975,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
+  /@types/normalize-path/3.0.0:
+    dev: true
+    resolution:
+      integrity: sha512-Nd8y/5t/7CRakPYiyPzr/IAfYusy1FkcZYFEAcoMZkwpJv2n4Wm+olW+e7xBdHEXhOnWdG9ddbar0gqZWS4x5Q==
   /@types/parse-json/4.0.0:
     dev: true
     resolution:
@@ -5640,7 +5646,6 @@ packages:
     resolution:
       integrity: sha1-GrKLVW4Zg2Oowab35vogE3/mrtk=
   /normalize-path/3.0.0:
-    dev: true
     engines:
       node: '>=0.10.0'
     resolution:
@@ -6493,7 +6498,7 @@ packages:
       request-promise-core: 1.1.4_request@2.88.2
       stealthy-require: 1.1.1
       tough-cookie: 2.5.0
-    deprecated: 'request-promise-native has been deprecated because it extends the now deprecated request package, see https://github.com/request/request/issues/3142'
+    deprecated: request-promise-native has been deprecated because it extends the now deprecated request package, see https://github.com/request/request/issues/3142
     dev: true
     engines:
       node: '>=0.12.0'
@@ -6523,7 +6528,7 @@ packages:
       tough-cookie: 2.5.0
       tunnel-agent: 0.6.0
       uuid: 3.4.0
-    deprecated: 'request has been deprecated, see https://github.com/request/request/issues/3142'
+    deprecated: request has been deprecated, see https://github.com/request/request/issues/3142
     dev: true
     engines:
       node: '>= 6'
@@ -6577,7 +6582,7 @@ packages:
     resolution:
       integrity: sha512-zFa12V4OLtT5XUX/Q4VLvTfBf+Ok0SPc1FNGM/z9ctUdiU618qwKpWnd0CHs3+RqROfyEg/DhuHbMWYqcgljEw==
   /resolve-url/0.2.1:
-    deprecated: 'https://github.com/lydell/resolve-url#deprecated'
+    deprecated: https://github.com/lydell/resolve-url#deprecated
     dev: true
     resolution:
       integrity: sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
@@ -7720,7 +7725,7 @@ packages:
     resolution:
       integrity: sha512-B0yRTzYdUCCn9n+F4+Gh4yIDtMQcaJsmYBDsTSG8g/OejKBodLQ2IHfN3bM7jUsRXndopT7OIXWdYqc1fjmV6g==
   /urix/0.1.0:
-    deprecated: 'Please see https://github.com/lydell/urix#deprecated'
+    deprecated: Please see https://github.com/lydell/urix#deprecated
     dev: true
     resolution:
       integrity: sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
@@ -8029,7 +8034,7 @@ packages:
     dev: true
     name: obsidian
     resolution:
-      tarball: 'https://codeload.github.com/obsidianmd/obsidian-api/tar.gz/ea530cce1adaa33eb891f053a56a12fa8640b834'
+      tarball: https://codeload.github.com/obsidianmd/obsidian-api/tar.gz/ea530cce1adaa33eb891f053a56a12fa8640b834
     version: 0.9.21
 specifiers:
   '@commitlint/cli': ^11.0.0
@@ -8042,6 +8047,7 @@ specifiers:
   '@types/github-slugger': ^1.3.0
   '@types/jest': ^26.0.15
   '@types/node': ^14.14.9
+  '@types/normalize-path': ^3.0.0
   '@typescript-eslint/eslint-plugin': ^4.8.2
   '@typescript-eslint/parser': ^4.8.2
   commitizen: ^4.2.2
@@ -8059,6 +8065,7 @@ specifiers:
   husky: ^4.3.0
   jest: ^26.6.3
   lint-staged: ^10.5.2
+  normalize-path: ^3.0.0
   obsidian: obsidianmd/obsidian-api#ea530cce1adaa33eb891f053a56a12fa8640b834
   prettier: ^2.2.0
   rebber: ^5.1.2

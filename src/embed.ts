@@ -8,7 +8,6 @@ import {
   FileSystemAdapter,
   HeadingSubpathResult,
   MetadataCache,
-  normalizePath,
   parseLinktext,
   resolveSubpath,
   TFile,
@@ -18,6 +17,7 @@ import { makeVFile } from './file';
 import { TexContext } from './data';
 import { ImagePathSettings } from './settings';
 import { platform } from 'os';
+import normalizePath from 'normalize-path';
 
 export function embed(this: Processor): Transformer {
   return async (tree: Node, file: VFile) =>
@@ -220,8 +220,6 @@ class EmbedResolver {
   }
 
   private static formatAbsolutePath(absolutePath: string): string {
-    return platform() === 'win32'
-      ? path.toNamespacedPath(absolutePath)
-      : '/' + absolutePath;
+    return platform() === 'win32' ? normalizePath(absolutePath) : absolutePath;
   }
 }
