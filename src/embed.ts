@@ -16,7 +16,6 @@ import { assertEmbedDirective, EmbedDirective } from './mdastInterfaces';
 import { makeVFile } from './file';
 import { TexContext } from './data';
 import { ImagePathSettings } from './settings';
-import { platform } from 'os';
 import normalizePath from 'normalize-path';
 
 export function embed(this: Processor): Transformer {
@@ -205,7 +204,7 @@ class EmbedResolver {
       case ImagePathSettings.RelativeToRoot:
         return normalizePath(file.path);
       case ImagePathSettings.FullPath:
-        return EmbedResolver.formatAbsolutePath(absolutePath);
+        return normalizePath(absolutePath);
       case ImagePathSettings.BaseName:
         return file.basename;
       case ImagePathSettings.RelativeToExport: {
@@ -214,12 +213,8 @@ class EmbedResolver {
           exportPath === null || exportPath === undefined
             ? settings.exportToTex.defaultExportDirectory
             : path.dirname(exportPath);
-        return path.relative(exportFolder, absolutePath);
+        return normalizePath(path.relative(exportFolder, absolutePath));
       }
     }
-  }
-
-  private static formatAbsolutePath(absolutePath: string): string {
-    return platform() === 'win32' ? normalizePath(absolutePath) : absolutePath;
   }
 }
