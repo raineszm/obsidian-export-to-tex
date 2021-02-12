@@ -119,7 +119,13 @@ Options are
 - *Relative to vault root*: uses to file path relative to the root of the current vault, `\includegraphics{Figures/image.png}`
 - *Absolute path*: uses the absolute path to the file on your filesystem, `\includegraphics{/Users/user/Documents/Vault/Figures/image.png}` 
 - *File base name*: uses only the base name of the image file: `\includegraphics{image}`
-- *Relative to export directory*: gives the file path relative to the export TeX directory, (if copying to clipboard will fall back to absolute path).
+- *Relative to export directory*: gives the file path relative to the export TeX directory, (if copying to clipboard will be relative to default export directory).
+
+### Default export directory
+
+**Defaults to vault root*
+
+If set the file picker will open to the chosen directory for export.
 
 
 
