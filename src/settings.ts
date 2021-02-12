@@ -19,6 +19,7 @@ export class ExportToTexSettings {
   generateLabels: boolean = true;
   compressNewlines: boolean = false;
   imagePathSettings: ImagePathSettings = ImagePathSettings.RelativeToRoot;
+  defaultExportDirectory: string = '';
 }
 
 export type PartialSettings = Partial<ExportToTexSettings> & {
@@ -53,6 +54,9 @@ export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
     settings.imagePathSettings =
       partial.imagePathSettings ?? settings.imagePathSettings;
   }
+
+  settings.defaultExportDirectory =
+    partial.defaultExportDirectory ?? settings.defaultExportDirectory;
 
   return settings;
 }

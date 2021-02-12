@@ -1,9 +1,8 @@
-import { Notice, Plugin, TFile } from 'obsidian';
+import { FileSystemAdapter, Notice, Plugin, TFile } from 'obsidian';
 import { TeXPrinter } from './texPrinter';
 import { remote } from 'electron';
-import * as fs from 'fs';
+import { writeFile } from './promises';
 import { ensureSettings, ExportToTexSettings } from './settings';
-import { promisify } from 'util';
 import { ExportToTeXSettingTab } from './settingsTabs';
 
 export default class ExportToTeXPlugin extends Plugin {
@@ -49,7 +48,13 @@ export default class ExportToTeXPlugin extends Plugin {
   }
 
   async exportToFile(file: TFile): Promise<void> {
+    const directory =
+      this.settings.defaultExportDirectory.length > 0
+        ? this.settings.defaultExportDirectory
+        : (file.vault.adapter as FileSystemAdapter).getBasePath();
     const { filePath, canceled } = await remote.dialog.showSaveDialog({
+      defaultPath: directory,
+      properties: ['createDirectory'],
       filters: [
         {
           name: 'TeX',
@@ -67,7 +72,7 @@ export default class ExportToTeXPlugin extends Plugin {
     );
     const contents = await printer.toTex(file);
 
-    await promisify(fs.writeFile)(filePath, contents);
+    await writeFile(filePath, contents);
 
     // eslint-disable-next-line no-new
     new Notice(`Tex exported to ${filePath}`);
