@@ -199,9 +199,8 @@ class EmbedResolver {
 
   private getImagePath(file: TFile, settings: TexContext): string {
     const adapter = file.vault.adapter as FileSystemAdapter;
-    const absolutePath = normalizePath(
-      path.join(adapter.getBasePath(), file.path),
-    );
+    const absolutePath = adapter.getFullPath(file.path);
+
     switch (settings.exportToTex.imagePathSettings) {
       case ImagePathSettings.RelativeToRoot:
         return normalizePath(file.path);
@@ -211,15 +210,10 @@ class EmbedResolver {
         return file.basename;
       case ImagePathSettings.RelativeToExport: {
         const exportPath = this.processor.data('exportPath') as string;
-        if (exportPath === null || exportPath === undefined) {
-          this.parentFile.info(
-            'No export file specified, falling back to exporting image absolute path',
-            this.node,
-            'imagePath:relativeToExport',
-          );
-          return EmbedResolver.formatAbsolutePath(absolutePath);
-        }
-        const exportFolder = path.dirname(normalizePath(exportPath));
+        const exportFolder =
+          exportPath === null || exportPath === undefined
+            ? settings.exportToTex.defaultExportDirectory
+            : path.dirname(exportPath);
         return path.relative(exportFolder, absolutePath);
       }
     }
