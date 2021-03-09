@@ -2,6 +2,7 @@ import { displayMath, inlineMath } from './math';
 import { Node } from 'unist';
 import { AugmentedContext, getContext, OptionalContext } from './data';
 import {
+  assertBlockquote,
   assertHeading,
   assertLabelDirective,
   assertLabeledLink,
@@ -17,6 +18,7 @@ export const rebberOverrides = {
   yaml,
   math: ensureContext(displayMath),
   heading: ensureContext(heading),
+  blockquote: ensureContext(blockquote),
 };
 
 function ensureContext(
@@ -98,4 +100,12 @@ function heading(ctx: AugmentedContext, node: Node): string {
     .join('');
   const label = node.data?.label as string;
   return `\\${cmd}{${text}}${getLabel(ctx, 'heading', label)}`;
+}
+
+function blockquote(ctx: AugmentedContext, node: Node): string {
+  assertBlockquote(node);
+  const text = node.children
+    .map((content) => rebber.toLaTeX(content, ctx))
+    .join('');
+  return `\\begin{quotation}\n${text}\\end{quotation}\n\n`;
 }

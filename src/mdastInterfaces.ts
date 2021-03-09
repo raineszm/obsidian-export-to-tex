@@ -1,5 +1,5 @@
 import { Node } from 'unist';
-import { Heading, Parent } from 'mdast';
+import { Heading, Parent, Blockquote } from 'mdast';
 import { WikiLink } from 'remark-wiki-link';
 
 export interface LabeledHeading extends Heading {
@@ -81,6 +81,14 @@ export function isLabeledLink(node: Node): node is LabeledLink {
 
 export function assertLabeledLink(node: Node): asserts node is LabeledLink {
   if (!isLabeledLink(node)) throwWrongNode('wikiLink', node);
+}
+
+export function isBlockquote(node: Node): node is Blockquote {
+  return node.type === 'blockquote';
+}
+
+export function assertBlockquote(node: Node): asserts node is Blockquote {
+  if (!isBlockquote(node)) throwWrongNode('blockquote', node);
 }
 
 export interface InlineMath extends Node {
