@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.2](https://github.com/raineszm/obsidian-export-to-tex/compare/0.2.1...0.2.2) (2021-03-17)
+
+
+### Bug Fixes
+
+* **environments:** export quotation environment with correct capitalization ([3ba07a1](https://github.com/raineszm/obsidian-export-to-tex/commit/3ba07a12cdc496c82226599f2f044f5abb967407)), closes [#23](https://github.com/raineszm/obsidian-export-to-tex/issues/23)
+
 ### [0.2.1](https://github.com/raineszm/obsidian-export-to-tex/compare/0.2.0...0.2.1) (2021-02-12)
 
 
