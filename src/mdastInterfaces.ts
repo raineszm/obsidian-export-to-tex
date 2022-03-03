@@ -1,5 +1,5 @@
 import { Node } from 'unist';
-import { Heading, Parent, Blockquote } from 'mdast';
+import { Blockquote, Heading, Paragraph, Parent, Text } from 'mdast';
 import { WikiLink } from 'remark-wiki-link';
 
 export interface LabeledHeading extends Heading {
@@ -71,7 +71,7 @@ export interface LabeledLink extends WikiLink {
   data: {
     label?: string;
     alias?: string;
-    targetType?: 'heading' | 'block';
+    targetType?: 'block' | 'heading';
   };
 }
 
@@ -117,10 +117,28 @@ export function assertMath(node: Node): asserts node is Math {
   if (!isMath(node)) throwWrongNode('math', node);
 }
 
+export function isParagraph(node: Node): node is Paragraph {
+  return node.type === 'paragraph';
+}
+
+export function isText(node: Node): node is Text {
+  return node.type === 'text';
+}
+
 function throwWrongNode(expected: string, node: Node): never {
   throw new Error(
     `Expected node of type ${expected} but received node ${JSON.stringify(
       node,
     )}`,
   );
+}
+
+export interface LabeledNode extends Node {
+  data: {
+    label?: string;
+  };
+}
+
+export function hasLabel(node: Node): node is LabeledNode {
+  return typeof node?.data?.label === 'string';
 }

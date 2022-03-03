@@ -4,7 +4,6 @@ import { AugmentedContext, getContext, OptionalContext } from './data';
 import {
   assertBlockquote,
   assertHeading,
-  assertLabelDirective,
   assertLabeledLink,
 } from './mdastInterfaces';
 import rebber from 'rebber';
@@ -14,7 +13,6 @@ const yaml = consume;
 export const rebberOverrides = {
   wikiLink: ensureContext(wikiLink),
   inlineMath: ensureContext(inlineMath),
-  textDirective: ensureContext(textDirective),
   yaml,
   math: ensureContext(displayMath),
   heading: ensureContext(heading),
@@ -27,11 +25,6 @@ function ensureContext(
   return (ctx, node) => {
     return fn(getContext(ctx), node);
   };
-}
-
-function textDirective(ctx: AugmentedContext, node: Node): string {
-  assertLabelDirective(node);
-  return getLabel(ctx, 'block', node.data?.label ?? '');
 }
 
 const keyPrefixes: Record<string, string> = {
