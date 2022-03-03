@@ -58,6 +58,7 @@ function addLabel(
 function getLabel(node: Node): { subpath: string; type: 'heading' | 'block' } {
   if (isHeading(node)) {
     return {
+      // @ts-expect-error
       subpath: `#${node.children.map((c) => c.value).join('')}`,
       type: 'heading',
     };

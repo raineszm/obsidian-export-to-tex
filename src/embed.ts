@@ -54,7 +54,7 @@ async function embedTransformer(
     },
   );
 
-  return Promise.allSettled(promises).then(() => {
+  return await Promise.allSettled(promises).then(() => {
     file.info('All embeds resolved', tree);
   });
 }
@@ -72,6 +72,7 @@ class EmbedResolver {
       `Failed to resolve embed ${embedTarget}`,
       this.node,
     );
+    // @ts-expect-error
     return { type: 'inlineCode', value: `Missing ${embedTarget}` };
   }
 
@@ -145,6 +146,7 @@ class EmbedResolver {
     const imagePath = this.getImagePath(file, settings);
     return {
       type: 'image',
+      // @ts-expect-error
       url: imagePath,
     };
   }
@@ -154,9 +156,7 @@ class EmbedResolver {
     result: null,
   };
 
-  getTarget(
-    metadata: MetadataCache,
-  ): {
+  getTarget(metadata: MetadataCache): {
     file?: TFile;
     result: HeadingSubpathResult | BlockSubpathResult | null;
     subpath: string;

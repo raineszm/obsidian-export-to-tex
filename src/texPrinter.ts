@@ -1,5 +1,5 @@
 import { MetadataCache, TFile } from 'obsidian';
-import { markdownToTex } from './processor';
+import { markdownToTex } from './processor.js';
 import { toVFile } from './file';
 import { VFile } from 'vfile';
 import { ExportToTexSettings } from './settings';

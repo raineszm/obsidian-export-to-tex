@@ -3,7 +3,7 @@ import markdown from 'remark-parse';
 import math from 'remark-math';
 import gfm from 'remark-gfm';
 import directive from 'remark-directive';
-import { wikiLinkPlugin } from 'remark-wiki-link';
+import wikiLinkPlugin from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
 import rebber from 'rebber';
 import { embed } from './embed';
