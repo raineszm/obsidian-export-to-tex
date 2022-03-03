@@ -10,7 +10,7 @@ import { embed } from './embed';
 import { labels } from './labels';
 import { rebberOverrides } from './stringify';
 
-export const markdownToTex = unified()
+export const markdownToAst = unified()
   .use(markdown)
   .use(gfm)
   .use(math)
@@ -18,7 +18,9 @@ export const markdownToTex = unified()
   .use(directive)
   .use(wikiLinkPlugin, {
     aliasDivider: '|',
-  })
+  });
+
+export const markdownToTex = markdownToAst
   .use(embed)
   .use(labels)
   .use(rebber, {

@@ -17,6 +17,7 @@ esbuild.build({
   },
   entryPoints: ['src/main.ts'],
   bundle: true,
+  define: {"DEBUG": !prod},
   external: [
     'obsidian',
     'electron',

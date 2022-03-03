@@ -4,6 +4,7 @@ import { remote } from 'electron';
 import { writeFile } from './promises';
 import { ensureSettings, ExportToTexSettings } from './settings';
 import { ExportToTeXSettingTab } from './settingsTabs';
+import { exportAstToConsole } from './debug/ast';
 
 export default class ExportToTeXPlugin extends Plugin {
   settings: ExportToTexSettings = new ExportToTexSettings();
@@ -43,6 +44,23 @@ export default class ExportToTeXPlugin extends Plugin {
         return false;
       },
     });
+
+    if (DEBUG) {
+      this.addCommand({
+        id: 'export-ast-to-console',
+        name: 'Show AST',
+        checkCallback: (checking: boolean) => {
+          const file = this.app.workspace.getActiveFile();
+          if (file !== null) {
+            if (!checking) {
+              exportAstToConsole(file).catch(this.onExportError);
+            }
+            return true;
+          }
+          return false;
+        },
+      });
+    }
 
     this.addSettingTab(new ExportToTeXSettingTab(this.app, this));
   }
