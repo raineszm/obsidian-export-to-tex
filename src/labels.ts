@@ -57,7 +57,7 @@ function associateLabels(
         );
         return;
       }
-      const target = parent.children[index--];
+      const target = parent.children[index - 1];
       parent.children.splice(index, 1);
       createLabel(
         slugger,
@@ -100,7 +100,7 @@ function getHeadingLabel(node: Heading): string {
   return `#${node.children.map((c) => c.value).join('')}`;
 }
 
-const LABEL_REGEX: RegExp = /^\^[[a-z][A-Z][0-9]-]$/;
+const LABEL_REGEX: RegExp = /^\^\w+$/;
 
 export interface LabelParagraph extends Paragraph {
   children: Text[];
