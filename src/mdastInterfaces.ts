@@ -2,17 +2,11 @@ import { Node } from 'unist';
 import { Blockquote, Heading, Paragraph, Parent, Text } from 'mdast';
 import { WikiLink } from 'remark-wiki-link';
 
-export interface LabeledHeading extends Heading {
-  data: {
-    label?: string;
-  };
-}
-
-export function isHeading(node: Node): node is LabeledHeading {
+export function isHeading(node: Node): node is Heading {
   return node.type === 'heading';
 }
 
-export function assertHeading(node: Node): asserts node is LabeledHeading {
+export function assertHeading(node: Node): asserts node is Heading {
   if (!isHeading(node)) throwWrongNode('heading', node);
 }
 
@@ -69,9 +63,9 @@ export function assertEmbedDirective(
 
 export interface LabeledLink extends WikiLink {
   data: {
-    label?: string;
+    label?: Label;
     alias?: string;
-    targetType?: 'block' | 'heading';
+    isHeading?: boolean;
   };
 }
 
@@ -133,12 +127,13 @@ function throwWrongNode(expected: string, node: Node): never {
   );
 }
 
-export interface LabeledNode extends Node {
-  data: {
-    label?: string;
-  };
+export interface Label {
+  name: string;
+  type: string;
 }
 
-export function hasLabel(node: Node): node is LabeledNode {
-  return typeof node?.data?.label === 'string';
+export interface LabeledNode extends Node {
+  data: {
+    label?: Label;
+  };
 }

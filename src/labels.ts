@@ -8,6 +8,7 @@ import {
   isHeading,
   isParagraph,
   isText,
+  Label,
   LabeledNode,
 } from './mdastInterfaces';
 import { toNamedVFile } from './file';
@@ -17,12 +18,12 @@ import { Heading, Paragraph, Text } from 'mdast';
 interface LinkTarget {
   path: string;
   subpath: string;
-  type: 'block' | 'heading';
+  isHeading: boolean;
 }
 
 export function labels(this: Processor): Transformer {
   const slugger = new GithubSlugger();
-  const labels = new Map<string, string>();
+  const labels = new Map<string, Label>();
   return (tree: Node, file: VFile) => {
     associateLabels(slugger, labels, tree, file);
     targetLabels(labels, tree, file);
@@ -31,7 +32,7 @@ export function labels(this: Processor): Transformer {
 
 function associateLabels(
   slugger: GithubSlugger,
-  labelsMap: Map<string, string>,
+  labelsMap: Map<string, Label>,
   tree: Node,
   file: VFile,
 ): void {
@@ -44,9 +45,8 @@ function associateLabels(
           slugger,
           labelsMap,
           file,
-          node,
+          node as LabeledNode,
           getHeadingLabel(node),
-          'heading',
         );
       }
       if (!isLabelParagraph(node)) return;
@@ -65,7 +65,6 @@ function associateLabels(
         file,
         target as LabeledNode,
         node.children[0].value,
-        'block',
       );
       return index;
     },
@@ -74,24 +73,26 @@ function associateLabels(
 
 function createLabel(
   slugger: GithubSlugger,
-  labelsMap: Map<string, string>,
+  labelsMap: Map<string, Label>,
   file: VFile,
   node: LabeledNode,
   subpath: string,
-  type: 'block' | 'heading',
 ): void {
   const namedFile = toNamedVFile(file);
   const key: LinkTarget = {
     path: namedFile.stem,
     subpath,
-    type,
+    isHeading: node.type === 'heading',
   };
 
   if (node.data === undefined) {
     node.data = {};
   }
   if (node.data.label === undefined) {
-    node.data.label = slugger.slug(subpath);
+    node.data.label = {
+      name: slugger.slug(subpath),
+      type: node.type,
+    };
   }
   labelsMap.set(keyToString(key), node.data.label);
 }
@@ -115,7 +116,7 @@ function isLabelParagraph(node: Node): node is LabelParagraph {
 }
 
 function targetLabels(
-  labelsMap: Map<string, string>,
+  labelsMap: Map<string, Label>,
   tree: Node,
   file: VFile,
 ): void {
@@ -132,18 +133,18 @@ function targetLabels(
     const namedFile = toNamedVFile(file);
     const { path, subpath } = parseLinktext(node.value);
     const key: LinkTarget = {
-      type: node.value.contains('^') ? 'block' : 'heading',
+      isHeading: !node.value.contains('^'),
       path: path.length > 0 ? path : namedFile.stem,
       subpath,
     };
     const label = labelsMap.get(keyToString(key));
     if (label !== null) {
       node.data.label = label;
-      node.data.targetType = key.type;
+      node.data.isHeading = key.isHeading;
     }
   });
 }
 
 function keyToString(key: LinkTarget): string {
-  return `${key.type}:${key.path}:${key.subpath}`;
+  return `${key.isHeading ? 'h' : 'b'}:${key.path}:${key.subpath}`;
 }
