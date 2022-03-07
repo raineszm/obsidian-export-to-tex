@@ -53,11 +53,7 @@ export default class ExportToTeXPlugin extends Plugin {
           const file = this.app.workspace.getActiveFile();
           if (file !== null) {
             if (!checking) {
-              exportAstToConsole(
-                file,
-                this.settings,
-                this.app.metadataCache,
-              ).catch(this.onExportError);
+              exportAstToConsole(file).catch(this.onExportError);
             }
             return true;
           }
@@ -72,7 +68,11 @@ export default class ExportToTeXPlugin extends Plugin {
           const file = this.app.workspace.getActiveFile();
           if (file !== null) {
             if (!checking) {
-              exportModifiedAstToConsole(file).catch(this.onExportError);
+              exportModifiedAstToConsole(
+                file,
+                this.settings,
+                this.app.metadataCache,
+              ).catch(this.onExportError);
             }
             return true;
           }
