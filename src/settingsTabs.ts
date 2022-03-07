@@ -135,8 +135,9 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
       .addButton((button) => {
         button.setButtonText('Choose').onClick(async () => {
           const { filePaths, canceled } = await remote.dialog.showOpenDialog({
-            defaultPath: (this.app.vault
-              .adapter as FileSystemAdapter).getBasePath(),
+            defaultPath: (
+              this.app.vault.adapter as FileSystemAdapter
+            ).getBasePath(),
             properties: ['createDirectory', 'openDirectory'],
           });
 
