@@ -4,7 +4,8 @@ import { toVFile } from '../file';
 import { ExportToTexSettings } from '../settings';
 
 export async function exportAstToConsole(file: TFile): Promise<void> {
-  const ast = await markdownToTex().parse(await toVFile(file));
+  const vfile = await toVFile(file);
+  const ast = await markdownToTex().parse(vfile);
   console.log(ast);
 }
 

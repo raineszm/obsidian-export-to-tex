@@ -20,7 +20,7 @@ export function makeVFile(
   subpath?: string,
 ): ObsidianVFile {
   const options: VFileOptions = {
-    contents: preprocess(contents),
+    value: preprocess(contents),
     path,
     data: { embedded: new Array<VFile>() },
     subpath,

@@ -1,5 +1,5 @@
 import { unified } from 'unified';
-import markdown from 'remark-parse';
+import remarkParse from 'remark-parse';
 import math from 'remark-math';
 import gfm from 'remark-gfm';
 import directive from 'remark-directive';
@@ -11,7 +11,7 @@ import { labels } from './labels';
 import { rebberOverrides } from './stringify';
 
 export const markdownToTex = unified()
-  .use(markdown)
+  .use(remarkParse)
   .use(gfm)
   .use(math)
   .use(frontmatter)
