@@ -1,7 +1,5 @@
-import { FileSystemAdapter, Notice, Plugin, TFile } from 'obsidian';
+import { Notice, Plugin, TFile } from 'obsidian';
 import { TeXPrinter } from './texPrinter';
-import { remote } from 'electron';
-import { writeFile } from './promises';
 import { ensureSettings, ExportToTexSettings } from './settings';
 import { ExportToTeXSettingTab } from './settingsTabs';
 import { exportAstToConsole, exportModifiedAstToConsole } from './debug/ast';
@@ -85,40 +83,44 @@ export default class ExportToTeXPlugin extends Plugin {
   }
 
   async exportToFile(file: TFile): Promise<void> {
-    const directory =
-      this.settings.defaultExportDirectory.length > 0
-        ? this.settings.defaultExportDirectory
-        : (file.vault.adapter as FileSystemAdapter).getBasePath();
-    const { filePath, canceled } = await remote.dialog.showSaveDialog({
-      defaultPath: directory,
-      properties: ['createDirectory'],
-      filters: [
-        {
-          name: 'TeX',
-          extensions: ['tex'],
-        },
-      ],
-    });
+    // const directory =
+    //   this.settings.defaultExportDirectory.length > 0
+    //     ? this.settings.defaultExportDirectory
+    //     : (file.vault.adapter as FileSystemAdapter).getBasePath();
+    try {
+      const fileHandle = await window.showSaveFilePicker({
+        types: [
+          {
+            description: 'LaTeX',
+            accept: {
+              'application/x-tex': ['.tex'],
+            },
+          },
+        ],
+      });
 
-    if (canceled || filePath === undefined) return;
+      const printer = new TeXPrinter(
+        this.app.metadataCache,
+        this.settings,
+        fileHandle.name,
+      );
+      const contents = await printer.toTex(file);
 
-    const printer = new TeXPrinter(
-      this.app.metadataCache,
-      this.settings,
-      filePath,
-    );
-    const contents = await printer.toTex(file);
+      const writeable = await fileHandle.createWritable();
+      await writeable.write(contents);
+      writeable.close();
 
-    await writeFile(filePath, contents);
-
-    // eslint-disable-next-line no-new
-    new Notice(`Tex exported to ${filePath}`);
+      // eslint-disable-next-line no-new
+      new Notice(`Tex exported to ${fileHandle.name}`);
+    } catch (AbortError) {
+      return;
+    }
   }
 
   async exportToClipboard(file: TFile): Promise<void> {
     const printer = new TeXPrinter(this.app.metadataCache, this.settings);
     const contents = await printer.toTex(file);
-    remote.clipboard.writeText(contents);
+    await navigator.clipboard.writeText(contents);
     // eslint-disable-next-line no-new
     new Notice(`Tex exported to clipboard`);
   }

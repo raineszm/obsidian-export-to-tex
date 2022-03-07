@@ -1,17 +1,5 @@
-import {
-  App,
-  ButtonComponent,
-  FileSystemAdapter,
-  PluginSettingTab,
-  Setting,
-  TextComponent,
-} from 'obsidian';
-import { remote } from 'electron';
-import {
-  ExportToTexSettings,
-  ImagePathSettingDescriptions,
-  ImagePathSettings,
-} from './settings';
+import { App, PluginSettingTab, Setting } from 'obsidian';
+import { ImagePathSettingDescriptions, ImagePathSettings } from './settings';
 import ExportToTeXPlugin from './main';
 
 export class ExportToTeXSettingTab extends PluginSettingTab {
@@ -119,53 +107,53 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
           });
       });
 
-    let textEl: TextComponent;
+    // let textEl: TextComponent;
 
-    new Setting(containerEl)
-      .setName('Default export directory')
-      .setDesc(
-        'Default directory to save TeX files to. If blank will default to vault root.',
-      )
-      .addText((text) => {
-        textEl = text
-          .setPlaceholder('Default (Vault root)')
-          .setValue(this.plugin.settings.defaultExportDirectory);
-        textEl.inputEl.disabled = true;
-      })
-      .addButton((button) => {
-        button.setButtonText('Choose').onClick(async () => {
-          const { filePaths, canceled } = await remote.dialog.showOpenDialog({
-            defaultPath: (
-              this.app.vault.adapter as FileSystemAdapter
-            ).getBasePath(),
-            properties: ['createDirectory', 'openDirectory'],
-          });
+    // new Setting(containerEl)
+    // .setName('Default export directory')
+    // .setDesc(
+    //   'Default directory to save TeX files to. If blank will default to vault root.',
+    // )
+    // .addText((text) => {
+    //   textEl = text
+    //     .setPlaceholder('Default (Vault root)')
+    //     .setValue(this.plugin.settings.defaultExportDirectory);
+    //   textEl.inputEl.disabled = true;
+    // })
+    // .addButton((button) => {
+    //   button.setButtonText('Choose').onClick(async () => {
+    //     const { filePaths, canceled } = await remote.dialog.showOpenDialog({
+    //       defaultPath: (
+    //         this.app.vault.adapter as FileSystemAdapter
+    //       ).getBasePath(),
+    //       properties: ['createDirectory', 'openDirectory'],
+    //     });
+    //
+    //     if (canceled) return;
+    //
+    //     const exportPath = filePaths[0];
+    //     textEl.setValue(exportPath);
+    //     this.plugin.settings.defaultExportDirectory = exportPath;
+    //     await this.plugin.saveData(this.plugin.settings);
+    //   });
+    // });
 
-          if (canceled) return;
-
-          const exportPath = filePaths[0];
-          textEl.setValue(exportPath);
-          this.plugin.settings.defaultExportDirectory = exportPath;
-          await this.plugin.saveData(this.plugin.settings);
-        });
-      });
-
-    new ButtonComponent(containerEl)
-      .setButtonText('Reset to default')
-      .onClick(async () => {
-        await remote.dialog
-          .showMessageBox({
-            title: 'Reset settings to default?',
-            type: 'question',
-            message: 'Are you sure?',
-            buttons: ['No', 'Yes'],
-          })
-          .then(async (value) => {
-            if (value.response === 0) return;
-            this.plugin.settings = new ExportToTexSettings();
-            await this.plugin.saveData(this.plugin.settings);
-            this.display();
-          });
-      });
+    // new ButtonComponent(containerEl)
+    //   .setButtonText('Reset to default')
+    //   .onClick(async () => {
+    //     await remote.dialog
+    //       .showMessageBox({
+    //         title: 'Reset settings to default?',
+    //         type: 'question',
+    //         message: 'Are you sure?',
+    //         buttons: ['No', 'Yes'],
+    //       })
+    //       .then(async (value) => {
+    //         if (value.response === 0) return;
+    //         this.plugin.settings = new ExportToTexSettings();
+    //         await this.plugin.saveData(this.plugin.settings);
+    //         this.display();
+    //       });
+    //   });
   }
 }
