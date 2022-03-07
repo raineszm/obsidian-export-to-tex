@@ -4,16 +4,15 @@ import { Node, Parent } from 'unist';
 import { VFile } from 'vfile';
 import visit from 'unist-util-visit';
 import {
-  assertLabeledLink,
-  isHeading,
-  isParagraph,
-  isText,
+  assertNodeType,
   Label,
+  LabeledLink,
   LabeledNode,
 } from './mdastInterfaces';
 import { toNamedVFile } from './file';
 import { parseLinktext } from 'obsidian';
 import { Heading, Paragraph, Text } from 'mdast';
+import { is } from 'unist-util-is';
 
 interface LinkTarget {
   path: string;
@@ -40,7 +39,7 @@ function associateLabels(
     tree,
     ['heading', 'paragraph'],
     (node: Node, index: number, parent?: Parent) => {
-      if (isHeading(node)) {
+      if (is<Heading>(node, 'heading')) {
         return createLabel(
           slugger,
           labelsMap,
@@ -108,10 +107,10 @@ export interface LabelParagraph extends Paragraph {
 }
 
 function isLabelParagraph(node: Node): node is LabelParagraph {
-  if (!isParagraph(node)) return false;
+  if (!is<Paragraph>(node, 'paragraph')) return false;
   if (node.children.length !== 1) return false;
   const child = node.children[0];
-  if (!isText(child)) return false;
+  if (!is<Text>(child, 'text')) return false;
   return child.value.match(LABEL_REGEX) !== null;
 }
 
@@ -121,7 +120,7 @@ function targetLabels(
   file: VFile,
 ): void {
   visit(tree, 'wikiLink', (node: Node) => {
-    assertLabeledLink(node);
+    assertNodeType<LabeledLink>(node, 'wikiLink');
     if (node.data.label !== undefined) {
       return;
     }
@@ -140,7 +139,6 @@ function targetLabels(
     const label = labelsMap.get(keyToString(key));
     if (label !== null) {
       node.data.label = label;
-      node.data.isHeading = key.isHeading;
     }
   });
 }

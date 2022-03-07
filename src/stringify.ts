@@ -1,12 +1,9 @@
 import { displayMath, inlineMath } from './math';
 import { Node } from 'unist';
 import { AugmentedContext, getContext, OptionalContext } from './data';
-import {
-  assertBlockquote,
-  assertHeading,
-  assertLabeledLink,
-} from './mdastInterfaces';
 import rebber from 'rebber';
+import { assertNodeType, Label, LabeledLink } from './mdastInterfaces';
+import { Blockquote, Heading } from 'mdast';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
 const yaml = consume;
@@ -39,38 +36,30 @@ function getPrefix(targetType: string | undefined): string {
   return '';
 }
 
-function getRef(
-  ctx: AugmentedContext,
-  targetType: string | undefined,
-  label: string,
-): string {
+function getRef(ctx: AugmentedContext, label: Label): string {
   const {
     exportToTex: { refCommand, generateLabels },
   } = ctx;
   if (!generateLabels) return '';
-  return `\\${refCommand}{${getPrefix(targetType)}${label}}`;
+  return `\\${refCommand}{${getPrefix(label.type)}${label.name}}`;
 }
 
-function getLabel(
-  ctx: AugmentedContext,
-  targetType: string | undefined,
-  label: string,
-): string {
+function getLabel(ctx: AugmentedContext, label: Label): string {
   const {
     exportToTex: { generateLabels },
   } = ctx;
   if (!generateLabels) return '';
-  return `\\label{${getPrefix(targetType)}${label}}`;
+  return `\\label{${getPrefix(label.type)}${label.name}}`;
 }
 
 function wikiLink(ctx: AugmentedContext, node: Node): string {
-  assertLabeledLink(node);
+  assertNodeType<LabeledLink>(node, 'wikiLink');
 
-  const { alias, label, targetType } = node.data;
+  const { alias, label } = node.data;
   if (!node.value.contains('#') || label === undefined) {
     return alias ?? node.value;
   }
-  return `${alias ?? ''}${getRef(ctx, targetType, label)}`;
+  return `${alias ?? ''}${getRef(ctx, label)}`;
 }
 
 const headingNames = [
@@ -82,7 +71,7 @@ const headingNames = [
 ];
 
 function heading(ctx: AugmentedContext, node: Node): string {
-  assertHeading(node);
+  assertNodeType<Heading>(node, 'heading');
 
   if (node.depth > 5) {
     return '';
@@ -91,12 +80,12 @@ function heading(ctx: AugmentedContext, node: Node): string {
   const text = node.children
     .map((content) => rebber.toLaTeX(content, ctx))
     .join('');
-  const label = node.data?.label as string;
-  return `\\${cmd}{${text}}${getLabel(ctx, 'heading', label)}`;
+  const label = node.data?.label as Label;
+  return `\\${cmd}{${text}}${getLabel(ctx, label)}`;
 }
 
 function blockquote(ctx: AugmentedContext, node: Node): string {
-  assertBlockquote(node);
+  assertNodeType<Blockquote>(node, 'blockquote');
   const text = node.children
     .map((content) => rebber.toLaTeX(content, ctx))
     .join('');

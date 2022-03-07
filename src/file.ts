@@ -1,4 +1,4 @@
-import vfile, { VFile, VFileOptions } from 'vfile';
+import { VFile, VFileOptions } from 'vfile';
 import { TFile } from 'obsidian';
 import { preprocess } from './preprocessor';
 
@@ -25,7 +25,7 @@ export function makeVFile(
     data: { embedded: new Array<VFile>() },
     subpath,
   };
-  return vfile(options);
+  return new VFile(options);
 }
 
 type NameKeys = 'path' | 'basename' | 'ext' | 'stem';

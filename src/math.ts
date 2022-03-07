@@ -1,6 +1,7 @@
 import { Node } from 'unist';
 import { AugmentedContext } from './data';
-import { assertInlineMath, assertMath } from './mdastInterfaces';
+import { assertNodeType } from './mdastInterfaces';
+import { InlineMath, Math } from 'mdast-util-math';
 
 const mathEnvironments = [
   'equation',
@@ -14,12 +15,12 @@ const mathEnvironments = [
 const beginRegex = /^\s*\\begin{\s*(\w+)\*?\s*}/m;
 
 export function inlineMath(_ctx: AugmentedContext, node: Node): string {
-  assertInlineMath(node);
+  assertNodeType<InlineMath>(node, 'inlineMath');
   return `$${node.value}$`;
 }
 
 export function displayMath(ctx: AugmentedContext, node: Node): string {
-  assertMath(node);
+  assertNodeType<Math>(node, 'math');
   const { value } = node;
   const match = beginRegex.exec(value);
   const {
