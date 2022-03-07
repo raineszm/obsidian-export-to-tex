@@ -6,7 +6,7 @@ import directive from 'remark-directive';
 import wikiLinkPlugin from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
 import rebber from 'rebber';
-import { embed } from './transform/embed';
+import { embed } from './transform/embeds';
 import { labels } from './transform/labels';
 import { rebberOverrides } from './compile/stringify';
 

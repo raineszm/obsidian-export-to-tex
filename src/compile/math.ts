@@ -1,6 +1,6 @@
 import { Node } from 'unist';
 import { AugmentedContext } from '../data';
-import { assertNodeType } from '../nodes/mdastInterfaces';
+import { assertNodeType } from '../nodeTypeHelpers';
 import { InlineMath, Math } from 'mdast-util-math';
 
 const mathEnvironments = [
