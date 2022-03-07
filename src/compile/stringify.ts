@@ -1,8 +1,8 @@
 import { displayMath, inlineMath } from './math';
 import { Node } from 'unist';
-import { AugmentedContext, getContext, OptionalContext } from './data';
+import { AugmentedContext, getContext, OptionalContext } from '../data';
 import rebber from 'rebber';
-import { assertNodeType, Label, LabeledLink } from './mdastInterfaces';
+import { assertNodeType, Label, LabeledLink } from '../nodes/mdastInterfaces';
 import { Blockquote, Heading } from 'mdast';
 
 const consume = (_ctx: unknown, _node: Node): string => '';

@@ -1,6 +1,6 @@
 import { VFile, VFileOptions } from 'vfile';
 import { TFile } from 'obsidian';
-import { preprocess } from './preprocessor';
+import { preprocess } from './transform/preprocessor';
 
 export interface ObsidianVFile extends VFile {
   subpath?: string;

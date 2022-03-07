@@ -6,9 +6,9 @@ import directive from 'remark-directive';
 import wikiLinkPlugin from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
 import rebber from 'rebber';
-import { embed } from './embed';
-import { labels } from './labels';
-import { rebberOverrides } from './stringify';
+import { embed } from './transform/embed';
+import { labels } from './transform/labels';
+import { rebberOverrides } from './compile/stringify';
 
 export const markdownToTex = unified()
   .use(remarkParse)

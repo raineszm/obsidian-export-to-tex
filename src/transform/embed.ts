@@ -12,10 +12,10 @@ import {
   resolveSubpath,
   TFile,
 } from 'obsidian';
-import { assertEmbedDirective, EmbedDirective } from './mdastInterfaces';
-import { makeVFile } from './file';
-import { TexContext } from './data';
-import { ImagePathSettings } from './settings';
+import { assertEmbedDirective, EmbedDirective } from '../nodes/mdastInterfaces';
+import { makeVFile } from '../file';
+import { TexContext } from '../data';
+import { ImagePathSettings } from '../plugin/settings';
 import normalizePath from 'normalize-path';
 
 export function embed(this: Processor): Transformer {

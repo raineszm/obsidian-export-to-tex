@@ -1,5 +1,5 @@
 import { RebberSettings } from 'rebber';
-import { ExportToTexSettings } from './settings';
+import { ExportToTexSettings } from './plugin/settings';
 
 export interface TexContext {
   exportToTex: ExportToTexSettings;

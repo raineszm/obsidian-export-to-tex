@@ -1,7 +1,7 @@
 import { MetadataCache, TFile } from 'obsidian';
 import { markdownToTex } from '../processor';
 import { toVFile } from '../file';
-import { ExportToTexSettings } from '../settings';
+import { ExportToTexSettings } from '../plugin/settings';
 
 export async function exportAstToConsole(file: TFile): Promise<void> {
   const vfile = await toVFile(file);

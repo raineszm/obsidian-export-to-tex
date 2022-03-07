@@ -1,7 +1,7 @@
 import { Notice, Plugin, TFile } from 'obsidian';
-import { TeXPrinter } from './texPrinter';
-import { ensureSettings, ExportToTexSettings } from './settings';
-import { ExportToTeXSettingTab } from './settingsTabs';
+import { TeXPrinter } from './compile/texPrinter';
+import { ensureSettings, ExportToTexSettings } from './plugin/settings';
+import { ExportToTeXSettingTab } from './plugin/settingsTabs';
 import { exportAstToConsole, exportModifiedAstToConsole } from './debug/ast';
 
 export default class ExportToTeXPlugin extends Plugin {

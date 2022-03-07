@@ -8,8 +8,8 @@ import {
   Label,
   LabeledLink,
   LabeledNode,
-} from './mdastInterfaces';
-import { toNamedVFile } from './file';
+} from '../nodes/mdastInterfaces';
+import { toNamedVFile } from '../file';
 import { parseLinktext } from 'obsidian';
 import { Heading, Paragraph, Text } from 'mdast';
 import { is } from 'unist-util-is';

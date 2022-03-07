@@ -1,8 +1,8 @@
 import { MetadataCache, TFile } from 'obsidian';
-import { markdownToTex } from './processor.js';
-import { toVFile } from './file';
+import { markdownToTex } from '../processor.js';
+import { toVFile } from '../file';
 import { VFile } from 'vfile';
-import { ExportToTexSettings } from './settings';
+import { ExportToTexSettings } from '../plugin/settings';
 import reporter from 'vfile-reporter';
 
 export class TeXPrinter {

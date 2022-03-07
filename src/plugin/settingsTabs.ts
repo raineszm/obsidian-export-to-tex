@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import { ImagePathSettingDescriptions, ImagePathSettings } from './settings';
-import ExportToTeXPlugin from './main';
+import ExportToTeXPlugin from '../main';
 
 export class ExportToTeXSettingTab extends PluginSettingTab {
   constructor(app: App, readonly plugin: ExportToTeXPlugin) {
