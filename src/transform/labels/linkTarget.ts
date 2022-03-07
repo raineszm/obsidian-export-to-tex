@@ -1,10 +1,11 @@
-import { Label, LabeledLink } from './label';
+import { Label } from './label';
 import { Node } from 'unist';
 import { VFile } from 'vfile';
 import visit from 'unist-util-visit';
 import { assertNodeType } from '../../nodeTypeHelpers';
 import { toNamedVFile } from '../../file';
 import { parseLinktext } from 'obsidian';
+import { WikiLink } from 'remark-wiki-link';
 
 export interface LinkTarget {
   path: string;
@@ -12,8 +13,11 @@ export interface LinkTarget {
   isHeading: boolean;
 }
 
-export function keyToString(key: LinkTarget): string {
-  return `${key.isHeading ? 'h' : 'b'}:${key.path}:${key.subpath}`;
+export interface LabeledLink extends WikiLink {
+  data: {
+    label?: Label;
+    alias?: string;
+  };
 }
 
 export function setLinkTargets(
@@ -43,4 +47,7 @@ export function setLinkTargets(
       node.data.label = label;
     }
   });
+}
+export function keyToString(key: LinkTarget): string {
+  return `${key.isHeading ? 'h' : 'b'}:${key.path}:${key.subpath}`;
 }

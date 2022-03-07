@@ -4,7 +4,8 @@ import { AugmentedContext, getContext, OptionalContext } from '../data';
 import rebber from 'rebber';
 import { assertNodeType } from '../nodeTypeHelpers';
 import { Blockquote, Heading } from 'mdast';
-import { Label, LabeledLink } from '../transform/labels/label';
+import { Label } from '../transform/labels/label';
+import { LabeledLink } from '../transform/labels/linkTarget';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
 const yaml = consume;
