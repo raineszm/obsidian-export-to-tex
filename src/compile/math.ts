@@ -43,8 +43,8 @@ export function displayMath(ctx: AugmentedContext, node: Node): string {
     return value;
   }
 
-  const labelText = label === undefined ? '' : getLabel(ctx, label);
-  if (defaultToEquation) {
+  if (defaultToEquation || label !== undefined) {
+    const labelText = label === undefined ? '' : getLabel(ctx, label);
     return `\\begin{equation}
     ${value}${labelText}
     \\end{equation}`;
