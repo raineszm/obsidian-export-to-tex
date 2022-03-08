@@ -6,6 +6,7 @@ import { assertNodeType } from '../nodeTypeHelpers';
 import { Blockquote, Heading } from 'mdast';
 import { Label } from '../transform/labels/label';
 import { LabeledLink } from '../transform/labels/linkTarget';
+import { getLabel, getRef } from './getRef';
 
 const consume = (_ctx: unknown, _node: Node): string => '';
 const yaml = consume;
@@ -24,34 +25,6 @@ function ensureContext(
   return (ctx, node) => {
     return fn(getContext(ctx), node);
   };
-}
-
-const keyPrefixes: Record<string, string> = {
-  heading: 'sec',
-  block: 'block',
-};
-
-function getPrefix(targetType: string | undefined): string {
-  if (targetType !== undefined && targetType in keyPrefixes) {
-    return keyPrefixes[targetType] + ':';
-  }
-  return '';
-}
-
-function getRef(ctx: AugmentedContext, label: Label): string {
-  const {
-    exportToTex: { refCommand, generateLabels },
-  } = ctx;
-  if (!generateLabels) return '';
-  return `\\${refCommand}{${getPrefix(label.type)}${label.name}}`;
-}
-
-function getLabel(ctx: AugmentedContext, label: Label): string {
-  const {
-    exportToTex: { generateLabels },
-  } = ctx;
-  if (!generateLabels) return '';
-  return `\\label{${getPrefix(label.type)}${label.name}}`;
 }
 
 function wikiLink(ctx: AugmentedContext, node: Node): string {
