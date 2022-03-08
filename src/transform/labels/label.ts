@@ -109,7 +109,8 @@ function getLabelParagraphData(
       `Label ${node.children[0].value} cannot be associated to a block`,
       node.children[0],
     );
-    return undefined;
+    replaceWithComment(node.children[0].value, node, index, parent);
+    return;
   }
 
   parent.children.splice(index, 1);
@@ -128,7 +129,8 @@ function getLabelTextData(
 ): LabelData | undefined {
   if (parent === undefined || index === 0) {
     file.message(`Label ${node.value} cannot be associated to a block`, node);
-    return undefined;
+    replaceWithComment(node.value, node, index, parent);
+    return;
   }
 
   parent.children.splice(index, 1);
@@ -138,4 +140,21 @@ function getLabelTextData(
     name: node.value,
     removeNode: true,
   };
+}
+
+function replaceWithComment(
+  text: string,
+  node: Node,
+  index: number,
+  parent?: Parent,
+): void {
+  if (parent === undefined) return;
+  const marker = {
+    type: 'comment',
+    name: text,
+    attributes: '',
+    parameters: {},
+    node,
+  };
+  parent.children[index] = marker;
 }

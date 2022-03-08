@@ -38,7 +38,7 @@ export function displayMath(ctx: AugmentedContext, node: Node): string {
   ) {
     if (label !== undefined) {
       return `${value.slice(0, match.index)}${getLabel(ctx, label)}
-      ${value.slice(match.index)}`;
+  ${value.slice(match.index)}`;
     }
     return value;
   }
@@ -46,11 +46,11 @@ export function displayMath(ctx: AugmentedContext, node: Node): string {
   if (defaultToEquation || label !== undefined) {
     const labelText = label === undefined ? '' : getLabel(ctx, label);
     return `\\begin{equation}
-    ${value}${labelText}
-    \\end{equation}`;
+  ${value}${labelText}
+\\end{equation}`;
   }
 
   return `\\[
-  ${value}
-  \\]`;
+${value}
+\\]`;
 }
