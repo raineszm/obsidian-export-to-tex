@@ -1,5 +1,5 @@
-import { AugmentedContext } from '../data';
 import { Label } from '../transform/labels/label';
+import { ExportToTexSettings } from '../plugin/settings';
 
 const keyPrefixes: Record<string, string> = {
   heading: 'sec',
@@ -14,18 +14,14 @@ function getPrefix(targetType: string | undefined): string {
   return '';
 }
 
-export function getRef(ctx: AugmentedContext, label: Label): string {
-  const {
-    exportToTex: { refCommand, generateLabels },
-  } = ctx;
+export function getRef(settings: ExportToTexSettings, label: Label): string {
+  const { refCommand, generateLabels } = settings;
   if (!generateLabels) return '';
   return `\\${refCommand}{${getPrefix(label.type)}${label.name}}`;
 }
 
-export function getLabel(ctx: AugmentedContext, label: Label): string {
-  const {
-    exportToTex: { generateLabels },
-  } = ctx;
+export function getLabel(settings: ExportToTexSettings, label: Label): string {
+  const { generateLabels } = settings;
   if (!generateLabels) return '';
   return `\\label{${getPrefix(label.type)}${label.name}}`;
 }

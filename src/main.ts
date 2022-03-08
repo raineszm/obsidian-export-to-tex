@@ -1,5 +1,5 @@
 import { Notice, Plugin, TFile } from 'obsidian';
-import { TeXPrinter } from './compile/texPrinter';
+import { TeXPrinter } from './texPrinter';
 import { ensureSettings, ExportToTexSettings } from './plugin/settings';
 import { ExportToTeXSettingTab } from './plugin/settingsTabs';
 import { exportAstToConsole, exportModifiedAstToConsole } from './debug/ast';

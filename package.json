@@ -69,7 +69,6 @@
     "mdast-util-directive": "^2.2.1",
     "mdast-util-math": "^2.0.1",
     "normalize-path": "^3.0.0",
-    "rebber": "^5.2.1",
     "remark-directive": "^2.0.1",
     "remark-frontmatter": "^4.0.0",
     "remark-gfm": "^3.0.0",

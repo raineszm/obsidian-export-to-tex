@@ -5,10 +5,9 @@ import gfm from 'remark-gfm';
 import directive from 'remark-directive';
 import wikiLinkPlugin from 'remark-wiki-link';
 import frontmatter from 'remark-frontmatter';
-import rebber from 'rebber';
 import { embed } from './transform/embeds';
 import { labels } from './transform/labels';
-import { rebberOverrides } from './compile/stringify';
+import { texCompiler } from './compile/texCompiler';
 
 export const markdownToTex = unified()
   .use(remarkParse)
@@ -21,7 +20,5 @@ export const markdownToTex = unified()
   })
   .use(embed)
   .use(labels)
-  .use(rebber, {
-    overrides: rebberOverrides,
-  })
+  .use(texCompiler)
   .freeze();
