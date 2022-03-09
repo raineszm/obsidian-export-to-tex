@@ -16,7 +16,7 @@ import {
 import { ExportToTexSettings } from '../plugin/settings';
 import { VFile } from 'vfile';
 import { LabeledNode } from '../transform/labels/label';
-import { getLabel } from './getRef';
+import { getLabel, getRef } from './getRef';
 import { InlineMath, Math } from 'mdast-util-math';
 import { displayMath } from './types/math';
 import { WikiLink } from 'remark-wiki-link';
@@ -162,9 +162,13 @@ export class Visitor {
 
   visitWikiLink(wikiLink: WikiLink): void {
     const { alias } = wikiLink.data;
-    const name = alias ?? wikiLink.value;
-    this.emit(name);
-    this.label(wikiLink as LabeledNode);
+    const label = (wikiLink as LabeledNode).data.label;
+    const fallbackText =
+      !wikiLink.value.contains('#') || label === undefined
+        ? wikiLink.value
+        : '';
+    this.emit(alias ?? fallbackText);
+    this.reference(wikiLink as LabeledNode);
   }
 
   visitLink(link: Link): void {
@@ -230,5 +234,10 @@ export class Visitor {
   label(node?: LabeledNode): void {
     if (node?.data?.label === undefined) return;
     this.emit(getLabel(this._settings, node.data.label));
+  }
+
+  reference(node: LabeledNode): void {
+    if (node.data?.label === undefined) return;
+    this.emit(getRef(this._settings, node.data.label));
   }
 }
