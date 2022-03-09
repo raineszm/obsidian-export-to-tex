@@ -1,7 +1,7 @@
 import { Node, Parent } from 'unist';
 import GithubSlugger from 'github-slugger';
 import { VFile } from 'vfile';
-import visit from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 import { is } from 'unist-util-is';
 import { Heading } from 'mdast';
 import {
@@ -33,7 +33,7 @@ export function associateLabels(
   visit(
     tree,
     ['heading', 'paragraph', 'text'],
-    (node: Node, index: number, parent?: Parent) => {
+    (node: Node, index: number | null, parent: Parent) => {
       const labelData = getLabelData(file, node, index, parent);
       if (!labelData) return;
       createLabel(slugger, labelsMap, file, labelData);
@@ -77,7 +77,7 @@ function createLabel(
 function getLabelData(
   file: VFile,
   node: Node,
-  index: number,
+  index: number | null,
   parent?: Parent,
 ): LabelData | undefined {
   if (is<Heading>(node, 'heading')) {
@@ -101,10 +101,10 @@ function getHeadingLabel(node: Heading): LabelData {
 function getLabelParagraphData(
   file: VFile,
   node: LabelParagraph,
-  index: number,
+  index: number | null,
   parent?: Parent,
 ): LabelData | undefined {
-  if (parent === undefined || index === 0) {
+  if (parent === undefined || index === null || index === 0) {
     file.message(
       `Label ${node.children[0].value} cannot be associated to a block`,
       node.children[0],
@@ -121,13 +121,14 @@ function getLabelParagraphData(
     removeNode: true,
   };
 }
+
 function getLabelTextData(
   file: VFile,
   node: LabelText,
-  index: number,
+  index: number | null,
   parent?: Parent,
 ): LabelData | undefined {
-  if (parent === undefined || index === 0) {
+  if (parent === undefined || index === null || index === 0) {
     file.message(`Label ${node.value} cannot be associated to a block`, node);
     replaceWithComment(node.value, node, index, parent);
     return;
@@ -145,10 +146,10 @@ function getLabelTextData(
 function replaceWithComment(
   text: string,
   node: Node,
-  index: number,
+  index: number | null,
   parent?: Parent,
 ): void {
-  if (parent === undefined) return;
+  if (parent === undefined || index === null) return;
   const marker = {
     type: 'comment',
     name: text,

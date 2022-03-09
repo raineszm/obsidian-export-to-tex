@@ -1,7 +1,7 @@
 import { Label } from './label';
 import { Node } from 'unist';
 import { VFile } from 'vfile';
-import visit from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 import { assertNodeType } from '../../nodeTypeHelpers';
 import { toNamedVFile } from '../../file';
 import { parseLinktext } from 'obsidian';

@@ -1,7 +1,7 @@
-import { Node } from 'unist';
+import { Node, Parent } from 'unist';
 import { Processor, Transformer } from 'unified';
 import { VFile } from 'vfile';
-import visit from 'unist-util-visit';
+import { visit } from 'unist-util-visit';
 import { assertEmbedDirective } from './embedDirective';
 import { EmbedResolver } from './embedResolver';
 
@@ -20,7 +20,7 @@ async function embedTransformer(
   visit(
     tree,
     { type: 'textDirective', name: 'embed' },
-    (node, index, parent) => {
+    (node: Node, index, parent?: Parent) => {
       assertEmbedDirective(node);
 
       if (parent === undefined)
