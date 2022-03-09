@@ -1,5 +1,17 @@
 import { Node, Parent } from 'unist';
-import { Blockquote, Heading, Paragraph, Root, Text } from 'mdast';
+import {
+  Blockquote,
+  Emphasis,
+  Heading,
+  Image,
+  Link,
+  Paragraph,
+  Root,
+  Strong,
+  Table,
+  TableRow,
+  Text,
+} from 'mdast';
 import { ExportToTexSettings } from '../plugin/settings';
 import { VFile } from 'vfile';
 import { LabeledNode } from '../transform/labels/label';
@@ -18,8 +30,8 @@ const headingNames = [
 
 export class Visitor {
   private _output: string[];
-  private _settings: ExportToTexSettings;
-  private _file: VFile;
+  private readonly _settings: ExportToTexSettings;
+  private readonly _file: VFile;
 
   constructor(settings: ExportToTexSettings, file: VFile) {
     this._output = [];
@@ -45,8 +57,14 @@ export class Visitor {
       case 'paragraph':
         this.visitParagraph(node as Paragraph);
         break;
+      case 'image':
+        this.visitImage(node as Image);
+        break;
+      case 'table':
+        this.visitTable(node as Table);
+        break;
       case 'inlineMath':
-        this.visitInlineMath(node as InlineMath);
+        this.emit(`$$${(node as InlineMath).value}$$`);
         break;
       case 'math':
         this.visitMath(node as Math);
@@ -54,25 +72,24 @@ export class Visitor {
       case 'wikiLink':
         this.visitWikiLink(node as WikiLink);
         break;
+      case 'link':
+        this.visitLink(node as Link);
+        break;
+      case 'emphasis':
+        this.commandChildren('emph', node as Emphasis);
+        break;
+      case 'strong':
+        this.commandChildren('textbf', node as Strong);
+        break;
       case 'text':
         this.visitText(node as Text);
+        break;
+      case 'break':
+        this.emit('\\\\\n');
         break;
       default:
         this.visitUnknown(node);
     }
-  }
-
-  begin(name: string): void {
-    this._output.push(`\\begin${name}\n`);
-  }
-
-  end(name: string): void {
-    this._output.push(`\\end${name}\n`);
-  }
-
-  label(node?: LabeledNode): void {
-    if (node?.data?.label === undefined) return;
-    this._output.push(getLabel(this._settings, node.data.label));
   }
 
   visitHeading(heading: Heading): void {
@@ -80,9 +97,7 @@ export class Visitor {
       return;
     }
     const cmd = headingNames[heading.depth - 1];
-    this._output.push(`\\${cmd}{`);
-    this.visitChildren(heading);
-    this._output.push('}');
+    this.commandChildren(cmd, heading);
     this.label(heading as LabeledNode);
   }
 
@@ -93,28 +108,62 @@ export class Visitor {
   }
 
   visitParagraph(paragraph: Paragraph): void {
-    this._output.push('\n\n');
+    this.emit('\n\n');
     this.visitChildren(paragraph);
-    this._output.push('\n\n');
+    this.emit('\n\n');
   }
 
-  visitInlineMath(math: InlineMath): void {
-    this._output.push(`$$${math.value}$$`);
+  visitImage(image: Image): void {
+    this.begin('figure');
+    this.emit('\\includegraphics{');
+    this.emit(image.url);
+    this.emit('}\n');
+    this.emit(`'\\caption{${image.title} ${image.alt}`);
+    this.label(image as LabeledNode);
+    this.emit('}');
+    this.end('figure');
   }
 
+  visitTable(table: Table): void {
+    const columns = table.children[0].children.length;
+    const rows = table.children.length;
+
+    this.begin('table');
+    this.emit(`\\begin{tabular}{${Array(columns).fill('c').join('|')}}\n`);
+    table.children.forEach((row, index) => {
+      this.visitTableRow(row);
+      if (index < rows - 1) this.emit('\\\\\n');
+    });
+    this.end('tabular');
+    this.label(table as LabeledNode);
+    this.end('table');
+  }
+
+  visitTableRow(row: TableRow): void {
+    const cells = row.children.length;
+    row.children.forEach((cell, index) => {
+      this.visit(cell);
+      if (index < cells - 1) this.emit('&');
+    });
+  }
   visitMath(math: Math): void {
-    this._output.push(displayMath(this._settings, math));
+    this.emit(displayMath(this._settings, math));
   }
 
   visitWikiLink(wikiLink: WikiLink): void {
     const { alias } = wikiLink.data;
     const name = alias ?? wikiLink.value;
-    this._output.push(name);
+    this.emit(name);
     this.label(wikiLink as LabeledNode);
   }
 
+  visitLink(link: Link): void {
+    this.emit(`\\href{${link.url}{`);
+    this.visitChildren(link);
+    this.emit('}');
+  }
   visitText(text: Text): void {
-    this._output.push(text.value);
+    this.emit(text.value);
   }
 
   visitChildren(node: Parent): void {
@@ -123,5 +172,32 @@ export class Visitor {
 
   visitUnknown(node: Node): void {
     this._file.message(`Encountered unknown node type ${node.type}`, node);
+  }
+
+  emit(content: string): void {
+    this._output.push(content);
+  }
+
+  command(cmd: string, callback: Function): void {
+    this.emit('\\${cmd}{');
+    callback();
+    this.emit('}');
+  }
+
+  commandChildren(cmd: string, node: Parent): void {
+    this.command(cmd, () => this.visitChildren(node));
+  }
+
+  begin(name: string): void {
+    this.emit(`\\begin${name}\n`);
+  }
+
+  end(name: string): void {
+    this.emit(`\\end${name}\n`);
+  }
+
+  label(node?: LabeledNode): void {
+    if (node?.data?.label === undefined) return;
+    this.emit(getLabel(this._settings, node.data.label));
   }
 }
