@@ -208,7 +208,7 @@ export class Visitor {
       !wikiLink.value.contains('#') || label === undefined
         ? wikiLink.value
         : '';
-    this.emit(alias ?? fallbackText);
+    this.emit((alias ?? fallbackText).replaceAll('#', ''));
     this.reference(wikiLink as LabeledNode);
   }
 
