@@ -27,8 +27,10 @@ export function displayMath(settings: ExportToTexSettings, math: Math): string {
       additionalMathEnvironments.contains(match[1]))
   ) {
     if (label !== undefined) {
-      return `${value.slice(0, match.index)}${getLabel(settings, label)}
-  ${value.slice(match.index)}`;
+      return `${value.slice(0, match.index)}${getLabel(
+        settings,
+        label,
+      )}\n${value.slice(match.index)}`;
     }
     return value;
   }

@@ -9,6 +9,7 @@ import {
   Root,
   Strong,
   Table,
+  TableCell,
   TableRow,
   Text,
 } from 'mdast';
@@ -19,6 +20,9 @@ import { getLabel } from './getRef';
 import { InlineMath, Math } from 'mdast-util-math';
 import { displayMath } from './types/math';
 import { WikiLink } from 'remark-wiki-link';
+import { Literal } from 'hast';
+import { is } from 'unist-util-is';
+import { isParent } from '../nodeTypeHelpers';
 
 const headingNames = [
   'section',
@@ -32,6 +36,7 @@ export class Visitor {
   private _output: string[];
   private readonly _settings: ExportToTexSettings;
   private readonly _file: VFile;
+  private _commenting: boolean = false;
 
   constructor(settings: ExportToTexSettings, file: VFile) {
     this._output = [];
@@ -62,6 +67,9 @@ export class Visitor {
         break;
       case 'table':
         this.visitTable(node as Table);
+        break;
+      case 'tableCell':
+        this.visitChildren(node as TableCell);
         break;
       case 'inlineMath':
         this.emit(`$$${(node as InlineMath).value}$$`);
@@ -134,6 +142,7 @@ export class Visitor {
       this.visitTableRow(row);
       if (index < rows - 1) this.emit('\\\\\n');
     });
+    this.emit('\n');
     this.end('tabular');
     this.label(table as LabeledNode);
     this.end('table');
@@ -146,6 +155,7 @@ export class Visitor {
       if (index < cells - 1) this.emit('&');
     });
   }
+
   visitMath(math: Math): void {
     this.emit(displayMath(this._settings, math));
   }
@@ -162,6 +172,7 @@ export class Visitor {
     this.visitChildren(link);
     this.emit('}');
   }
+
   visitText(text: Text): void {
     this.emit(text.value);
   }
@@ -172,14 +183,34 @@ export class Visitor {
 
   visitUnknown(node: Node): void {
     this._file.message(`Encountered unknown node type ${node.type}`, node);
+    this.comment(() => {
+      this.emit(`Unknown Node :: ${node.type}\n`);
+      if (is<Literal>(node, (x): x is Literal => 'value' in x)) {
+        this.emit(node.value);
+      } else if (isParent(node)) {
+        this.visitChildren(node);
+      }
+    });
   }
 
   emit(content: string): void {
+    if (
+      this._commenting &&
+      this._output[this._output.length - 1].endsWith('\n')
+    )
+      this._output.push('%');
     this._output.push(content);
   }
 
+  comment(callback: Function): void {
+    const previous = this._commenting;
+    this._commenting = true;
+    callback();
+    this._commenting = previous;
+  }
+
   command(cmd: string, callback: Function): void {
-    this.emit('\\${cmd}{');
+    this.emit(`\\${cmd}{`);
     callback();
     this.emit('}');
   }
@@ -189,11 +220,11 @@ export class Visitor {
   }
 
   begin(name: string): void {
-    this.emit(`\\begin${name}\n`);
+    this.emit(`\\begin{${name}}\n`);
   }
 
   end(name: string): void {
-    this.emit(`\\end${name}\n`);
+    this.emit(`\\end{${name}}\n`);
   }
 
   label(node?: LabeledNode): void {

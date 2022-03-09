@@ -1,5 +1,10 @@
 import { Node } from 'unist';
 import { is } from 'unist-util-is';
+import { Parent } from 'mdast';
+
+export function isParent(node: Node): node is Parent {
+  return 'children' in node;
+}
 
 export function assertNodeType<T extends Node>(
   node: Node,
