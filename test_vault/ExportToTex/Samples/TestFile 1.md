@@ -41,3 +41,5 @@ Vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tr
 ```latex
 This is a code block \href{example.com}.
 ```
+
+![[image.png]]

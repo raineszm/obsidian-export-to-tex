@@ -147,9 +147,9 @@ export class Visitor {
     this.emit('\\includegraphics{');
     this.emit(image.url);
     this.emit('}\n');
-    this.emit(`'\\caption{${image.title} ${image.alt}`);
+    this.emit(`\\caption{${image.title} ${image.alt}`);
     this.label(image as LabeledNode);
-    this.emit('}');
+    this.emit('}\\n');
     this.end('figure');
   }
 
