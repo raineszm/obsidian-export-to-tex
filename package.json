@@ -76,9 +76,8 @@
     "remark-parse": "^10.0.0",
     "remark-wiki-link": "^1.0.4",
     "unified": "^10.0.0",
-    "unist-util-filter": "^2.0.3",
     "unist-util-is": "^5.1.0",
-    "unist-util-visit": "^2.0.3",
+    "unist-util-visit": "^4.0.0",
     "vfile-reporter": "^7.0.2"
   }
 }
