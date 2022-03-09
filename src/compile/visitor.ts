@@ -1,10 +1,14 @@
 import { Node, Parent } from 'unist';
 import {
   Blockquote,
+  Code,
   Emphasis,
   Heading,
   Image,
+  InlineCode,
   Link,
+  List,
+  ListItem,
   Paragraph,
   Root,
   Strong,
@@ -77,6 +81,18 @@ export class Visitor {
       case 'math':
         this.visitMath(node as Math);
         break;
+      case 'inlineCode':
+        this.emit(`\\verb{${(node as InlineCode).value}}`);
+        break;
+      case 'code':
+        this.visitCode(node as Code);
+        break;
+      case 'list':
+        this.visitList(node as List);
+        break;
+      case 'listItem':
+        this.visitListItem(node as ListItem);
+        break;
       case 'wikiLink':
         this.visitWikiLink(node as WikiLink);
         break;
@@ -94,6 +110,11 @@ export class Visitor {
         break;
       case 'break':
         this.emit('\\\\\n');
+        break;
+      case 'thematicBreak':
+        this.emit('\\hrulefill');
+        break;
+      case 'yaml':
         break;
       default:
         this.visitUnknown(node);
@@ -158,6 +179,25 @@ export class Visitor {
 
   visitMath(math: Math): void {
     this.emit(displayMath(this._settings, math));
+  }
+
+  visitCode(code: Code): void {
+    this.emit(`% ${code.lang} ${code.meta}`);
+    this.begin('verbatim');
+    this.emit(code.value);
+    this.end('verbatim');
+  }
+
+  visitList(list: List): void {
+    const listEnvironment = list.ordered ? 'enumerate' : 'itemize';
+    this.begin(listEnvironment);
+    this.visitChildren(list);
+    this.end(listEnvironment);
+  }
+
+  visitListItem(listItem: ListItem): void {
+    this.emit('\\item ');
+    this.visitChildren(listItem);
   }
 
   visitWikiLink(wikiLink: WikiLink): void {
