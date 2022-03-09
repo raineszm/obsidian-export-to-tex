@@ -15,9 +15,19 @@ $$
 Consequat mauris nunc congue nisi vitae suscipit. Aliquam id diam maecenas ultricies mi eget mauris pharetra et. Dictum varius duis at consectetur lorem donec massa sapien faucibus. Velit ut tortor pretium viverra suspendisse potenti nullam ac. Aliquam sem et tortor consequat id porta nibh venenatis cras.
 ^block
 
+1. Numbered
+2. Further number
+
 Sit amet porttitor eget dolor morbi non arcu risus quis. Natoque penatibus et magnis dis parturient montes nascetur ridiculus mus. Diam donec adipiscing tristique risus. Massa enim nec dui nunc mattis enim ut tellus. Vel elit scelerisque mauris pellentesque pulvinar pellentesque. Pellentesque eu tincidunt tortor aliquam nulla facilisi cras fermentum. Suspendisse in est ante in nibh. Nisi vitae suscipit tellus mauris a. Posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus. Vitae tortor condimentum lacinia quis vel eros donec ac odio. Dui nunc mattis enim ut. Enim eu turpis egestas pretium aenean. Magna sit amet purus gravida quis blandit. Nec nam aliquam sem et tortor consequat id. [[#Heading]]
 
+- Item
+- Also an item
+
 Tortor consequat id porta nibh venenatis cras. Quis lectus nulla at volutpat diam ut venenatis tellus in. Augue interdum velit euismod in pellentesque. Urna duis convallis convallis tellus id interdum. Tempor orci dapibus ultrices in iaculis nunc sed. Sem integer vitae justo eget magna fermentum iaculis eu. Non quam lacus suspendisse faucibus interdum posuere lorem. Eu augue ut lectus arcu bibendum at varius. [[#^stokes]] Tellus orci ac auctor augue. Semper eget duis at tellus at urna condimentum mattis. Vitae suscipit tellus mauris a diam. Nunc vel risus commodo viverra. Vehicula ipsum a arcu cursus vitae congue mauris rhoncus aenean. Quam lacus suspendisse faucibus interdum posuere lorem ipsum dolor. Lacus vel facilisis volutpat est velit egestas. Habitant morbi tristique senectus et netus et malesuada. Ultricies integer quis auctor elit sed vulputate. Interdum varius sit amet mattis vulputate. Consequat mauris nunc congue nisi vitae suscipit tellus mauris a.
+
+Here is a paragraph, because I need to test adjacent paragraphs.
+
+---
 
 |Heading 1|Heading 2|
 |----|---|

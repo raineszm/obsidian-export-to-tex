@@ -112,7 +112,7 @@ export class Visitor {
         this.emit('\\\\\n');
         break;
       case 'thematicBreak':
-        this.emit('\\hrulefill');
+        this.emit('\n\\hrulefill\n');
         break;
       case 'yaml':
         break;
@@ -137,9 +137,9 @@ export class Visitor {
   }
 
   visitParagraph(paragraph: Paragraph): void {
-    this.emit('\n\n');
+    this.emit('\n');
     this.visitChildren(paragraph);
-    this.emit('\n\n');
+    this.emit('\n');
   }
 
   visitImage(image: Image): void {
@@ -182,9 +182,10 @@ export class Visitor {
   }
 
   visitCode(code: Code): void {
-    this.emit(`% ${code.lang} ${code.meta}`);
+    this.emit(`% ${code.lang} ${code.meta}\n`);
     this.begin('verbatim');
     this.emit(code.value);
+    this.emit('\n');
     this.end('verbatim');
   }
 
@@ -252,7 +253,6 @@ export class Visitor {
     callback();
     this._commenting = previous;
   }
-
   command(cmd: string, callback: Function): void {
     this.emit(`\\${cmd}{`);
     callback();
