@@ -1,5 +1,5 @@
 import { VFile, VFileOptions } from 'vfile';
-import { TFile } from 'obsidian';
+import { MarkdownView, TFile } from 'obsidian';
 import { preprocess } from './transform/preprocessor';
 
 export interface ObsidianVFile extends VFile {
@@ -12,6 +12,10 @@ export async function toVFile(file: TFile): Promise<ObsidianVFile> {
   }
   const data = await file.vault.cachedRead(file);
   return makeVFile(data, file.path);
+}
+
+export function vfileFromSelection(view: MarkdownView): ObsidianVFile {
+  return makeVFile(view.editor.getSelection(), view.file.path);
 }
 
 export function makeVFile(

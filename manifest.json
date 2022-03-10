@@ -5,6 +5,6 @@
   "description": "Export vault files in a format amenable to pasting into a tex document",
   "author": "Zach Raines",
   "authorUrl": "https://github.com/raineszm/obsidian-export-to-tex",
-  "minAppVersion": "0.9.21",
+  "minAppVersion": "0.11.11",
   "isDesktopOnly": false
 }

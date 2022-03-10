@@ -1,6 +1,6 @@
-import { MetadataCache, TFile } from 'obsidian';
+import { MetadataCache } from 'obsidian';
 import { markdownToTex } from './processor.js';
-import { toVFile } from './file';
+import { ObsidianVFile } from './file';
 import { VFile } from 'vfile';
 import { ExportToTexSettings } from './plugin/settings';
 import reporter from 'vfile-reporter';
@@ -23,8 +23,7 @@ export class TeXPrinter {
     return output.toString();
   }
 
-  async toTex(file: TFile): Promise<string> {
-    const vfile = await toVFile(file);
+  async toTex(vfile: ObsidianVFile): Promise<string> {
     console.groupCollapsed('export-to-tex');
     let tex = await this.process(vfile);
     console.log(reporter(vfile));

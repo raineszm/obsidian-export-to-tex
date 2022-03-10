@@ -54,7 +54,7 @@
     "husky": "^7.0.4",
     "jest": "^27.5.1",
     "lint-staged": "^12.3.5",
-    "obsidian": "github:obsidianmd/obsidian-api#ea530cce1adaa33eb891f053a56a12fa8640b834",
+    "obsidian": "^0.11.11",
     "prettier": "^2.5.1",
     "standard-version": "^9.3.2",
     "ts-jest": "^27.1.3",
