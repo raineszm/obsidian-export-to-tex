@@ -13,106 +13,84 @@ export default class ExportToTeXPlugin extends Plugin {
     if (settings !== null) {
       this.settings = ensureSettings(settings);
     }
-
-    this.addCommand({
-      id: 'export-to-tex',
-      name: 'Export To TeX',
-      checkCallback: (checking: boolean) => {
-        const file = this.app.workspace.getActiveFile();
-        if (file !== null) {
-          if (!checking) {
-            this.exportFileToFile(file).catch(this.onExportError);
-          }
-          return true;
-        }
-        return false;
-      },
-    });
-
-    this.addCommand({
-      id: 'export-tex-to-clipboard',
-      name: 'Export To Clipboard',
-      checkCallback: (checking: boolean) => {
-        const file = this.app.workspace.getActiveFile();
-        if (file !== null) {
-          if (!checking) {
-            this.exportFileToClipboard(file).catch(this.onExportError);
-          }
-          return true;
-        }
-        return false;
-      },
-    });
-
-    this.addCommand({
-      id: 'export-selection-to-tex',
-      name: 'Export Selection To TeX',
-      checkCallback: (checking: boolean) => {
-        const view =
-          this.app.workspace.getActiveViewOfType<MarkdownView>(MarkdownView);
-        if (view !== null) {
-          if (!checking) {
-            this.exportSelectionToFile(view).catch(this.onExportError);
-          }
-          return true;
-        }
-        return false;
-      },
-    });
-
-    this.addCommand({
-      id: 'export-selection-tex-to-clipboard',
-      name: 'Export Selection To Clipboard',
-      checkCallback: (checking: boolean) => {
-        const view =
-          this.app.workspace.getActiveViewOfType<MarkdownView>(MarkdownView);
-        if (view !== null) {
-          if (!checking) {
-            this.exportSelectionToClipboard(view).catch(this.onExportError);
-          }
-          return true;
-        }
-        return false;
-      },
-    });
+    this.addCommands();
 
     if (DEBUG) {
-      this.addCommand({
-        id: 'export-ast-to-console',
-        name: 'Show AST',
-        checkCallback: (checking: boolean) => {
-          const file = this.app.workspace.getActiveFile();
-          if (file !== null) {
-            if (!checking) {
-              exportAstToConsole(file).catch(this.onExportError);
-            }
-            return true;
-          }
-          return false;
-        },
-      });
-
-      this.addCommand({
-        id: 'export-modified-ast-to-console',
-        name: 'Show modified AST',
-        checkCallback: (checking: boolean) => {
-          const file = this.app.workspace.getActiveFile();
-          if (file !== null) {
-            if (!checking) {
-              exportModifiedAstToConsole(
-                file,
-                this.settings,
-                this.app.metadataCache,
-              ).catch(this.onExportError);
-            }
-            return true;
-          }
-          return false;
-        },
-      });
+      this.addDebugCommands();
     }
 
     this.addSettingTab(new ExportToTeXSettingTab(this.app, this));
+  }
+
+  private addCommands() {
+    // Note we use arrow functions here to make sure we're always getting the currently
+    // defined versions of things
+    this.addExportCommand(
+      'export-to-tex',
+      'Export To TeX',
+      () => this.app.workspace.getActiveFile(),
+      (x) => this.exportFileToFile(x),
+    );
+
+    this.addExportCommand(
+      'export-tex-to-clipboard',
+      'Export To Clipboard',
+      () => this.app.workspace.getActiveFile(),
+      (x) => this.exportFileToClipboard(x),
+    );
+
+    this.addExportCommand(
+      'export-selection-to-tex',
+      'Export Selection To TeX',
+      () => this.app.workspace.getActiveViewOfType(MarkdownView),
+      (x) => this.exportSelectionToFile(x),
+    );
+
+    this.addExportCommand(
+      'export-selection-tex-to-clipboard',
+      'Export Selection To Clipboard',
+      () => this.app.workspace.getActiveViewOfType(MarkdownView),
+      (x) => this.exportSelectionToClipboard(x),
+    );
+  }
+
+  private addDebugCommands() {
+    this.addExportCommand(
+      'export-ast-to-console',
+      'Show AST',
+      () => this.app.workspace.getActiveFile(),
+      exportAstToConsole,
+    );
+
+    this.addExportCommand(
+      'export-modified-ast-to-console',
+      'Show modified AST',
+      () => this.app.workspace.getActiveFile(),
+      (file) =>
+        exportModifiedAstToConsole(file, this.settings, this.app.metadataCache),
+    );
+  }
+
+  private addExportCommand<TFileOrView>(
+    id: string,
+    name: string,
+    getFileOrView: () => TFileOrView | null,
+    doExport: (x: TFileOrView) => Promise<void>,
+  ) {
+    this.addCommand({
+      id,
+      name,
+      checkCallback: (checking: boolean) => {
+        const fileOrView = getFileOrView();
+        if (fileOrView !== null) {
+          if (!checking) {
+            doExport(fileOrView).catch(this.onExportError);
+          }
+          return true;
+        }
+        return false;
+      },
+    });
   }
 
   async exportFileToFile(file: TFile): Promise<void> {
@@ -124,10 +102,6 @@ export default class ExportToTeXPlugin extends Plugin {
   }
 
   async exportToFile(vfile: ObsidianVFile): Promise<void> {
-    // const directory =
-    //   this.settings.defaultExportDirectory.length > 0
-    //     ? this.settings.defaultExportDirectory
-    //     : (file.vault.adapter as FileSystemAdapter).getBasePath();
     try {
       const fileHandle = await window.showSaveFilePicker({
         types: [
