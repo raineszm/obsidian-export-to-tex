@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/raineszm/obsidian-export-to-tex/compare/0.2.2...0.3.0) (2022-03-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **compiler:** output may differ from previous versions
+* behavior of file picker dialogs has changed
+
+### Features
+
+* add ability to export selection ([c6f81db](https://github.com/raineszm/obsidian-export-to-tex/commit/c6f81dbcaa35515830e50f3da41a00537aeb1fd3)), closes [#24](https://github.com/raineszm/obsidian-export-to-tex/issues/24)
+* **compiler:** replace rebber with custom stringifier ([0c3f54b](https://github.com/raineszm/obsidian-export-to-tex/commit/0c3f54be357d71ba1ec734b7dcc4b8ef60a6ab46))
+* **label:** comment out unrecognized labels ([7e62cff](https://github.com/raineszm/obsidian-export-to-tex/commit/7e62cffa42041e3854799de8b4ff9b4abbf1d38e))
+* **label:** default to equation when label is present ([f01db67](https://github.com/raineszm/obsidian-export-to-tex/commit/f01db67ac6ab24a33f8672bcb1897e0581da502f))
+* **label:** include labels in math environments ([166e45f](https://github.com/raineszm/obsidian-export-to-tex/commit/166e45f1f4de9f81779ea2f7507cb468e3962a75))
+* remove desktop only apis ([d77dd9f](https://github.com/raineszm/obsidian-export-to-tex/commit/d77dd9fe5dfca3335a8d40682d7c56cf3c81b4fa))
+
+
+### Bug Fixes
+
+* **debug:** fix error in calls to debug commands on initialization ([83208bc](https://github.com/raineszm/obsidian-export-to-tex/commit/83208bcca2bc1760a5a4fc9f1e875880d670eceb))
+* **image:** fix formatting of image include ([68c4102](https://github.com/raineszm/obsidian-export-to-tex/commit/68c4102c62c61f979b2a7cabee2da72f8b85e73e)), closes [#25](https://github.com/raineszm/obsidian-export-to-tex/issues/25)
+* improve spacing of outputs ([968f63e](https://github.com/raineszm/obsidian-export-to-tex/commit/968f63ef74f79d54b0c5dea2c9c00c150688c0fc))
+* **label:** fix label regex and splicing ([e65affe](https://github.com/raineszm/obsidian-export-to-tex/commit/e65affef1762dc58de6de1a86053fb75d72d6c5b))
+* **link:** remove '#' characters from wikiLinks ([2f48f43](https://github.com/raineszm/obsidian-export-to-tex/commit/2f48f43f80912fc3aa0eb0dc291eb71b65f09dd7)), closes [#13](https://github.com/raineszm/obsidian-export-to-tex/issues/13)
+* **vfile:** use correct options when creating vfile ([43c11b0](https://github.com/raineszm/obsidian-export-to-tex/commit/43c11b09f6586dd3e72984c1390ae3a1a828fd25))
+
 ### [0.2.2](https://github.com/raineszm/obsidian-export-to-tex/compare/0.2.1...0.2.2) (2021-03-17)
 
 
