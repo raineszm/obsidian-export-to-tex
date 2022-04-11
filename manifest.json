@@ -1,7 +1,7 @@
 {
   "id": "obsidian-export-to-tex",
   "name": "Export To TeX",
-  "version": "0.3.0",
+  "version": "0.3.1-0",
   "description": "Export vault files in a format amenable to pasting into a tex document",
   "author": "Zach Raines",
   "authorUrl": "https://github.com/raineszm/obsidian-export-to-tex",
