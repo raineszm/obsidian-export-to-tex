@@ -4,7 +4,7 @@
   "description": "Export vault files in a format amenable to pasting into a tex document",
   "main": "src/main.js",
   "scripts": {
-    "dev": "node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs && cp manifest.json dist/",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && cp manifest.json dist/",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
