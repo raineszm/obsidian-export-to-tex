@@ -15,7 +15,6 @@ import { makeVFile } from '../../file';
 import { TexContext } from '../../data';
 import { ImagePathSettings } from '../../plugin/settings';
 import normalizePath from 'normalize-path';
-import path from 'path';
 
 export class EmbedResolver {
   constructor(
@@ -101,7 +100,7 @@ export class EmbedResolver {
   processImageEmbed(embedTarget: string, subpath: string, file: TFile): Node {
     this.parentFile.info(`Processing image "${embedTarget}"`, this.node);
     const settings = this.processor.data('settings') as TexContext;
-    const imagePath = this.getImagePath(file, settings);
+    const imagePath = EmbedResolver.getImagePath(file, settings);
     return {
       type: 'image',
       // @ts-expect-error
@@ -154,7 +153,7 @@ export class EmbedResolver {
     };
   }
 
-  private getImagePath(file: TFile, settings: TexContext): string {
+  private static getImagePath(file: TFile, settings: TexContext): string {
     const adapter = file.vault.adapter as FileSystemAdapter;
     const absolutePath = adapter.getFullPath(file.path);
 
@@ -166,12 +165,13 @@ export class EmbedResolver {
       case ImagePathSettings.BaseName:
         return file.basename;
       case ImagePathSettings.RelativeToExport: {
-        const exportPath = this.processor.data('exportPath') as string;
-        const exportFolder =
-          exportPath === null || exportPath === undefined
-            ? settings.exportToTex.defaultExportDirectory
-            : path.dirname(exportPath);
-        return normalizePath(path.relative(exportFolder, absolutePath));
+        throw new Error('Relative to export setting is deprecated');
+        // const exportPath = this.processor.data('exportPath') as string;
+        // const exportFolder =
+        //   // exportPath === null || exportPath === undefined
+        //     ? settings.exportToTex.defaultExportDirectory
+        //     : path.dirname(exportPath);
+        // return normalizePath(path.relative(exportFolder, absolutePath));
       }
     }
   }

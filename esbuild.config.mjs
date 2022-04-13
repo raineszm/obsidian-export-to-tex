@@ -1,6 +1,5 @@
 import esbuild from "esbuild";
 import process from "process";
-import builtins from 'builtin-modules'
 
 const banner =
   `/*
@@ -18,10 +17,7 @@ esbuild.build({
   entryPoints: ['src/main.ts'],
   bundle: true,
   define: {"DEBUG": !prod},
-  external: [
-    'obsidian',
-    'electron',
-    ...builtins],
+  external: [ 'obsidian' ],
   format: 'cjs',
   // watch: !prod,
   target: 'es2016',
