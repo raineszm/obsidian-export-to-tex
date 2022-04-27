@@ -19,6 +19,7 @@ export class ExportToTexSettings {
   generateLabels: boolean = true;
   compressNewlines: boolean = false;
   imagePathSettings: ImagePathSettings = ImagePathSettings.RelativeToRoot;
+  numberedSections: boolean = true;
 }
 
 export type PartialSettings = Partial<ExportToTexSettings> & {
@@ -42,6 +43,9 @@ export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
 
   settings.compressNewlines =
     partial.compressNewlines ?? settings.compressNewlines;
+
+  settings.numberedSections =
+    partial.numberedSections ?? settings.numberedSections;
 
   if (
     partial.imagePathSettings === undefined &&

@@ -77,6 +77,20 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
+      .setName('Numbered sections')
+      .setDesc(
+        'When enabled emit headers as \\section{...}. When disabled instead use \\section*{...}',
+      )
+      .addToggle((toggle) => {
+        toggle
+          .setValue(this.plugin.settings.numberedSections)
+          .onChange(async (value) => {
+            this.plugin.settings.numberedSections = value;
+            await this.plugin.saveData(this.plugin.settings);
+          });
+      });
+
+    new Setting(containerEl)
       .setName('Compress newlines')
       .setDesc(
         'Reduce any instance of 2 or more blank lines to a single blank line',

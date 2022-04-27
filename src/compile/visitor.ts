@@ -125,7 +125,9 @@ export class Visitor {
     if (heading.depth > 5) {
       return;
     }
-    const cmd = headingNames[heading.depth - 1];
+    const cmd =
+      headingNames[heading.depth - 1] +
+      (this._settings.numberedSections ? '' : '*');
     this.commandChildren(cmd, heading);
     this.label(heading as LabeledNode);
   }
