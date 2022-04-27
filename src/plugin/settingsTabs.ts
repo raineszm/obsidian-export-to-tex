@@ -1,5 +1,9 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
-import { ImagePathSettingDescriptions, ImagePathSettings } from './settings';
+import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
+import {
+  ExportToTexSettings,
+  ImagePathSettingDescriptions,
+  ImagePathSettings,
+} from './settings';
 import ExportToTeXPlugin from '../main';
 
 export class ExportToTeXSettingTab extends PluginSettingTab {
@@ -107,22 +111,13 @@ export class ExportToTeXSettingTab extends PluginSettingTab {
           });
       });
 
-    // new ButtonComponent(containerEl)
-    //   .setButtonText('Reset to default')
-    //   .onClick(async () => {
-    //     await remote.dialog
-    //       .showMessageBox({
-    //         title: 'Reset settings to default?',
-    //         type: 'question',
-    //         message: 'Are you sure?',
-    //         buttons: ['No', 'Yes'],
-    //       })
-    //       .then(async (value) => {
-    //         if (value.response === 0) return;
-    //         this.plugin.settings = new ExportToTexSettings();
-    //         await this.plugin.saveData(this.plugin.settings);
-    //         this.display();
-    //       });
-    //   });
+    new ButtonComponent(containerEl)
+      .setButtonText('Reset to default')
+      .onClick(async () => {
+        if (!window.confirm('Reset settings to default?')) return;
+        this.plugin.settings = new ExportToTexSettings();
+        await this.plugin.saveData(this.plugin.settings);
+        this.display();
+      });
   }
 }
