@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/raineszm/obsidian-export-to-tex/compare/0.3.0...0.4.0) (2022-04-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* Relative to export Image Path setting no longer works
+
+### Features
+
+* **mobile:** make plugin desktop only ([967ea95](https://github.com/raineszm/obsidian-export-to-tex/commit/967ea95de00af1adc50f7dc7774345b69204e529)), closes [#30](https://github.com/raineszm/obsidian-export-to-tex/issues/30)
+* **sections:** add option to use unnumbered section heading ([b697381](https://github.com/raineszm/obsidian-export-to-tex/commit/b697381576d9356808a770cf3a6e118cf81c3b7d)), closes [#29](https://github.com/raineszm/obsidian-export-to-tex/issues/29)
+* **settings:** add an option to reset settings to default ([7ac8c1b](https://github.com/raineszm/obsidian-export-to-tex/commit/7ac8c1b59044bc62b893385bcd81148e2ea6bf6c))
+
+
+### Bug Fixes
+
+* **inlinemath:** properly emit inline math ([0774100](https://github.com/raineszm/obsidian-export-to-tex/commit/0774100bd1b8c7baacd263239f01bac6a0a8295b)), closes [#31](https://github.com/raineszm/obsidian-export-to-tex/issues/31)
+
+
+* remove dependency on node and electron apis ([db1cf10](https://github.com/raineszm/obsidian-export-to-tex/commit/db1cf1026feb969ca2be1169a7de35db8f79efd2))
+
 ## [0.3.0](https://github.com/raineszm/obsidian-export-to-tex/compare/0.2.2...0.3.0) (2022-03-19)
 
 
