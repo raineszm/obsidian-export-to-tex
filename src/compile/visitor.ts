@@ -76,7 +76,7 @@ export class Visitor {
         this.visitChildren(node as TableCell);
         break;
       case 'inlineMath':
-        this.emit(`$$${(node as InlineMath).value}$$`);
+        this.emit(`$${(node as InlineMath).value}$`);
         break;
       case 'math':
         this.visitMath(node as Math);
