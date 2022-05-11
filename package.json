@@ -69,6 +69,7 @@
     "mdast-comment-marker": "^2.1.0",
     "mdast-util-directive": "^2.2.1",
     "mdast-util-math": "^2.0.1",
+    "merge-anything": "^5.0.2",
     "normalize-path": "^3.0.0",
     "remark-directive": "^2.0.1",
     "remark-frontmatter": "^4.0.0",

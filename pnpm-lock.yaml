@@ -24,6 +24,7 @@ specifiers:
   mdast-comment-marker: ^2.1.0
   mdast-util-directive: ^2.2.1
   mdast-util-math: ^2.0.1
+  merge-anything: ^5.0.2
   normalize-path: ^3.0.0
   obsidian: ^0.11.11
   prettier: ^2.5.1
@@ -50,6 +51,7 @@ dependencies:
   mdast-comment-marker: 2.1.0
   mdast-util-directive: 2.2.1
   mdast-util-math: 2.0.1
+  merge-anything: 5.0.2
   normalize-path: 3.0.0
   remark-directive: 2.0.1
   remark-frontmatter: 4.0.1
@@ -3303,6 +3305,11 @@ packages:
     resolution: {integrity: sha1-Sw2hRCEE0bM2NA6AeX6GXPOffXI=}
     dev: true
 
+  /is-what/4.1.7:
+    resolution: {integrity: sha512-DBVOQNiPKnGMxRMLIYSwERAS5MVY1B7xYiGnpgctsOFvVDz9f9PFXXxMcTOHuoqYp4NK9qFYQaIC1NRRxLMpBQ==}
+    engines: {node: '>=12.13'}
+    dev: false
+
   /is-windows/1.0.2:
     resolution: {integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==}
     engines: {node: '>=0.10.0'}
@@ -4330,6 +4337,14 @@ packages:
       type-fest: 0.18.1
       yargs-parser: 20.2.9
     dev: true
+
+  /merge-anything/5.0.2:
+    resolution: {integrity: sha512-POPQBWkBC0vxdgzRJ2Mkj4+2NTKbvkHo93ih+jGDhNMLzIw+rYKjO7949hOQM2X7DxMHH1uoUkwWFLIzImw7gA==}
+    engines: {node: '>=12.13'}
+    dependencies:
+      is-what: 4.1.7
+      ts-toolbelt: 9.6.0
+    dev: false
 
   /merge-stream/2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -5834,6 +5849,10 @@ packages:
       v8-compile-cache-lib: 3.0.0
       yn: 3.1.1
     dev: true
+
+  /ts-toolbelt/9.6.0:
+    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
+    dev: false
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}

@@ -1,3 +1,4 @@
+import { merge } from 'merge-anything';
 export enum ImagePathSettings {
   RelativeToRoot,
   FullPath,
@@ -29,34 +30,19 @@ export type PartialSettings = Partial<ExportToTexSettings> & {
 };
 
 export function ensureSettings(partial: PartialSettings): ExportToTexSettings {
-  const settings = new ExportToTexSettings();
+  const settings = merge(
+    new ExportToTexSettings(),
+    partial as Partial<ExportToTexSettings>,
+  );
 
-  settings.refCommand = partial.refCommand ?? settings.refCommand;
-
-  settings.additionalMathEnvironments =
-    partial.additionalMathEnvironments ?? settings.additionalMathEnvironments;
-
-  settings.generateLabels = partial.generateLabels ?? settings.generateLabels;
-
-  settings.defaultToEquation =
-    partial.defaultToEquation ?? settings.defaultToEquation;
-
-  settings.compressNewlines =
-    partial.compressNewlines ?? settings.compressNewlines;
-
-  settings.numberedSections =
-    partial.numberedSections ?? settings.numberedSections;
-
+  // Convert deprecated settings
   if (
-    partial.imagePathSettings === undefined &&
+    settings.imagePathSettings === undefined &&
     partial.fullImagePath !== undefined
   ) {
     settings.imagePathSettings = partial.fullImagePath
       ? ImagePathSettings.FullPath
       : ImagePathSettings.RelativeToRoot;
-  } else {
-    settings.imagePathSettings =
-      partial.imagePathSettings ?? settings.imagePathSettings;
   }
 
   return settings;
