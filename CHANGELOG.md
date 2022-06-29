@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/raineszm/obsidian-export-to-tex/compare/0.4.0...0.4.2) (2022-06-29)
+
+
+### Bug Fixes
+
+* correct missing curly brace in exported links ([40262ce](https://github.com/raineszm/obsidian-export-to-tex/commit/40262ce96a7df9576e0f24baebc8889da7155556)), closes [#33](https://github.com/raineszm/obsidian-export-to-tex/issues/33)
+
 ## [0.4.0](https://github.com/raineszm/obsidian-export-to-tex/compare/0.3.0...0.4.0) (2022-04-27)
 
 
