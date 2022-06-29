@@ -215,7 +215,7 @@ export class Visitor {
   }
 
   visitLink(link: Link): void {
-    this.emit(`\\href{${link.url}{`);
+    this.emit(`\\href{${link.url}}{`);
     this.visitChildren(link);
     this.emit('}');
   }
