@@ -11,8 +11,6 @@
 
 ## Installation
 
-*(Not yet in the registry)*
-
 If you have Obsidian version 0.9.8 or greater:
 
 1. Open the options pane
